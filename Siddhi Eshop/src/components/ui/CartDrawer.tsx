@@ -57,31 +57,81 @@ export const CartDrawer: React.FC = () => {
       return;
     }
 
-    const header = "SIDDHI KABEL & ESHOP - OFFICIAL QUOTATION SUMMARY\n";
-    const dateStr = `Date: ${new Date().toLocaleString()}\n`;
-    const companyStr = `Customer: ${currentUser?.companyName || 'Guest / Unverified'}\n`;
-    const separator = "--------------------------------------------------\n\n";
-    
-    const itemsList = cart.map((item, idx) => 
-      `${idx + 1}. [${item.brand}] ${item.name}\n   Part No: ${item.partNo}\n   Quantity: ${item.qty} ${item.unit}\n   Unit Price: ₹${item.price.toFixed(2)}\n   Total: ₹${(item.price * item.qty).toFixed(2)}\n`
-    ).join('\n');
+    const itemsHtml = cart.map((item, idx) => `
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${idx + 1}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #ddd;">
+          <strong>${item.name}</strong><br>
+          <span style="font-size: 11px; color: #666;">Brand: ${item.brand} | Part No: ${item.partNo}</span>
+        </td>
+        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${item.qty} ${item.unit}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">₹${item.price.toFixed(2)}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">₹${(item.price * item.qty).toFixed(2)}</td>
+      </tr>
+    `).join('');
 
-    const subtotalStr = `\n--------------------------------------------------\nEstimated Subtotal (excl. GST): ₹${subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
-    const footer = "\nThank you for choosing Siddhi Kabel for your industrial needs.\nEmail: sales@siddhikabel.com | Phone: 096200 00947";
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Siddhi Kabel - Official Quotation</title>
+        <style>
+          body { font-family: Arial, sans-serif; color: #333; padding: 30px; max-width: 800px; margin: auto; }
+          .header { border-bottom: 3px solid #c32125; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+          .title { font-size: 22px; font-weight: bold; color: #c32125; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th { background: #f4f6f9; padding: 10px; text-align: left; border-bottom: 2px solid #ddd; font-size: 12px; }
+          .total-box { margin-top: 20px; text-align: right; font-size: 16px; font-weight: bold; }
+          .footer { margin-top: 40px; font-size: 11px; color: #777; text-align: center; border-top: 1px solid #ddd; padding-top: 10px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <div class="title">SIDDHI KABEL & ESHOP</div>
+            <div style="font-size: 12px; color: #666;">Official B2B Industrial Quotation Summary</div>
+          </div>
+          <div style="text-align: right; font-size: 12px;">
+            <strong>Date:</strong> ${new Date().toLocaleString()}<br>
+            <strong>Customer:</strong> ${currentUser?.companyName || 'Guest / Unverified'}
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align: center;">#</th>
+              <th>Item Description</th>
+              <th style="text-align: center;">Qty</th>
+              <th style="text-align: right;">Unit Price (excl. GST)</th>
+              <th style="text-align: right;">Total (excl. GST)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+        </table>
+        <div class="total-box">
+          Estimated Subtotal (excl. GST): ₹${subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
+        <div class="footer">
+          Siddhi Kabel Corporation Private Limited | Email: sales@siddhikabel.com | Phone: 096200 00947<br>
+          <em>Note: This is a system-generated quotation summary sheet for internal review and site estimation.</em>
+        </div>
+      </body>
+      </html>
+    `;
 
-    const fileContent = header + dateStr + companyStr + separator + itemsList + subtotalStr + footer;
-    
-    const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8;' });
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Siddhi_Quotation_${Date.now()}.txt`;
+    link.download = `Siddhi_Quotation_${Date.now()}.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    showToast('Quotation downloaded successfully!');
+    showToast('Quotation sheet downloaded successfully!');
   };
 
   return (
@@ -151,7 +201,7 @@ export const CartDrawer: React.FC = () => {
               ₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-          <div className="cart-checkout-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingBottom: '10px' }}>
+          <div className="cart-checkout-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <button className="btn btn-primary" onClick={handleCheckoutRfq}>
               Request Official GST Quotation
             </button>
