@@ -1,7 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
-import { useAuth } from "../../context/AuthContext";
-import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../../context/AuthContext";
+import { useCart } from "../../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
 export const QuickViewModal: React.FC = () => {

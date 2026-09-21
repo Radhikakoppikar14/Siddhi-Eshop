@@ -9,7 +9,12 @@ import {
   MapPin,
   ShieldCheck,
 } from "lucide-react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
+import {
+  isNotEmptyString,
+  isValidEmail,
+  isValidPhone,
+} from "../../../utils/validation";
 
 export const AuthModal: React.FC = () => {
   const {
@@ -25,6 +30,9 @@ export const AuthModal: React.FC = () => {
   const [loginId, setLoginId] = useState("");
   const [loginPass, setLoginPass] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [loginFieldErrors, setLoginFieldErrors] = useState<
+    Record<string, string>
+  >({});
 
   // Register form state
   const [regData, setRegData] = useState({
@@ -36,21 +44,58 @@ export const AuthModal: React.FC = () => {
     state: "Karnataka",
     city: "Bangalore",
     password: "",
+    confirmPassword: "",
     address: "",
   });
   const [regError, setRegError] = useState("");
+  const [regFieldErrors, setRegFieldErrors] = useState<Record<string, string>>(
+    {},
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const renderRegError = (field: string) =>
+    regFieldErrors[field] ? (
+      <div
+        className="auth-alert"
+        style={{ display: "block", marginTop: "6px" }}
+      >
+        {regFieldErrors[field]}
+      </div>
+    ) : null;
+  const updateRegField = (field: keyof typeof regData, value: string) => {
+    setRegData((current) => ({ ...current, [field]: value }));
+    setRegFieldErrors((current) => ({ ...current, [field]: "" }));
+  };
 
   if (!authModalOpen) return null;
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setLoginError("");
-    if (!loginId || !loginPass) {
-      setLoginError("Please enter your Phone No / Email and password.");
+    const nextErrors: Record<string, string> = {};
+    const cleanLoginId = loginId.trim();
+    if (!isNotEmptyString(cleanLoginId)) {
+      nextErrors.loginId = "Email or phone number is required.";
+    } else if (
+      cleanLoginId.includes("@")
+        ? !isValidEmail(cleanLoginId)
+        : !isValidPhone(cleanLoginId)
+    ) {
+      nextErrors.loginId = cleanLoginId.includes("@")
+        ? "Please enter a valid email."
+        : "Please enter a valid phone number.";
+    }
+    if (!isNotEmptyString(loginPass)) {
+      nextErrors.loginPass = "Password is required.";
+    }
+    setLoginFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
       return;
     }
 
-    const res = login(loginId, loginPass);
+    setIsSubmitting(true);
+    const res = login(cleanLoginId, loginPass);
+    setIsSubmitting(false);
     if (!res.success) {
       setLoginError(res.message || "Login failed.");
     }
@@ -58,6 +103,7 @@ export const AuthModal: React.FC = () => {
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setRegError("");
 
     const {
@@ -69,38 +115,55 @@ export const AuthModal: React.FC = () => {
       state,
       city,
       password,
+      confirmPassword,
       address,
     } = regData;
 
+    const nextErrors: Record<string, string> = {};
+    const requiredFields: Array<[string, string, string]> = [
+      ["companyName", companyName, "Company name is required."],
+      ["address", address, "Address is required."],
+      ["city", city, "City is required."],
+      ["gstNo", gstNo, "GST number is required."],
+      ["contactPerson", contactPerson, "Full name is required."],
+      ["phone", phone, "Mobile number is required."],
+      ["email", email, "Email is required."],
+      ["password", password, "Password is required."],
+      ["confirmPassword", confirmPassword, "Confirm password is required."],
+    ];
+    requiredFields.forEach(([field, value, message]) => {
+      if (!isNotEmptyString(value)) nextErrors[field] = message;
+    });
+    if (isNotEmptyString(email) && !isValidEmail(email))
+      nextErrors.email = "Please enter a valid email.";
+    if (isNotEmptyString(phone) && !isValidPhone(phone))
+      nextErrors.phone = "Please enter a valid mobile number.";
+    if (isNotEmptyString(password) && password.length < 6)
+      nextErrors.password = "Password must be at least 6 characters long.";
     if (
-      !companyName ||
-      !contactPerson ||
-      !phone ||
-      !email ||
-      !gstNo ||
-      !state ||
-      !city ||
-      !password ||
-      !address
-    ) {
-      setRegError("Please fill in all required fields.");
-      return;
-    }
+      isNotEmptyString(password) &&
+      !/[!@#$%^&*(),.?":{}|<>_\-+=[\]\\/`~]/.test(password)
+    )
+      nextErrors.password =
+        "Password must contain at least one special character.";
+    if (isNotEmptyString(confirmPassword) && password !== confirmPassword)
+      nextErrors.confirmPassword = "Passwords do not match.";
+    setRegFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
 
-    if (password.length < 6) {
-      setRegError("Password must be at least 6 characters long.");
-      return;
-    }
-
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>_\-+=[\]\\/`~]/.test(password);
-    if (!hasSpecialChar) {
-      setRegError(
-        "Password must contain at least one special character (e.g. @, #, $, %, &, *).",
-      );
-      return;
-    }
-
-    const res = register(regData);
+    setIsSubmitting(true);
+    const res = register({
+      companyName,
+      contactPerson,
+      phone,
+      email,
+      gstNo,
+      state,
+      city,
+      password,
+      address,
+    });
+    setIsSubmitting(false);
     if (!res.success) {
       setRegError(res.message || "Registration failed.");
     }
@@ -175,9 +238,23 @@ export const AuthModal: React.FC = () => {
                     required
                     placeholder="e.g. 98920000947 or name@company.com"
                     value={loginId}
-                    onChange={(e) => setLoginId(e.target.value)}
+                    onChange={(e) => {
+                      setLoginId(e.target.value);
+                      setLoginFieldErrors((current) => ({
+                        ...current,
+                        loginId: "",
+                      }));
+                    }}
                   />
                 </div>
+                {loginFieldErrors.loginId && (
+                  <div
+                    className="auth-alert"
+                    style={{ display: "block", marginTop: "6px" }}
+                  >
+                    {loginFieldErrors.loginId}
+                  </div>
+                )}
               </div>
 
               <div className="auth-field-group auth-inline-caption">
@@ -195,9 +272,23 @@ export const AuthModal: React.FC = () => {
                     required
                     placeholder="Enter your password"
                     value={loginPass}
-                    onChange={(e) => setLoginPass(e.target.value)}
+                    onChange={(e) => {
+                      setLoginPass(e.target.value);
+                      setLoginFieldErrors((current) => ({
+                        ...current,
+                        loginPass: "",
+                      }));
+                    }}
                   />
                 </div>
+                {loginFieldErrors.loginPass && (
+                  <div
+                    className="auth-alert"
+                    style={{ display: "block", marginTop: "6px" }}
+                  >
+                    {loginFieldErrors.loginPass}
+                  </div>
+                )}
               </div>
 
               <div
@@ -222,8 +313,12 @@ export const AuthModal: React.FC = () => {
                 </label>
               </div>
 
-              <button type="submit" className="auth-primary-btn">
-                SIGN IN &amp; CONTINUE
+              <button
+                type="submit"
+                className="auth-primary-btn"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "SIGNING IN..." : "SIGN IN &amp; CONTINUE"}
               </button>
 
               <div
@@ -277,10 +372,11 @@ export const AuthModal: React.FC = () => {
                       placeholder="e.g. Acme Automation Pvt Ltd"
                       value={regData.companyName}
                       onChange={(e) =>
-                        setRegData({ ...regData, companyName: e.target.value })
+                        updateRegField("companyName", e.target.value)
                       }
                     />
                   </div>
+                  {renderRegError("companyName")}
                 </div>
 
                 <div className="auth-field-group">
@@ -293,10 +389,11 @@ export const AuthModal: React.FC = () => {
                       placeholder="e.g. Plot No. 42, Peenya Industrial Area 2nd Phase"
                       value={regData.address}
                       onChange={(e) =>
-                        setRegData({ ...regData, address: e.target.value })
+                        updateRegField("address", e.target.value)
                       }
                     />
                   </div>
+                  {renderRegError("address")}
                 </div>
               </div>
 
@@ -310,11 +407,10 @@ export const AuthModal: React.FC = () => {
                       required
                       placeholder="e.g. Bangalore, Chennai, Pune"
                       value={regData.city}
-                      onChange={(e) =>
-                        setRegData({ ...regData, city: e.target.value })
-                      }
+                      onChange={(e) => updateRegField("city", e.target.value)}
                     />
                   </div>
+                  {renderRegError("city")}
                 </div>
 
                 <div className="auth-field-group">
@@ -322,9 +418,7 @@ export const AuthModal: React.FC = () => {
                   <select
                     className="auth-select"
                     value={regData.state}
-                    onChange={(e) =>
-                      setRegData({ ...regData, state: e.target.value })
-                    }
+                    onChange={(e) => updateRegField("state", e.target.value)}
                   >
                     <option value="Karnataka">-- Select State / UT --</option>
                     <option value="Karnataka">Karnataka (29)</option>
@@ -350,13 +444,11 @@ export const AuthModal: React.FC = () => {
                       placeholder="E.g. 29ABCDEF1234F1Z5"
                       value={regData.gstNo}
                       onChange={(e) =>
-                        setRegData({
-                          ...regData,
-                          gstNo: e.target.value.toUpperCase(),
-                        })
+                        updateRegField("gstNo", e.target.value.toUpperCase())
                       }
                     />
                   </div>
+                  {renderRegError("gstNo")}
                 </div>
               </div>
 
@@ -377,13 +469,11 @@ export const AuthModal: React.FC = () => {
                       placeholder="e.g. Ramesh Kumar"
                       value={regData.contactPerson}
                       onChange={(e) =>
-                        setRegData({
-                          ...regData,
-                          contactPerson: e.target.value,
-                        })
+                        updateRegField("contactPerson", e.target.value)
                       }
                     />
                   </div>
+                  {renderRegError("contactPerson")}
                 </div>
 
                 <div className="auth-field-group">
@@ -395,11 +485,10 @@ export const AuthModal: React.FC = () => {
                       required
                       placeholder="e.g. 09820000947"
                       value={regData.phone}
-                      onChange={(e) =>
-                        setRegData({ ...regData, phone: e.target.value })
-                      }
+                      onChange={(e) => updateRegField("phone", e.target.value)}
                     />
                   </div>
+                  {renderRegError("phone")}
                 </div>
 
                 <div className="auth-field-group">
@@ -411,11 +500,10 @@ export const AuthModal: React.FC = () => {
                       required
                       placeholder="name@company.com"
                       value={regData.email}
-                      onChange={(e) =>
-                        setRegData({ ...regData, email: e.target.value })
-                      }
+                      onChange={(e) => updateRegField("email", e.target.value)}
                     />
                   </div>
+                  {renderRegError("email")}
                 </div>
               </div>
 
@@ -435,11 +523,32 @@ export const AuthModal: React.FC = () => {
                       required
                       placeholder="Enter a secure password"
                       value={regData.password}
+                      onChange={(e) => {
+                        updateRegField("password", e.target.value);
+                        setRegFieldErrors((current) => ({
+                          ...current,
+                          confirmPassword: "",
+                        }));
+                      }}
+                    />
+                  </div>
+                  {renderRegError("password")}
+                  <div
+                    className="auth-input-wrap"
+                    style={{ marginTop: "10px" }}
+                  >
+                    <Lock size={16} className="auth-field-icon" />
+                    <input
+                      type="password"
+                      required
+                      placeholder="Confirm your password"
+                      value={regData.confirmPassword}
                       onChange={(e) =>
-                        setRegData({ ...regData, password: e.target.value })
+                        updateRegField("confirmPassword", e.target.value)
                       }
                     />
                   </div>
+                  {renderRegError("confirmPassword")}
                 </div>
 
                 <div className="password-note-box">
@@ -451,8 +560,12 @@ export const AuthModal: React.FC = () => {
                 </div>
               </div>
 
-              <button type="submit" className="auth-primary-btn">
-                CREATE ACCOUNT
+              <button
+                type="submit"
+                className="auth-primary-btn"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "CREATING ACCOUNT..." : "CREATE ACCOUNT"}
               </button>
 
               <div

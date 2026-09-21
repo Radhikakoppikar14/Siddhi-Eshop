@@ -51,26 +51,25 @@ export const PRODUCTS_DATA: Product[] = [
   },
   {
     id: "lapp-03",
-    category: "data",
+    category: "cables",
     brand: "LAPP KABEL",
     partNo: "LAPP-0028404",
-    name: "UNITRONIC® LiYCY Screened Data Cable",
+    name: "ÖLFLEX® CLASSIC 110 Control Cable (Industrial Spools)",
     specs: [
-      "4 Cores x 0.5 sq mm",
-      "Tinned copper screening braid",
-      "High EMC protection",
-      "Low capacitance",
+      "Multi-core flexible control wiring",
+      "Numbered black cores with earth",
+      "Flame retardant & oil resistant",
+      "Industrial harness configuration",
     ],
-    voltage: "250 V (non-power)",
+    voltage: "300/500 V",
     tempRange: "-40°C to +80°C",
     conductor: "Fine-wire bare copper",
     price: 52.0,
     unit: "meter",
     stock: "In Stock (3,500m)",
     icon: "ethernet",
-    application: "Industrial Ethernet, RS485, Instrumentation, SCADA",
-    image: "/images/gearboxes.jpg",
-    
+    application: "Industrial Machinery, Automation, Control Panels",
+    image: "/images/gearboxes.jpg", // Aligned with industrial cable spool display in image
   },
   {
     id: "lapp-04",
@@ -136,7 +135,7 @@ export const PRODUCTS_DATA: Product[] = [
     stock: "In Stock (85 units)",
     icon: "plug",
     application: "Heavy Industry, Outdoor Panels, Harsh Washdown Environments",
-    image: "/images/motors.jpg",
+    image: "/images/motors.jpg", // Aligned with the electric motor / heavy housing application view
   },
   {
     id: "eaton-01",
@@ -158,7 +157,7 @@ export const PRODUCTS_DATA: Product[] = [
     stock: "In Stock (45 units)",
     icon: "switchgear",
     application: "Motor Starters, MCC Panels, Machine Protection",
-    image: "/images/promo-partex.jpg",
+    image: "/images/promo-partex.jpg", // Aligned with circuit breaker / switchgear unit view
   },
   {
     id: "eaton-02",
@@ -227,7 +226,6 @@ export const PRODUCTS_DATA: Product[] = [
     application: "Industrial Building Electrification, Panel Distribution",
     image: "/images/product-3.jpg",
   },
-
   {
     id: "hager-01",
     category: "switchgear",
@@ -321,28 +319,6 @@ export const PRODUCTS_DATA: Product[] = [
 ];
 
 export const OLFLEX_110_PRODUCTS: OlflexProduct[] = LEGACY_OLFLEX_110_PRODUCTS;
-/*
-  {
-    "partNo": "1119752",
-    "name": "ÖLFLEX® CLASSIC 110 2X0,5",
-    "core": 2,
-    "pe": "X",
-    "size": 0.5,
-    "outerDia": 5.1,
-    "copperIndex": 9.6,
-    "weight": 68,
-    "price": 46.47,
-    "gst": 8.36,
-    "mrp": 84.49,
-    "category": "Power and control cables",
-    "subCategory": "PVC outer sheath and numbered cores",
-    "brand": "LAPP KABEL",
-    "voltage": "300/500 V",
-    "testVoltage": "4000 V",
-    "standard": "VDE Reg. No. 7030",
-    "tempRange": "-40°C to +80°C fixed / -5°C to +70°C flexing"
-  }
-]; */
 
 export const ALL_OLFLEX_PRODUCTS: OlflexProduct[] = [
   ...OLFLEX_110_PRODUCTS,

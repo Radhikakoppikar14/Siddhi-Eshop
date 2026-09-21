@@ -1,8 +1,8 @@
-import React from 'react';
-import { Eye, ShoppingCart } from 'lucide-react';
-import type { Product } from '../../types';
-import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
+import React from "react";
+import { Eye, ShoppingCart } from "lucide-react";
+import type { Product } from "../../../types";
+import { useCart } from "../../../context/CartContext";
+import { useAuth } from "../../../context/AuthContext";
 
 interface ProductCardProps {
   product: Product;
@@ -12,7 +12,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
   const { openQuickView } = useAuth();
 
-  const productImage = product.image || '/images/product-placeholder.svg';
+  const productImage = product.image || "/images/product-placeholder.svg";
 
   return (
     <div className="product-card" data-category={product.category}>
@@ -27,12 +27,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           alt={product.name}
           className="product-image"
           style={{
-            width: '100%',
-            height: '180px',
-            objectFit: 'contain',
-            display: 'block',
-            background: '#f7f7f7',
-            borderRadius: '10px'
+            width: "100%",
+            height: "180px",
+            objectFit: "contain",
+            display: "block",
+            background: "#f7f7f7",
+            borderRadius: "10px",
           }}
         />
 
@@ -65,8 +65,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <span className="price-unit">per {product.unit} (excl. GST)</span>
           </div>
 
-          <button className="btn-add-cart" onClick={() => addToCart(product.id)}>
-            <ShoppingCart size={14} style={{ marginRight: '4px' }} />
+          <button
+            className="btn-add-cart"
+            onClick={() => addToCart(product.id)}
+          >
+            <ShoppingCart size={14} style={{ marginRight: "4px" }} />
             Add
           </button>
         </div>

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, FileText, ShoppingCart } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { useCart } from '../../context/CartContext';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search, User, FileText, ShoppingCart } from "lucide-react";
+import { useAuth } from "../../../context/AuthContext";
+import { useCart } from "../../../context/CartContext";
 
 export const Header: React.FC = () => {
   const {
@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
     searchQuery,
     setSearchQuery,
     searchCategory,
-    setSearchCategory
+    setSearchCategory,
   } = useAuth();
 
   const { totalItems, subtotal, openCartDrawer } = useCart();
@@ -22,43 +22,53 @@ export const Header: React.FC = () => {
     if (currentUser) {
       openAccountModal();
     } else {
-      openAuthModal('login');
+      openAuthModal("login");
     }
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (window.location.pathname !== '/') {
-      navigate('/');
+    if (window.location.pathname !== "/") {
+      navigate("/");
       setTimeout(() => {
-        const el = document.getElementById('productsSection');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        const el = document.getElementById("productsSection");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
       }, 100);
     } else {
-      const el = document.getElementById('productsSection');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      const el = document.getElementById("productsSection");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
     setSearchCategory(val);
-    if (val === 'lapp') {
-      document.getElementById('lappPortfolioSection')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (val === 'eaton') {
-      document.getElementById('eatonPortfolioSection')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (val === 'partex') {
-      document.getElementById('partexPortfolioSection')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (val === 'mennekes') {
-      document.getElementById('mennekesPortfolioSection')?.scrollIntoView({ behavior: 'smooth' });
+    if (val === "lapp") {
+      document
+        .getElementById("lappPortfolioSection")
+        ?.scrollIntoView({ behavior: "smooth" });
+    } else if (val === "eaton") {
+      document
+        .getElementById("eatonPortfolioSection")
+        ?.scrollIntoView({ behavior: "smooth" });
+    } else if (val === "partex") {
+      document
+        .getElementById("partexPortfolioSection")
+        ?.scrollIntoView({ behavior: "smooth" });
+    } else if (val === "mennekes") {
+      document
+        .getElementById("mennekesPortfolioSection")
+        ?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const scrollToRfq = () => {
-    if (window.location.pathname !== '/') {
-      navigate('/#rfqSection');
+    if (window.location.pathname !== "/") {
+      navigate("/#rfqSection");
     } else {
-      document.getElementById('rfqSection')?.scrollIntoView({ behavior: 'smooth' });
+      document
+        .getElementById("rfqSection")
+        ?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -67,7 +77,11 @@ export const Header: React.FC = () => {
       <div className="container">
         <div className="header-inner">
           {/* Logo */}
-          <Link to="/" className="brand-logo-wrap" title="Siddhi Kabel Corporation Private Limited">
+          <Link
+            to="/"
+            className="brand-logo-wrap"
+            title="Siddhi Kabel Corporation Private Limited"
+          >
             <img
               src="/images/siddhi-kabel-lockup.png"
               alt="Siddhi Kabel Corporation Private Limited"
@@ -75,12 +89,12 @@ export const Header: React.FC = () => {
               width="220"
               height="52"
               style={{
-                height: '52px',
-                maxHeight: '52px',
-                width: 'auto',
-                maxWidth: '260px',
-                objectFit: 'contain',
-                display: 'block'
+                height: "52px",
+                maxHeight: "52px",
+                width: "auto",
+                maxWidth: "260px",
+                objectFit: "contain",
+                display: "block",
               }}
             />
           </Link>
@@ -106,7 +120,7 @@ export const Header: React.FC = () => {
                 className="search-input"
                 placeholder="Search Part No., Lapp ÖLFLEX, Eaton, Partex, Mennekes..."
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button type="submit" className="search-btn" title="Search">
                 <Search size={18} strokeWidth={2.5} />
@@ -122,19 +136,19 @@ export const Header: React.FC = () => {
               id="headerAuthAction"
               onClick={handleAccountClick}
               title="Customer Account / Sign In"
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
             >
               <div className="action-icon-wrap" id="headerAuthIconWrap">
                 <User size={18} strokeWidth={2} />
               </div>
               <div className="action-text">
                 <span className="action-label" id="headerAuthLabel">
-                  {currentUser ? 'Welcome,' : 'Sign In / Register'}
+                  {currentUser ? "Welcome," : "Sign In / Register"}
                 </span>
                 <span className="action-val" id="headerAuthVal">
                   {currentUser
-                    ? `${currentUser.contactPerson.split(' ')[0]} (${currentUser.companyName.slice(0, 12)}...)`
-                    : 'Customer Account'}
+                    ? `${currentUser.contactPerson.split(" ")[0]} (${currentUser.companyName.slice(0, 12)}...)`
+                    : "Customer Account"}
                 </span>
               </div>
             </div>
@@ -143,7 +157,7 @@ export const Header: React.FC = () => {
             <div
               className="action-item"
               onClick={scrollToRfq}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
               title="Bulk Inquiry / RFQ"
             >
               <div className="action-icon-wrap">
@@ -160,7 +174,12 @@ export const Header: React.FC = () => {
               className="action-item"
               onClick={openCartDrawer}
               title="View RFQ Cart"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                textAlign: "left",
+              }}
             >
               <div className="action-icon-wrap">
                 <ShoppingCart size={18} strokeWidth={2} />
@@ -171,7 +190,11 @@ export const Header: React.FC = () => {
               <div className="action-text">
                 <span className="action-label">Quotation Cart</span>
                 <span className="action-val" id="cartSubtotalHeader">
-                  ₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ₹
+                  {subtotal.toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
             </button>

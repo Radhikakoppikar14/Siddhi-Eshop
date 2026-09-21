@@ -1,27 +1,32 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ToastProvider } from './context/ToastContext';
-import { AuthProvider } from './context/AuthContext';
-import { CartProvider } from './context/CartContext';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { ToastProvider } from "./context/ToastContext";
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 
-import { TopBar } from './components/layout/TopBar';
-import { Header } from './components/layout/Header';
-import { Navigation } from './components/layout/Navigation';
-import { AnnouncementTicker } from './components/layout/AnnouncementTicker';
-import { Footer } from './components/layout/Footer';
+import { TopBar } from "./assets/components/layout/TopBar";
+import { Header } from "./assets/components/layout/Header";
+import { Navigation } from "./assets/components/layout/Navigation";
+import { AnnouncementTicker } from "./assets/components/layout/AnnouncementTicker";
+import { Footer } from "./assets/components/layout/Footer";
 
-import { CartDrawer } from './components/ui/CartDrawer';
-import { AuthModal } from './components/ui/AuthModal';
-import { AccountModal } from './components/ui/AccountModal';
-import { QuickViewModal } from './components/ui/QuickViewModal';
+import { CartDrawer } from "./assets/components/ui/CartDrawer";
+import { AuthModal } from "./assets/components/ui/AuthModal";
+import { AccountModal } from "./assets/components/ui/AccountModal";
+import { QuickViewModal } from "./assets/components/ui/QuickViewModal";
 
-import { Home } from './pages/Home';
-import { OlflexCables } from './pages/OlflexCables';
-import { ProductDetail } from './pages/ProductDetail';
-import { AboutLapp } from './pages/AboutLapp';
-import { AboutEaton } from './pages/AboutEaton';
-import { AboutPartex } from './pages/AboutPartex';
-import { AboutMennekes } from './pages/AboutMennekes';
+import { Home } from "./pages/Home";
+import { OlflexCables } from "./pages/OlflexCables";
+import { ProductDetail } from "./pages/ProductDetail";
+import { AboutLapp } from "./pages/AboutLapp";
+import { AboutEaton } from "./pages/AboutEaton";
+import { AboutPartex } from "./pages/AboutPartex";
+import { AboutMennekes } from "./pages/AboutMennekes";
 
 export const App: React.FC = () => {
   return (
@@ -29,7 +34,14 @@ export const App: React.FC = () => {
       <AuthProvider>
         <CartProvider>
           <Router>
-            <div className="siddhi-app-wrapper" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <div
+              className="siddhi-app-wrapper"
+              style={{
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               <TopBar />
               <Header />
               <Navigation />

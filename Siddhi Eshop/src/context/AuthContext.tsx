@@ -1,6 +1,17 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useToast } from './ToastContext';
-import type { Product } from '../types';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { useToast } from "./ToastContext";
+import type { Product } from "../types";
+import {
+  isNotEmptyString,
+  isValidEmail,
+  isValidPhone,
+} from "../utils/validation";
 
 export interface Customer {
   id: string;
@@ -31,14 +42,20 @@ export interface CommercialOffer {
 
 interface AuthContextType {
   currentUser: Customer | null;
-  login: (identifier: string, password: string) => { success: boolean; message?: string };
-  register: (data: Omit<Customer, 'id' | 'createdAt'>) => { success: boolean; message?: string };
+  login: (
+    identifier: string,
+    password: string,
+  ) => { success: boolean; message?: string };
+  register: (data: Omit<Customer, "id" | "createdAt">) => {
+    success: boolean;
+    message?: string;
+  };
   logout: () => void;
   authModalOpen: boolean;
   setAuthModalOpen: (open: boolean) => void;
-  authModalTab: 'login' | 'register';
-  setAuthModalTab: (tab: 'login' | 'register') => void;
-  openAuthModal: (tab?: 'login' | 'register') => void;
+  authModalTab: "login" | "register";
+  setAuthModalTab: (tab: "login" | "register") => void;
+  openAuthModal: (tab?: "login" | "register") => void;
   closeAuthModal: () => void;
   accountModalOpen: boolean;
   setAccountModalOpen: (open: boolean) => void;
@@ -52,29 +69,31 @@ interface AuthContextType {
   searchCategory: string;
   setSearchCategory: (c: string) => void;
   userOffers: CommercialOffer[];
-  addOffer: (offer: Omit<CommercialOffer, 'date'>) => void;
+  addOffer: (offer: Omit<CommercialOffer, "date">) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const DEFAULT_RADHIKA_USER: Customer = {
-  id: 'SK-CUST-DEFAULT',
-  companyName: 'Taarruni',
-  contactPerson: 'Radhika Koppikar',
-  phone: '08431409627',
-  email: 'koppikarradhika@gmail.com',
-  gstNo: '29AB2I30DNNJ',
-  state: 'Karnataka',
-  city: 'Bangalore',
-  address: 'flat no:2 peeny industry, Bangalore, Karnataka',
-  password: 'password123',
-  createdAt: new Date().toISOString()
+  id: "SK-CUST-DEFAULT",
+  companyName: "Taarruni",
+  contactPerson: "Radhika Koppikar",
+  phone: "08431409627",
+  email: "koppikarradhika@gmail.com",
+  gstNo: "29AB2I30DNNJ",
+  state: "Karnataka",
+  city: "Bangalore",
+  address: "flat no:2 peeny industry, Bangalore, Karnataka",
+  password: "password123",
+  createdAt: new Date().toISOString(),
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [currentUser, setCurrentUser] = useState<Customer | null>(() => {
     try {
-      const raw = localStorage.getItem('siddhi_current_user');
+      const raw = localStorage.getItem("siddhi_current_user");
       if (raw) return JSON.parse(raw);
       // Default to Radhika's profile if nothing set yet
       return DEFAULT_RADHIKA_USER;
@@ -84,14 +103,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
+  const [authModalTab, setAuthModalTab] = useState<"login" | "register">(
+    "login",
+  );
   const [accountModalOpen, setAccountModalOpen] = useState(false);
-  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchCategory, setSearchCategory] = useState('all');
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(
+    null,
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchCategory, setSearchCategory] = useState("all");
   const [offers, setOffers] = useState<CommercialOffer[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('siddhi_offers') || '[]');
+      return JSON.parse(localStorage.getItem("siddhi_offers") || "[]");
     } catch {
       return [];
     }
@@ -101,19 +124,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('siddhi_current_user', JSON.stringify(currentUser));
+      localStorage.setItem("siddhi_current_user", JSON.stringify(currentUser));
     } else {
-      localStorage.removeItem('siddhi_current_user');
+      localStorage.removeItem("siddhi_current_user");
     }
   }, [currentUser]);
 
   useEffect(() => {
-    localStorage.setItem('siddhi_offers', JSON.stringify(offers));
+    localStorage.setItem("siddhi_offers", JSON.stringify(offers));
   }, [offers]);
 
   const getStoredCustomers = (): Customer[] => {
     try {
-      const stored = JSON.parse(localStorage.getItem('siddhi_customers') || '[]');
+      const stored = JSON.parse(
+        localStorage.getItem("siddhi_customers") || "[]",
+      );
       if (stored.length === 0) return [DEFAULT_RADHIKA_USER];
       return stored;
     } catch {
@@ -121,50 +146,153 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = useCallback((identifier: string, password: string) => {
-    const cleanId = identifier.replace(/[^0-9]/g, '');
-    const customers = getStoredCustomers();
+  const login = useCallback(
+    (identifier: string, password: string) => {
+      const cleanIdentifier = identifier.trim();
+      if (!isNotEmptyString(cleanIdentifier)) {
+        return {
+          success: false,
+          message: "Email or phone number is required.",
+        };
+      }
+      if (!isNotEmptyString(password)) {
+        return { success: false, message: "Password is required." };
+      }
+      const isEmailIdentifier = cleanIdentifier.includes("@");
+      if (isEmailIdentifier && !isValidEmail(cleanIdentifier)) {
+        return { success: false, message: "Please enter a valid email." };
+      }
+      if (!isEmailIdentifier && !isValidPhone(cleanIdentifier)) {
+        return {
+          success: false,
+          message: "Please enter a valid phone number.",
+        };
+      }
 
-    const user = customers.find(c => {
-      const phoneMatch = cleanId.length > 5 && c.phone.replace(/[^0-9]/g, '').endsWith(cleanId);
-      const emailMatch = c.email.toLowerCase() === identifier.toLowerCase().trim();
-      return (phoneMatch || emailMatch) && c.password === password;
-    });
+      const cleanId = identifier.replace(/[^0-9]/g, "");
+      const customers = getStoredCustomers();
 
-    if (!user && identifier.toLowerCase() !== 'koppikarradhika@gmail.com' && identifier !== '08431409627') {
-      return { success: false, message: 'Invalid credentials. No customer account matched this Phone/Email and password.' };
-    }
+      const user = customers.find((c) => {
+        const phoneMatch =
+          cleanId.length > 5 &&
+          c.phone.replace(/[^0-9]/g, "").endsWith(cleanId);
+        const emailMatch =
+          c.email.toLowerCase() === cleanIdentifier.toLowerCase();
+        return (phoneMatch || emailMatch) && c.password === password;
+      });
 
-    const loggedUser = user || DEFAULT_RADHIKA_USER;
-    setCurrentUser(loggedUser);
-    setAuthModalOpen(false);
-    showToast(`Welcome back, ${loggedUser.contactPerson} (${loggedUser.companyName})!`);
-    return { success: true };
-  }, [showToast]);
+      if (
+        !user &&
+        identifier.toLowerCase() !== "koppikarradhika@gmail.com" &&
+        identifier !== "08431409627"
+      ) {
+        return {
+          success: false,
+          message:
+            "Invalid credentials. No customer account matched this Phone/Email and password.",
+        };
+      }
 
-  const register = useCallback((data: Omit<Customer, 'id' | 'createdAt'>) => {
-    const customers = getStoredCustomers();
-    const newCustomer: Customer = {
-      ...data,
-      id: 'SK-CUST-' + Date.now(),
-      createdAt: new Date().toISOString()
-    };
+      const loggedUser = user || DEFAULT_RADHIKA_USER;
+      setCurrentUser(loggedUser);
+      setAuthModalOpen(false);
+      showToast(
+        `Welcome back, ${loggedUser.contactPerson} (${loggedUser.companyName})!`,
+      );
+      return { success: true };
+    },
+    [showToast],
+  );
 
-    customers.push(newCustomer);
-    localStorage.setItem('siddhi_customers', JSON.stringify(customers));
-    setCurrentUser(newCustomer);
-    setAuthModalOpen(false);
-    showToast(`Welcome, ${newCustomer.contactPerson}! Account created for ${newCustomer.companyName}.`);
-    return { success: true };
-  }, [showToast]);
+  const register = useCallback(
+    (data: Omit<Customer, "id" | "createdAt">) => {
+      const customers = getStoredCustomers();
+      const normalizedData = {
+        ...data,
+        companyName: data.companyName.trim(),
+        contactPerson: data.contactPerson.trim(),
+        phone: data.phone.trim(),
+        email: data.email.trim().toLowerCase(),
+        gstNo: data.gstNo.trim().toUpperCase(),
+        state: data.state.trim(),
+        city: data.city.trim(),
+        address: data.address.trim(),
+      };
+      const password = normalizedData.password?.trim() || "";
+
+      if (
+        !isNotEmptyString(normalizedData.companyName) ||
+        !isNotEmptyString(normalizedData.contactPerson) ||
+        !isNotEmptyString(normalizedData.address) ||
+        !isNotEmptyString(normalizedData.city) ||
+        !isNotEmptyString(normalizedData.state) ||
+        !isNotEmptyString(normalizedData.gstNo)
+      ) {
+        return {
+          success: false,
+          message: "Please fill in all required fields.",
+        };
+      }
+      if (!isValidEmail(normalizedData.email)) {
+        return { success: false, message: "Please enter a valid email." };
+      }
+      if (!isValidPhone(normalizedData.phone)) {
+        return {
+          success: false,
+          message: "Please enter a valid phone number.",
+        };
+      }
+      if (!isNotEmptyString(password) || password.length < 6) {
+        return {
+          success: false,
+          message: "Password must be at least 6 characters long.",
+        };
+      }
+      if (!/[!@#$%^&*(),.?":{}|<>_\-+=[\]\\/`~]/.test(password)) {
+        return {
+          success: false,
+          message: "Password must contain at least one special character.",
+        };
+      }
+      if (
+        customers.some(
+          (customer) =>
+            customer.email.toLowerCase() === normalizedData.email ||
+            customer.phone.replace(/\D/g, "") ===
+              normalizedData.phone.replace(/\D/g, ""),
+        )
+      ) {
+        return {
+          success: false,
+          message: "An account with this email or phone number already exists.",
+        };
+      }
+
+      const newCustomer: Customer = {
+        ...normalizedData,
+        id: "SK-CUST-" + Date.now(),
+        createdAt: new Date().toISOString(),
+      };
+
+      customers.push(newCustomer);
+      localStorage.setItem("siddhi_customers", JSON.stringify(customers));
+      setCurrentUser(newCustomer);
+      setAuthModalOpen(false);
+      showToast(
+        `Welcome, ${newCustomer.contactPerson}! Account created for ${newCustomer.companyName}.`,
+      );
+      return { success: true };
+    },
+    [showToast],
+  );
 
   const logout = useCallback(() => {
     setCurrentUser(null);
     setAccountModalOpen(false);
-    showToast('You have been signed out.');
+    showToast("You have been signed out.");
   }, [showToast]);
 
-  const openAuthModal = useCallback((tab: 'login' | 'register' = 'login') => {
+  const openAuthModal = useCallback((tab: "login" | "register" = "login") => {
     setAuthModalTab(tab);
     setAuthModalOpen(true);
   }, []);
@@ -175,7 +303,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const openAccountModal = useCallback(() => {
     if (!currentUser) {
-      openAuthModal('login');
+      openAuthModal("login");
     } else {
       setAccountModalOpen(true);
     }
@@ -193,22 +321,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setQuickViewProduct(null);
   }, []);
 
-  const addOffer = useCallback((newOffer: Omit<CommercialOffer, 'date'>) => {
+  const addOffer = useCallback((newOffer: Omit<CommercialOffer, "date">) => {
     const fullOffer: CommercialOffer = {
       ...newOffer,
-      date: new Date().toLocaleDateString('en-IN', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
+      date: new Date().toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
-    setOffers(prev => [fullOffer, ...prev]);
+    setOffers((prev) => [fullOffer, ...prev]);
   }, []);
 
   const userOffers = currentUser
-    ? offers.filter(o => o.customerId === currentUser.id || o.email === currentUser.email || o.phone === currentUser.phone)
+    ? offers.filter(
+        (o) =>
+          o.customerId === currentUser.id ||
+          o.email === currentUser.email ||
+          o.phone === currentUser.phone,
+      )
     : [];
 
   return (
@@ -236,7 +369,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         searchCategory,
         setSearchCategory,
         userOffers,
-        addOffer
+        addOffer,
       }}
     >
       {children}
@@ -247,7 +380,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
