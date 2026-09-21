@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, X, Minus, Plus, Trash2 } from 'lucide-react';
+import { ShoppingCart, X, Minus, Plus, Trash2, Download } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -49,6 +49,39 @@ export const CartDrawer: React.FC = () => {
     } else {
       prepareRfq();
     }
+  };
+
+  const handleDownloadQuote = () => {
+    if (cart.length === 0) {
+      showToast('Your quotation cart is empty.');
+      return;
+    }
+
+    const header = "SIDDHI KABEL & ESHOP - OFFICIAL QUOTATION SUMMARY\n";
+    const dateStr = `Date: ${new Date().toLocaleString()}\n`;
+    const companyStr = `Customer: ${currentUser?.companyName || 'Guest / Unverified'}\n`;
+    const separator = "--------------------------------------------------\n\n";
+    
+    const itemsList = cart.map((item, idx) => 
+      `${idx + 1}. [${item.brand}] ${item.name}\n   Part No: ${item.partNo}\n   Quantity: ${item.qty} ${item.unit}\n   Unit Price: ₹${item.price.toFixed(2)}\n   Total: ₹${(item.price * item.qty).toFixed(2)}\n`
+    ).join('\n');
+
+    const subtotalStr = `\n--------------------------------------------------\nEstimated Subtotal (excl. GST): ₹${subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
+    const footer = "\nThank you for choosing Siddhi Kabel for your industrial needs.\nEmail: sales@siddhikabel.com | Phone: 096200 00947";
+
+    const fileContent = header + dateStr + companyStr + separator + itemsList + subtotalStr + footer;
+    
+    const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Siddhi_Quotation_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showToast('Quotation downloaded successfully!');
   };
 
   return (
@@ -118,10 +151,19 @@ export const CartDrawer: React.FC = () => {
               ₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-          <div className="cart-checkout-actions">
+          <div className="cart-checkout-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingBottom: '10px' }}>
             <button className="btn btn-primary" onClick={handleCheckoutRfq}>
               Request Official GST Quotation
             </button>
+            {cart.length > 0 && (
+              <button 
+                className="btn btn-outline-secondary btn-sm" 
+                onClick={handleDownloadQuote}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+              >
+                <Download size={14} /> Download Quote Sheet
+              </button>
+            )}
             <button className="btn btn-outline-primary btn-sm" onClick={closeCartDrawer}>
               Continue Browsing
             </button>
