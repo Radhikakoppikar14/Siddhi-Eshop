@@ -96,7 +96,15 @@ export const CatalogGrid: React.FC = () => {
         </div>
 
         {/* Product Cards Grid */}
-        <div className="products-grid" id="productsGrid">
+        <div 
+          className="products-grid" 
+          id="productsGrid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '20px'
+          }}
+        >
           {filteredProducts.length === 0 ? (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '50px 20px', color: 'var(--gray-500)' }}>
               <h3>No products match your search or filter criteria.</h3>

@@ -70,6 +70,7 @@ export const PRODUCTS_DATA: Product[] = [
     icon: "ethernet",
     application: "Industrial Ethernet, RS485, Instrumentation, SCADA",
     image: "/images/gearboxes.jpg",
+    
   },
   {
     id: "lapp-04",
