@@ -45,8 +45,8 @@ export const CatalogGrid: React.FC = () => {
   }, [activeTab, searchCategory, searchQuery]);
 
   return (
-    <section className="products-section" id="productsSection" style={{ padding: '50px 0', background: '#ffffff' }}>
-      <div className="container">
+    <section className="products-section" id="productsSection" style={{ padding: '50px 0', background: '#ffffff', width: '100%', boxSizing: 'border-box' }}>
+      <div className="container" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '0 15px', boxSizing: 'border-box' }}>
         <div className="section-title-wrap">
           <span className="section-subtitle">Verified Industrial Inventory</span>
           <h2 className="section-title">Direct Procurement Catalog</h2>
@@ -101,8 +101,12 @@ export const CatalogGrid: React.FC = () => {
           id="productsGrid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '20px'
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
+            gap: '16px',
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box',
+            margin: '0 auto'
           }}
         >
           {filteredProducts.length === 0 ? (
