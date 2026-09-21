@@ -424,10 +424,12 @@ export const RFQSection: React.FC = () => {
                     type="tel"
                     id="rfqPhone"
                     required
-                    placeholder="+91 98765 43210"
+                    maxLength={10}
+                    inputMode="numeric"
+                    placeholder="98765 43210"
                     value={phone}
                     onChange={(e) => {
-                      setPhone(e.target.value);
+                      setPhone(e.target.value.replace(/\D/g, "").slice(0, 10));
                       setFieldErrors((current) => ({ ...current, phone: "" }));
                     }}
                   />

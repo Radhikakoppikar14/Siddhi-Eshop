@@ -239,7 +239,11 @@ export const AuthModal: React.FC = () => {
                     placeholder="e.g. 98920000947 or name@company.com"
                     value={loginId}
                     onChange={(e) => {
-                      setLoginId(e.target.value);
+                      const rawValue = e.target.value;
+                      const value = /[A-Za-z@]/.test(rawValue)
+                        ? rawValue
+                        : rawValue.replace(/\D/g, "").slice(0, 10);
+                      setLoginId(value);
                       setLoginFieldErrors((current) => ({
                         ...current,
                         loginId: "",
@@ -318,7 +322,7 @@ export const AuthModal: React.FC = () => {
                 className="auth-primary-btn"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "SIGNING IN..." : "SIGN IN &amp; CONTINUE"}
+                {isSubmitting ? "SIGNING IN..." : "SIGN IN & CONTINUE"}
               </button>
 
               <div
@@ -483,9 +487,16 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="tel"
                       required
-                      placeholder="e.g. 09820000947"
+                      maxLength={10}
+                      inputMode="numeric"
+                      placeholder="e.g. 9820000947"
                       value={regData.phone}
-                      onChange={(e) => updateRegField("phone", e.target.value)}
+                      onChange={(e) =>
+                        updateRegField(
+                          "phone",
+                          e.target.value.replace(/\D/g, "").slice(0, 10),
+                        )
+                      }
                     />
                   </div>
                   {renderRegError("phone")}

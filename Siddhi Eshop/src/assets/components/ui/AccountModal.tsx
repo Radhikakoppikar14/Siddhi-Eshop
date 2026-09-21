@@ -1,5 +1,5 @@
 import React from "react";
-import { X, FileText, Paperclip, Send } from "lucide-react";
+import { X, FileText, Paperclip, Send, Trash2 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +10,7 @@ export const AccountModal: React.FC = () => {
     closeAccountModal,
     logout,
     userOffers,
+    deleteOffer,
   } = useAuth();
   const navigate = useNavigate();
 
@@ -132,7 +133,14 @@ export const AccountModal: React.FC = () => {
               ) : (
                 userOffers.map((o) => (
                   <div className="offer-item-card" key={o.refNo}>
-                    <div className="offer-item-top">
+                    <div
+                      className="offer-item-top"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "12px",
+                      }}
+                    >
                       <span className="offer-ref">
                         <FileText
                           size={12}
@@ -140,7 +148,30 @@ export const AccountModal: React.FC = () => {
                         />
                         {o.refNo}
                       </span>
-                      <span className="offer-date">{o.date}</span>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <span className="offer-date">{o.date}</span>
+                        <button
+                          type="button"
+                          onClick={() => deleteOffer(o.refNo)}
+                          aria-label={`Delete offer ${o.refNo}`}
+                          title="Delete offer"
+                          style={{
+                            border: "none",
+                            background: "none",
+                            color: "var(--primary)",
+                            cursor: "pointer",
+                            padding: "2px",
+                          }}
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
                     </div>
                     <div style={{ fontSize: "13px", marginTop: "4px" }}>
                       <strong>Category:</strong> {o.category}

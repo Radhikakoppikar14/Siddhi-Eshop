@@ -6,8 +6,7 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 export const isValidPhone = (phone: string): boolean => {
-  const digits = phone.replace(/\D/g, "");
-  return isNotEmptyString(phone) && digits.length >= 10 && digits.length <= 15;
+  return /^\d{10}$/.test(phone.trim());
 };
 
 export const isNotEmptyString = (value: string): boolean => {

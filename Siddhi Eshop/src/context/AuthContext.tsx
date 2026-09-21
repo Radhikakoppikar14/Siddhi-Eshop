@@ -70,6 +70,7 @@ interface AuthContextType {
   setSearchCategory: (c: string) => void;
   userOffers: CommercialOffer[];
   addOffer: (offer: Omit<CommercialOffer, "date">) => void;
+  deleteOffer: (refNo: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -95,10 +96,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const raw = localStorage.getItem("siddhi_current_user");
       if (raw) return JSON.parse(raw);
-      // Default to Radhika's profile if nothing set yet
-      return DEFAULT_RADHIKA_USER;
+      return null;
     } catch {
-      return DEFAULT_RADHIKA_USER;
+      localStorage.removeItem("siddhi_current_user");
+      return null;
     }
   });
 
@@ -287,6 +288,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const logout = useCallback(() => {
+    localStorage.removeItem("siddhi_current_user");
+    sessionStorage.removeItem("siddhi_current_user");
+    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
     setCurrentUser(null);
     setAccountModalOpen(false);
     showToast("You have been signed out.");
@@ -335,6 +340,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setOffers((prev) => [fullOffer, ...prev]);
   }, []);
 
+  const deleteOffer = useCallback(
+    (refNo: string) => {
+      if (!currentUser || !isNotEmptyString(refNo)) return;
+
+      setOffers((prev) =>
+        prev.filter(
+          (offer) =>
+            offer.refNo !== refNo ||
+            (offer.customerId !== currentUser.id &&
+              offer.email !== currentUser.email &&
+              offer.phone !== currentUser.phone),
+        ),
+      );
+      showToast("Offer deleted successfully.");
+    },
+    [currentUser, showToast],
+  );
+
   const userOffers = currentUser
     ? offers.filter(
         (o) =>
@@ -370,6 +393,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setSearchCategory,
         userOffers,
         addOffer,
+        deleteOffer,
       }}
     >
       {children}
