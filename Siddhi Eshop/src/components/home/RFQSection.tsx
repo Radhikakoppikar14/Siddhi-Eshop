@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Check, Upload, Paperclip, X, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Check, Upload, Paperclip, X, ShieldAlert, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
@@ -15,6 +15,9 @@ export const RFQSection: React.FC = () => {
   const [city, setCity] = useState('');
   const [notes, setNotes] = useState('');
   const [files, setFiles] = useState<File[]>([]);
+  
+  // Success state tracking for confirmation banner/card
+  const [submittedOffer, setSubmittedOffer] = useState<{ refNo: string; date: string } | null>(null);
 
   useEffect(() => {
     if (currentUser) {
@@ -90,6 +93,12 @@ export const RFQSection: React.FC = () => {
       msg += ` (${files.length} file attachment(s) sent)`;
     }
     showToast(msg);
+
+    // Set success state to show confirmation card
+    setSubmittedOffer({
+      refNo,
+      date: new Date().toLocaleString()
+    });
 
     setNotes('');
     setFiles([]);
@@ -177,154 +186,207 @@ export const RFQSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Form */}
+          {/* Right Column: Form or Success Confirmation Card */}
           <div className="rfq-form-col">
-            <form className="rfq-form" onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="rfqName">Full Name *</label>
-                <input
-                  type="text"
-                  id="rfqName"
-                  required
-                  placeholder="e.g. Ramesh Kumar"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="rfqCompany">Company / Enterprise Name</label>
-                <input
-                  type="text"
-                  id="rfqCompany"
-                  placeholder="e.g. Acme Automation Pvt Ltd"
-                  value={company}
-                  onChange={e => setCompany(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="rfqEmail">Business Email *</label>
-                <input
-                  type="email"
-                  id="rfqEmail"
-                  required
-                  placeholder="name@company.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="rfqPhone">Phone / WhatsApp Number *</label>
-                <input
-                  type="tel"
-                  id="rfqPhone"
-                  required
-                  placeholder="+91 98765 43210"
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="rfqCat">Primary Product of Interest</label>
-                <select id="rfqCat" value={cat} onChange={e => setCat(e.target.value)}>
-                  <option value="lapp">Lapp Kabel Cables &amp; Wires</option>
-                  <option value="eaton">Eaton Moeller Switchgear</option>
-                  <option value="partex">Partex Cable Marking Systems</option>
-                  <option value="mennekes">Mennekes CEE Plugs &amp; Sockets</option>
-                  <option value="multiple">Complete Project BOM / Mixed Schedule</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="rfqCity">Delivery City / Site Location</label>
-                <input
-                  type="text"
-                  id="rfqCity"
-                  placeholder="e.g. Bangalore, Chennai, Pune"
-                  value={city}
-                  onChange={e => setCity(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group full-width">
-                <label htmlFor="rfqNotes">Requirement Details / Bill of Materials (BOM)</label>
-                <textarea
-                  id="rfqNotes"
-                  rows={4}
-                  placeholder="Mention part numbers, sizes (e.g. 4x1.5 sq mm), quantities in meters or units, and required dispatch dates..."
-                  value={notes}
-                  onChange={e => setNotes(e.target.value)}
-                />
-              </div>
-
-              {/* File Attachment Dropzone */}
-              <div className="form-group full-width">
-                <label htmlFor="rfqAttachment" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
-                  <span>Attach File / BOM / Drawing (Optional)</span>
-                  <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 'normal' }}>
-                    Excel (.xlsx, .csv), PDF, Images, CAD, ZIP (Any Format)
-                  </span>
-                </label>
-                <div
-                  className={`file-upload-box ${files.length > 0 ? 'has-files' : ''}`}
-                  id="fileUploadDropzone"
-                  onClick={() => document.getElementById('rfqAttachment')?.click()}
-                  style={{ cursor: 'pointer' }}
+            {submittedOffer ? (
+              <div 
+                className="rfq-success-card" 
+                style={{ 
+                  background: '#f8fafc', 
+                  border: '2px solid #22c55e', 
+                  borderRadius: '12px', 
+                  padding: '32px 24px', 
+                  textAlign: 'center',
+                  boxShadow: '0 4px 12px rgba(34, 197, 94, 0.1)' 
+                }}
+              >
+                <div style={{ color: '#22c55e', display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+                  <CheckCircle2 size={56} strokeWidth={2} />
+                </div>
+                <h3 style={{ color: '#0f172a', fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>
+                  RFQ Dispatched Successfully!
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>
+                  Thank you, <strong style={{ color: '#0f172a' }}>{name}</strong>. Your formal commercial inquiry has been registered with reference:
+                </p>
+                <div 
+                  style={{ 
+                    background: '#ffffff', 
+                    border: '1px dashed #cbd5e1', 
+                    padding: '12px 16px', 
+                    borderRadius: '8px', 
+                    fontFamily: 'monospace', 
+                    fontSize: '18px', 
+                    fontWeight: 700, 
+                    color: '#b91c1c',
+                    display: 'inline-block',
+                    marginBottom: '20px' 
+                  }}
                 >
-                  <input
-                    type="file"
-                    id="rfqAttachment"
-                    name="rfqAttachment"
-                    multiple
-                    accept="*/*"
-                    style={{ display: 'none' }}
-                    onChange={handleFileChange}
-                  />
-                  <div className="file-upload-content">
-                    <div className="file-upload-icon">
-                      <Upload size={22} strokeWidth={2.2} />
-                    </div>
-                    <div className="file-upload-text">
-                      <span className="file-upload-main">
-                        <strong>Click to upload</strong> or drag and drop files here
-                      </span>
-                      <span className="file-upload-sub">
-                        Attach Excel BOM, PDF schedules, drawings, photos, or spec sheets (Up to 25MB each)
-                      </span>
-                    </div>
-                  </div>
-
-                  {files.length > 0 && (
-                    <div className="file-selected-list" id="fileSelectedList" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
-                      {files.map((file, idx) => (
-                        <div className="file-chip" title={file.name} key={idx}>
-                          <Paperclip size={14} />
-                          <span className="file-chip-name">{file.name}</span>
-                          <span className="file-chip-size">({formatFileSize(file.size)})</span>
-                          <button
-                            type="button"
-                            className="file-chip-remove"
-                            onClick={(e) => removeFile(idx, e)}
-                            title="Remove file"
-                          >
-                            <X size={12} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {submittedOffer.refNo}
+                </div>
+                <p style={{ color: '#475569', fontSize: '13px', marginBottom: '24px' }}>
+                  Our sales engineering team will review your specifications and email your tiered quotation to <strong style={{ color: '#0f172a' }}>{email}</strong> within 2–4 business hours.
+                </p>
+                <div>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => setSubmittedOffer(null)}
+                    style={{ padding: '10px 24px' }}
+                  >
+                    Submit Another Inquiry
+                  </button>
                 </div>
               </div>
+            ) : (
+              <form className="rfq-form" onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="rfqName">Full Name *</label>
+                  <input
+                    type="text"
+                    id="rfqName"
+                    required
+                    placeholder="e.g. Ramesh Kumar"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                  />
+                </div>
 
-              <div className="form-group full-width">
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', height: '46px' }}>
-                  Submit Request for Quotation
-                </button>
-              </div>
-            </form>
+                <div className="form-group">
+                  <label htmlFor="rfqCompany">Company / Enterprise Name</label>
+                  <input
+                    type="text"
+                    id="rfqCompany"
+                    placeholder="e.g. Acme Automation Pvt Ltd"
+                    value={company}
+                    onChange={e => setCompany(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="rfqEmail">Business Email *</label>
+                  <input
+                    type="email"
+                    id="rfqEmail"
+                    required
+                    placeholder="name@company.com"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="rfqPhone">Phone / WhatsApp Number *</label>
+                  <input
+                    type="tel"
+                    id="rfqPhone"
+                    required
+                    placeholder="+91 98765 43210"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="rfqCat">Primary Product of Interest</label>
+                  <select id="rfqCat" value={cat} onChange={e => setCat(e.target.value)}>
+                    <option value="lapp">Lapp Kabel Cables &amp; Wires</option>
+                    <option value="eaton">Eaton Moeller Switchgear</option>
+                    <option value="partex">Partex Cable Marking Systems</option>
+                    <option value="mennekes">Mennekes CEE Plugs &amp; Sockets</option>
+                    <option value="multiple">Complete Project BOM / Mixed Schedule</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="rfqCity">Delivery City / Site Location</label>
+                  <input
+                    type="text"
+                    id="rfqCity"
+                    placeholder="e.g. Bangalore, Chennai, Pune"
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group full-width">
+                  <label htmlFor="rfqNotes">Requirement Details / Bill of Materials (BOM)</label>
+                  <textarea
+                    id="rfqNotes"
+                    rows={4}
+                    placeholder="Mention part numbers, sizes (e.g. 4x1.5 sq mm), quantities in meters or units, and required dispatch dates..."
+                    value={notes}
+                    onChange={e => setNotes(e.target.value)}
+                  />
+                </div>
+
+                {/* File Attachment Dropzone */}
+                <div className="form-group full-width">
+                  <label htmlFor="rfqAttachment" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+                    <span>Attach File / BOM / Drawing (Optional)</span>
+                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 'normal' }}>
+                      Excel (.xlsx, .csv), PDF, Images, CAD, ZIP (Any Format)
+                    </span>
+                  </label>
+                  <div
+                    className={`file-upload-box ${files.length > 0 ? 'has-files' : ''}`}
+                    id="fileUploadDropzone"
+                    onClick={() => document.getElementById('rfqAttachment')?.click()}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <input
+                      type="file"
+                      id="rfqAttachment"
+                      name="rfqAttachment"
+                      multiple
+                      accept="*/*"
+                      style={{ display: 'none' }}
+                      onChange={handleFileChange}
+                    />
+                    <div className="file-upload-content">
+                      <div className="file-upload-icon">
+                        <Upload size={22} strokeWidth={2.2} />
+                      </div>
+                      <div className="file-upload-text">
+                        <span className="file-upload-main">
+                          <strong>Click to upload</strong> or drag and drop files here
+                        </span>
+                        <span className="file-upload-sub">
+                          Attach Excel BOM, PDF schedules, drawings, photos, or spec sheets (Up to 25MB each)
+                        </span>
+                      </div>
+                    </div>
+
+                    {files.length > 0 && (
+                      <div className="file-selected-list" id="fileSelectedList" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+                        {files.map((file, idx) => (
+                          <div className="file-chip" title={file.name} key={idx}>
+                            <Paperclip size={14} />
+                            <span className="file-chip-name">{file.name}</span>
+                            <span className="file-chip-size">({formatFileSize(file.size)})</span>
+                            <button
+                              type="button"
+                              className="file-chip-remove"
+                              onClick={(e) => removeFile(idx, e)}
+                              title="Remove file"
+                            >
+                              <X size={12} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="form-group full-width">
+                  <button type="submit" className="btn btn-primary" style={{ width: '100%', height: '46px' }}>
+                    Submit Request for Quotation
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>
