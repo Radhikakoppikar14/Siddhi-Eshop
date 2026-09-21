@@ -1,11 +1,8 @@
 import type { Product, OlflexProduct } from "../types";
 // @ts-expect-error Legacy catalog data does not include a declaration file.
 import { OLFLEX_110_PRODUCTS as LEGACY_OLFLEX_110_PRODUCTS } from "../../assets/js/olflex-110-data.js";
-import {
-  OLFLEX_110SY_PRODUCTS,
-  OLFLEX_110CY_PRODUCTS,
-  OLFLEX_100I_PRODUCTS,
-} from "../../assets/js/olflex-subgroups-data.js";
+// @ts-expect-error Legacy catalog data does not include a declaration file.
+import { OLFLEX_110SY_PRODUCTS, OLFLEX_110CY_PRODUCTS, OLFLEX_100I_PRODUCTS } from "../../assets/js/olflex-subgroups-data.js";
 
 export const PRODUCTS_DATA: Product[] = [
   {
