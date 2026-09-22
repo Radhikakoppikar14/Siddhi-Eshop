@@ -5068,9 +5068,10 @@ h6 {
 }
 
 /* ====================================================================
-   MOBILE RESPONSIVE 2-COLUMN APP GRID
+   MOBILE RESPONSIVE TWEAKS & AMAZON-STYLE PRODUCT LAYOUT
    ==================================================================== */
 @media (max-width: 768px) {
+  /* 2-Column Product Grid Fix */
   .olflex-reference-track,
   .lapp-cards-grid,
   .brand-cards-grid {
@@ -5095,5 +5096,69 @@ h6 {
 
   .olflex-products-heading span {
     display: none !important;
+  }
+
+  /* Header Fix */
+  .header-inner {
+    flex-wrap: wrap !important;
+    padding: 10px 0 !important;
+    gap: 10px !important;
+  }
+
+  .brand-logo-wrap {
+    max-height: 40px !important;
+  }
+
+  .brand-logo-wrap img {
+    height: 36px !important;
+  }
+
+  .header-search-wrap {
+    order: 3 !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-top: 4px !important;
+  }
+
+  /* Amazon-Style Product Detail Page (Image Top, Details Bottom) */
+  .product-detail-container, 
+  .product-main-grid,
+  .modal-body {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  .product-image-section,
+  .modal-img-col,
+  .product-gallery-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    margin-bottom: 16px !important;
+  }
+
+  .product-image-section img,
+  .modal-product-image {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 320px !important;
+    object-fit: contain !important;
+  }
+
+  .product-info-section,
+  .modal-content-col,
+  .product-details-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  body, html {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
 }
