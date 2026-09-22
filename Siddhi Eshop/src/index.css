@@ -4990,7 +4990,7 @@ h6 {
 .auth-notice-body {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex: 1;
   min-width: 240px;
 }
@@ -5115,34 +5115,7 @@ h6 {
     max-width: 100% !important;
   }
 
-  /* 3. Catalog 2-Column Grid */
-  .olflex-reference-track,
-  .lapp-cards-grid,
-  .brand-cards-grid,
-  .products-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    overflow-x: visible !important;
-    padding: 4px 2px 14px !important;
-  }
-
-  .olflex-reference-card,
-  .lapp-photo-card,
-  .brand-photo-card,
-  .product-card {
-    flex: none !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    height: auto !important;
-  }
-
-  .olflex-products-heading span {
-    display: none !important;
-  }
-
-  /* 4. Product Detail Grid Stacking (Mobile Only) */
+  /* 3. Product Detail Grid Stacking (Mobile Only) */
   .product-detail-grid {
     display: flex !important;
     flex-direction: column !important;
@@ -5176,7 +5149,7 @@ h6 {
     margin: 0 auto !important;
   }
 
-  /* 5. RFQ Section / Modal Alignment (Mobile Only) */
+  /* 4. RFQ Section / Modal Alignment (Mobile Only) */
   .rfq-wrapper {
     display: flex !important;
     flex-direction: column !important;
@@ -5216,7 +5189,7 @@ h6 {
     margin: 0 !important;
   }
 
-  /* 6. Create Account & Login Form Field Alignment Fixes */
+  /* 5. Create Account & Login Form Field Alignment Fixes */
   .auth-modal-dialog,
   .auth-modal-card {
     width: 95% !important;
@@ -5262,7 +5235,7 @@ h6 {
     white-space: normal !important;
   }
 
-  /* 7. Fix Mobile Menu alignment and overlap */
+  /* 6. Fix Mobile Menu alignment and overlap */
   .nav-links.show {
     display: flex !important;
     flex-direction: column !important;
@@ -5285,14 +5258,213 @@ h6 {
     overflow-x: hidden !important;
   }
 }
+
 /* ====================================================================
    DESKTOP GRID LOCK
    ==================================================================== */
 @media (min-width: 769px) {
   .product-detail-grid {
     display: grid !important;
-    grid-template-columns: 1fr 1.3fr 1fr !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 30px !important;
     align-items: start !important;
+  }
+}
+
+/* ====================================================================
+   FINAL CLEAN MOBILE VERTICAL CARD STACK (DESKTOP UNTOUCHED)
+   ==================================================================== */
+@media (max-width: 768px) {
+  .lapp-cards-grid,
+  .brand-cards-grid,
+  .olflex-reference-track,
+  .olflex-reference-section div[class*="track"],
+  div[class*="cards-grid"],
+  div[class*="reference-track"] {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+    padding: 10px 0 !important;
+  }
+
+  .lapp-cards-grid > *,
+  .brand-cards-grid > *,
+  .olflex-reference-track > *,
+  .olflex-reference-section div[class*="track"] > *,
+  div[class*="cards-grid"] > *,
+  div[class*="reference-card"] {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 220px !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    border: 1px solid var(--gray-200) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  }
+}
+
+/* ====================================================================
+   UNIFORM MOBILE PAGE STACKING (EXACTLY LIKE PRODUCT DETAIL PAGE)
+   ==================================================================== */
+@media (max-width: 768px) {
+  /* Force all brand grids and card tracks into vertical column flows */
+  .lapp-cards-grid,
+  .brand-cards-grid,
+  .olflex-reference-track,
+  .lapp-product-card-grid,
+  .products-grid,
+  .category-grid,
+  .brands-grid,
+  div[class*="cards-grid"],
+  div[class*="reference-track"],
+  div[class*="product-grid"],
+  div[class*="portfolio-grid"] {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+    padding: 10px 0 !important;
+  }
+
+  /* Force every child card to be a full-width professional box */
+  .lapp-cards-grid > *,
+  .brand-cards-grid > *,
+  .olflex-reference-track > *,
+  .lapp-product-card-grid > *,
+  .products-grid > *,
+  .category-grid > *,
+  .brands-grid > *,
+  div[class*="cards-grid"] > *,
+  div[class*="reference-card"],
+  .lapp-photo-card,
+  .brand-photo-card,
+  .olflex-reference-card,
+  .product-card,
+  .cat-card,
+  .brand-partner-card {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 220px !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    border: 1px solid var(--gray-200) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  }
+}
+/* ====================================================================
+   FORCE MOBILE GRID & CARD STACKING (OVERRIDES INLINE STYLES)
+   ==================================================================== */
+@media (max-width: 768px) {
+  /* Target any grid container holding product cards and force vertical flow */
+  div[style*="grid"],
+  div[class*="grid"],
+  .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+  }
+
+  /* Force the individual product cards inside those grids to full width */
+  div[style*="grid"] > *,
+  div[class*="grid"] > *,
+  .grid > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ====================================================================
+   DESKTOP BANNER LOCK & MOBILE RESPONSIVE ADAPTATION
+   ==================================================================== */
+
+/* Ensure desktop view remains completely untouched */
+@media (min-width: 769px) {
+  .desktop-banner-section {
+    height: 320px !important;
+  }
+  .slide-body-split {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+}
+
+/* Mobile-only adaptation so the ad banner looks clean and readable on phones */
+@media (max-width: 768px) {
+  .desktop-banner-section {
+    height: auto !important;
+    min-height: 420px !important;
+    padding: 20px 0 !important;
+  }
+
+  .moglix-slide {
+    padding: 16px 12px !important;
+    position: relative !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .slide-body-split {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .slide-text-col {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .slide-heading-main {
+    font-size: 24px !important;
+    line-height: 1.25 !important;
+  }
+
+  .slide-paragraph {
+    font-size: 12.5px !important;
+    max-width: 100% !important;
+  }
+
+  .slide-product-showcase {
+    width: 100% !important;
+    max-width: 320px !important;
+    height: auto !important;
+    min-height: 180px !important;
+    margin: 0 auto !important;
+  }
+
+  .slide-action-btns {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .slide-action-btns .btn,
+  .slide-showcase-btn {
+    width: 100% !important;
   }
 }
