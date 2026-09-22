@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Search,
   Filter,
@@ -16,6 +16,7 @@ import { isValidPositiveNumber } from "../utils/validation";
 import { RFQModal } from "../assets/components/ui/RFQModal.tsx";
 
 export const OlflexCables: React.FC = () => {
+  const navigate = useNavigate();
   const [subgroup, setSubgroup] = useState<
     "all" | "110" | "110sy" | "110cy" | "100"
   >("all");
@@ -185,8 +186,27 @@ export const OlflexCables: React.FC = () => {
   const renderProductCard = (item: OlflexProduct) => {
     const qty = quantities[item.partNo] || 100;
     return (
-      <article className="olflex-reference-card" key={item.partNo}>
-        <div className="olflex-reference-image">
+      <article
+        className="olflex-reference-card"
+        key={item.partNo}
+        style={{
+          transition: "all 0.25s ease",
+          cursor: "pointer",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-4px)";
+          e.currentTarget.style.boxShadow =
+            "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "none";
+        }}
+      >
+        <div
+          className="olflex-reference-image"
+          onClick={() => navigate(`/product/${item.partNo}`)}
+        >
           <img src="/images/cable-olflex-thumb.png" alt={item.name} />
         </div>
         <div className="olflex-reference-card-body">
@@ -198,7 +218,21 @@ export const OlflexCables: React.FC = () => {
               item.subCategory ||
               "PVC outer sheath and numbered cores"}
           </span>
-          <h3>{item.name}</h3>
+
+          {/* Product Title: Black by default, highlights Orange on hover */}
+          <h3
+            onClick={() => navigate(`/product/${item.partNo}`)}
+            style={{
+              color: "#0f172a",
+              cursor: "pointer",
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#ff6600")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#0f172a")}
+          >
+            {item.name}
+          </h3>
+
           <p>
             Part No: <strong>{item.partNo}</strong>
           </p>
@@ -380,7 +414,7 @@ export const OlflexCables: React.FC = () => {
                 Export CSV Schedule
               </button>
               <Link
-                to="/product-detail"
+                to="/product/1119003"
                 className="btn btn-primary btn-sm"
                 style={{ display: "flex", alignItems: "center", gap: "6px" }}
               >

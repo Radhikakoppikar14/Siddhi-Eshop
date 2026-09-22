@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { ToastProvider } from "./context/ToastContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -28,12 +29,24 @@ import { AboutEaton } from "./pages/AboutEaton";
 import { AboutPartex } from "./pages/AboutPartex";
 import { AboutMennekes } from "./pages/AboutMennekes";
 
+// Helper component to reset scroll position on route change
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+
+  return null;
+};
+
 export const App: React.FC = () => {
   return (
     <ToastProvider>
       <AuthProvider>
         <CartProvider>
           <Router basename={import.meta.env.BASE_URL}>
+            <ScrollToTop />
             <div
               className="siddhi-app-wrapper"
               style={{
@@ -51,7 +64,8 @@ export const App: React.FC = () => {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/olflex-cables" element={<OlflexCables />} />
-                  <Route path="/product-detail" element={<ProductDetail />} />
+                  {/* Dynamic route supporting individual product IDs */}
+                  <Route path="/product/:id" element={<ProductDetail />} />
                   <Route path="/about-lapp" element={<AboutLapp />} />
                   <Route path="/about-eaton" element={<AboutEaton />} />
                   <Route path="/about-partex" element={<AboutPartex />} />
