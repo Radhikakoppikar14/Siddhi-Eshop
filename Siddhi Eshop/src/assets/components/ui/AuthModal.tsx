@@ -254,6 +254,8 @@ export const AuthModal: React.FC = () => {
                 {loginFieldErrors.loginId && (
                   <div
                     className="auth-alert"
+                    role="alert"
+                    aria-live="polite"
                     style={{ display: "block", marginTop: "6px" }}
                   >
                     {loginFieldErrors.loginId}
@@ -288,6 +290,8 @@ export const AuthModal: React.FC = () => {
                 {loginFieldErrors.loginPass && (
                   <div
                     className="auth-alert"
+                    role="alert"
+                    aria-live="polite"
                     style={{ display: "block", marginTop: "6px" }}
                   >
                     {loginFieldErrors.loginPass}
@@ -373,6 +377,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="text"
                       required
+                      aria-invalid={Boolean(regFieldErrors.companyName)}
                       placeholder="e.g. Acme Automation Pvt Ltd"
                       value={regData.companyName}
                       onChange={(e) =>
@@ -390,6 +395,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="text"
                       required
+                      aria-invalid={Boolean(regFieldErrors.address)}
                       placeholder="e.g. Plot No. 42, Peenya Industrial Area 2nd Phase"
                       value={regData.address}
                       onChange={(e) =>
@@ -409,6 +415,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="text"
                       required
+                      aria-invalid={Boolean(regFieldErrors.city)}
                       placeholder="e.g. Bangalore, Chennai, Pune"
                       value={regData.city}
                       onChange={(e) => updateRegField("city", e.target.value)}
@@ -444,6 +451,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="text"
                       required
+                      aria-invalid={Boolean(regFieldErrors.gstNo)}
                       maxLength={15}
                       placeholder="E.g. 29ABCDEF1234F1Z5"
                       value={regData.gstNo}
@@ -470,6 +478,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="text"
                       required
+                      aria-invalid={Boolean(regFieldErrors.contactPerson)}
                       placeholder="e.g. Ramesh Kumar"
                       value={regData.contactPerson}
                       onChange={(e) =>
@@ -487,6 +496,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="tel"
                       required
+                      aria-invalid={Boolean(regFieldErrors.phone)}
                       maxLength={10}
                       inputMode="numeric"
                       placeholder="e.g. 9820000947"
@@ -509,6 +519,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="email"
                       required
+                      aria-invalid={Boolean(regFieldErrors.email)}
                       placeholder="name@company.com"
                       value={regData.email}
                       onChange={(e) => updateRegField("email", e.target.value)}
@@ -532,6 +543,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="password"
                       required
+                      aria-invalid={Boolean(regFieldErrors.password)}
                       placeholder="Enter a secure password"
                       value={regData.password}
                       onChange={(e) => {
@@ -552,6 +564,7 @@ export const AuthModal: React.FC = () => {
                     <input
                       type="password"
                       required
+                      aria-invalid={Boolean(regFieldErrors.confirmPassword)}
                       placeholder="Confirm your password"
                       value={regData.confirmPassword}
                       onChange={(e) =>

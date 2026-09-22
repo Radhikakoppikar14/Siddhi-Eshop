@@ -3944,7 +3944,26 @@ h6 {
 
 @media (max-width: 600px) {
   .auth-modal-card {
-    max-width: 98% !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: 96vh !important;
+    border-radius: 8px;
+  }
+  .auth-modal-header {
+    padding: 14px 16px 8px;
+  }
+  .auth-modal-title {
+    padding-right: 24px;
+    font-size: 17px;
+  }
+  .auth-tabs {
+    gap: 0;
+    overflow-x: auto;
+  }
+  .auth-tab-btn {
+    flex: 1 0 auto;
+    padding-inline: 8px;
+    white-space: nowrap;
   }
   .auth-modal-body {
     padding: 16px;
@@ -3954,6 +3973,19 @@ h6 {
   }
   .auth-grid-company-bottom .col-gst {
     grid-column: span 1;
+  }
+  .rfq-section {
+    padding: 48px 0;
+  }
+  .rfq-info-col,
+  .rfq-form-col {
+    padding: 28px 20px;
+  }
+  .rfq-info-col h3 {
+    font-size: 24px;
+  }
+  .rfq-form {
+    gap: 14px;
   }
 }
 
@@ -4000,11 +4032,16 @@ h6 {
 }
 
 .auth-alert {
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 7px 10px;
+  border: 1px solid #fecaca;
+  border-left: 3px solid #dc2626;
+  border-radius: 4px;
+  background: #fff1f2;
+  color: #b91c1c;
   font-size: 12.5px;
   margin-bottom: 12px;
-  font-weight: 500;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .auth-alert.error {
@@ -4017,6 +4054,18 @@ h6 {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
   color: #16a34a;
+}
+
+.auth-field-group .auth-alert {
+  margin-bottom: 0;
+}
+
+.auth-input-wrap input[aria-invalid="true"],
+.auth-input-wrap select[aria-invalid="true"],
+.rfq-form input[aria-invalid="true"],
+.rfq-form select[aria-invalid="true"] {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12);
 }
 
 .input-icon-wrap {

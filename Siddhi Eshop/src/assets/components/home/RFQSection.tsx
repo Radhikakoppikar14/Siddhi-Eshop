@@ -159,6 +159,8 @@ export const RFQSection: React.FC = () => {
     fieldErrors[field] ? (
       <div
         className="auth-alert"
+        role="alert"
+        aria-live="polite"
         style={{ display: "block", marginTop: "6px" }}
       >
         {fieldErrors[field]}
@@ -381,6 +383,7 @@ export const RFQSection: React.FC = () => {
                     type="text"
                     id="rfqName"
                     required
+                    aria-invalid={Boolean(fieldErrors.name)}
                     placeholder="e.g. Ramesh Kumar"
                     value={name}
                     onChange={(e) => {
@@ -408,6 +411,7 @@ export const RFQSection: React.FC = () => {
                     type="email"
                     id="rfqEmail"
                     required
+                    aria-invalid={Boolean(fieldErrors.email)}
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => {
@@ -424,6 +428,7 @@ export const RFQSection: React.FC = () => {
                     type="tel"
                     id="rfqPhone"
                     required
+                    aria-invalid={Boolean(fieldErrors.phone)}
                     maxLength={10}
                     inputMode="numeric"
                     placeholder="98765 43210"
@@ -440,6 +445,7 @@ export const RFQSection: React.FC = () => {
                   <label htmlFor="rfqCat">Primary Product of Interest</label>
                   <select
                     id="rfqCat"
+                    aria-invalid={Boolean(fieldErrors.cat)}
                     value={cat}
                     onChange={(e) => setCat(e.target.value)}
                   >
@@ -463,6 +469,7 @@ export const RFQSection: React.FC = () => {
                     id="rfqQuantity"
                     min="1"
                     step="1"
+                    aria-invalid={Boolean(fieldErrors.quantity)}
                     value={quantity}
                     onChange={(e) => {
                       setQuantity(e.target.value);
