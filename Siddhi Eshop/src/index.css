@@ -5068,7 +5068,7 @@ h6 {
 }
 
 /* ====================================================================
-   MOBILE RESPONSIVE TWEAKS (True Mobile App Grid Feel)
+   MOBILE RESPONSIVE 2-COLUMN APP GRID
    ==================================================================== */
 @media (max-width: 768px) {
   .olflex-reference-track,
@@ -5090,7 +5090,7 @@ h6 {
     min-width: 0 !important;
     max-width: none !important;
     height: auto !important;
-    min-height: 200px !important;
+    min-height: 195px !important;
   }
 
   .olflex-products-heading span {
