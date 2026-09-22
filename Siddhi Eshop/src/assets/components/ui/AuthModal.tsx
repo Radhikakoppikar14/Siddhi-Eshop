@@ -44,7 +44,6 @@ export const AuthModal: React.FC = () => {
     state: "Karnataka",
     city: "Bangalore",
     password: "",
-    confirmPassword: "",
     address: "",
   });
   const [regError, setRegError] = useState("");
@@ -115,7 +114,6 @@ export const AuthModal: React.FC = () => {
       state,
       city,
       password,
-      confirmPassword,
       address,
     } = regData;
 
@@ -129,7 +127,6 @@ export const AuthModal: React.FC = () => {
       ["phone", phone, "Mobile number is required."],
       ["email", email, "Email is required."],
       ["password", password, "Password is required."],
-      ["confirmPassword", confirmPassword, "Confirm password is required."],
     ];
     requiredFields.forEach(([field, value, message]) => {
       if (!isNotEmptyString(value)) nextErrors[field] = message;
@@ -146,8 +143,6 @@ export const AuthModal: React.FC = () => {
     )
       nextErrors.password =
         "Password must contain at least one special character.";
-    if (isNotEmptyString(confirmPassword) && password !== confirmPassword)
-      nextErrors.confirmPassword = "Passwords do not match.";
     setRegFieldErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -297,28 +292,6 @@ export const AuthModal: React.FC = () => {
                     {loginFieldErrors.loginPass}
                   </div>
                 )}
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "15px",
-                }}
-              >
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    fontSize: "12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <input type="checkbox" defaultChecked /> Remember login on
-                  this device
-                </label>
               </div>
 
               <button
@@ -556,23 +529,6 @@ export const AuthModal: React.FC = () => {
                     />
                   </div>
                   {renderRegError("password")}
-                  <div
-                    className="auth-input-wrap"
-                    style={{ marginTop: "10px" }}
-                  >
-                    <Lock size={16} className="auth-field-icon" />
-                    <input
-                      type="password"
-                      required
-                      aria-invalid={Boolean(regFieldErrors.confirmPassword)}
-                      placeholder="Confirm your password"
-                      value={regData.confirmPassword}
-                      onChange={(e) =>
-                        updateRegField("confirmPassword", e.target.value)
-                      }
-                    />
-                  </div>
-                  {renderRegError("confirmPassword")}
                 </div>
 
                 <div className="password-note-box">
