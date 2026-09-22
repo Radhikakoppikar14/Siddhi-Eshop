@@ -5066,3 +5066,34 @@ h6 {
 #contactSection {
   scroll-margin-top: 90px;
 }
+
+/* ====================================================================
+   MOBILE RESPONSIVE TWEAKS (True Mobile App Grid Feel)
+   ==================================================================== */
+@media (max-width: 768px) {
+  .olflex-reference-track,
+  .lapp-cards-grid,
+  .brand-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    overflow-x: visible !important;
+    padding: 4px 2px 14px !important;
+    scroll-snap-type: none !important;
+  }
+
+  .olflex-reference-card,
+  .lapp-photo-card,
+  .brand-photo-card {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 200px !important;
+  }
+
+  .olflex-products-heading span {
+    display: none !important;
+  }
+}
