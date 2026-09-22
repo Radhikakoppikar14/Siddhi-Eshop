@@ -33,7 +33,7 @@ export const App: React.FC = () => {
     <ToastProvider>
       <AuthProvider>
         <CartProvider>
-          <Router>
+          <Router basename={import.meta.env.BASE_URL}>
             <div
               className="siddhi-app-wrapper"
               style={{

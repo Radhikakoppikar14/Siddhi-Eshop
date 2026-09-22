@@ -132,6 +132,83 @@ export const OlflexCables: React.FC = () => {
     setSubgroup("all");
   };
 
+  const groups = [
+    {
+      key: "110",
+      title: "1. ÖLFLEX® CLASSIC 110",
+      pill: "PVC outer sheath and numbered cores",
+      description:
+        "The benchmark oil-resistant flexible control cable for universal installation in electrical engineering, automation, and machine tooling.",
+      specs: "Conductor: Bare copper wire, Class 5 fine strand | Outer Sheath: Special PVC, Silver-grey (RAL 7001), Oil-resistant | Cores: Black with continuous white numbers | Voltage: U0/U: 300/500 V",
+      filter: (item: OlflexProduct) => !item.name.includes("SY") && !item.name.includes("CY") && !item.name.includes("100"),
+    },
+    {
+      key: "110sy",
+      title: "2. ÖLFLEX® CLASSIC 110 SY",
+      pill: "Steel wire braid · Mechanically protected",
+      description:
+        "Reinforced flexible control cable with galvanised steel wire braid for superior mechanical protection against crush, tensile forces, and rodents.",
+      specs: "Protection: Galvanised steel wire braid (SY) | Outer Sheath: Transparent PVC | Cores: Black cores with white numbers | Application: Heavy machinery and production lines",
+      filter: (item: OlflexProduct) => item.name.includes("SY"),
+    },
+    {
+      key: "110cy",
+      title: "3. ÖLFLEX® CLASSIC 110 CY",
+      pill: "Copper wire braid · EMC Screened",
+      description:
+        "Screened flexible control cable with tinned copper wire braid offering high electromagnetic compatibility against interference in automation, PLC, and drive systems.",
+      specs: "Screening: Tinned copper wire braid (CY) approx. 85% | Outer Sheath: Special PVC | Cores: Black with white numbers | Primary Use: Plant engineering and EMC environments",
+      filter: (item: OlflexProduct) => item.name.includes("CY"),
+    },
+    {
+      key: "100",
+      title: "4. ÖLFLEX® 100 I",
+      pill: "PVC outer sheath · Colour coded as per IS 694 cores",
+      description:
+        "Engineered for the Indian industrial and infrastructure market in compliance with BIS IS 694, with vivid colour-coded cores for intuitive identification.",
+      specs: "Standard: IS 694:2010 (ISI Mark) & Flame Retardant (FR) | Outer Sheath: Premium FR PVC | Cores: Colour coded as per IS 694 | Voltage: Up to 1100 V",
+      filter: (item: OlflexProduct) => item.name.includes("100"),
+    },
+  ] as const;
+
+  const baseFilteredProducts = filteredProducts;
+
+  const renderProductCard = (item: OlflexProduct) => {
+    const qty = quantities[item.partNo] || 100;
+    return (
+      <article className="olflex-reference-card" key={item.partNo}>
+        <div className="olflex-reference-image">
+          <img src="/images/cable-olflex-thumb.png" alt={item.name} />
+        </div>
+        <div className="olflex-reference-card-body">
+          <span className="olflex-card-category">{item.category || "Power and control cables"}</span>
+          <span className="olflex-card-subcategory">{item.desc || item.subCategory || "PVC outer sheath and numbered cores"}</span>
+          <h3>{item.name}</h3>
+          <p>Part No: <strong>{item.partNo}</strong></p>
+          <span className="olflex-card-spec">{item.core} Cores · {item.size} mm² ({item.pe === "G" ? "With Earth" : "Numbered"})</span>
+          <div className="olflex-card-price">
+            <strong>₹ {item.price.toFixed(2)}</strong>
+            <span>+ ₹{item.gst.toFixed(2)} GST</span>
+            <small>MRP ₹{item.mrp.toFixed(2)} <b>45% OFF</b></small>
+          </div>
+          <div className="olflex-card-actions">
+            <input
+              type="number"
+              min="1"
+              step="50"
+              value={qty}
+              aria-label={`Order length for ${item.name}`}
+              onChange={(event) => handleQtyChange(item.partNo, Number(event.target.value))}
+            />
+            <button type="button" onClick={() => handleAddToCart(item)}>
+              <ShoppingCart size={13} /> Add to Enquiry
+            </button>
+          </div>
+        </div>
+      </article>
+    );
+  };
+
   return (
     <div
       style={{
@@ -494,173 +571,43 @@ export const OlflexCables: React.FC = () => {
           </div>
         </div>
 
-        {/* Data Table */}
-        <div
-          style={{
-            background: "#ffffff",
-            border: "1px solid #e2e8f0",
-            borderRadius: "10px",
-            overflowX: "auto",
-            boxShadow: "0 1px 6px rgba(0,0,0,0.02)",
-          }}
-        >
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              textAlign: "left",
-              fontSize: "13px",
-            }}
-          >
-            <thead>
-              <tr
-                style={{
-                  background: "#f8fafc",
-                  borderBottom: "2px solid #e2e8f0",
-                  color: "#475569",
-                  fontSize: "12px",
-                  textTransform: "uppercase",
-                }}
-              >
-                <th style={{ padding: "12px 16px" }}>Image</th>
-                <th style={{ padding: "12px 16px" }}>Part No</th>
-                <th style={{ padding: "12px 16px" }}>Dimension &amp; Spec</th>
-                <th style={{ padding: "12px 16px" }}>Cores x mm²</th>
-                <th style={{ padding: "12px 16px" }}>Outer Dia</th>
-                <th style={{ padding: "12px 16px" }}>Copper Wt</th>
-                <th style={{ padding: "12px 16px" }}>Basic Price / m</th>
-                <th style={{ padding: "12px 16px" }}>GST (18%)</th>
-                <th style={{ padding: "12px 16px" }}>List Price</th>
-                <th style={{ padding: "12px 16px", textAlign: "center" }}>
-                  Order Length (m)
-                </th>
-                <th style={{ padding: "12px 16px", textAlign: "center" }}>
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.slice(0, 150).map((item) => {
-                const qty = quantities[item.partNo] || 100;
-                return (
-                  <tr
-                    key={item.partNo}
-                    style={{
-                      borderBottom: "1px solid #f1f5f9",
-                      transition: "background 0.15s ease",
-                    }}
-                  >
-                    <td style={{ padding: "8px 16px" }}>
-                      <img
-                        src="/images/cable-olflex-thumb.png"
-                        alt={item.name}
-                        width="72"
-                        height="56"
-                        style={{
-                          width: "72px",
-                          height: "56px",
-                          objectFit: "contain",
-                          borderRadius: "6px",
-                          background: "#f8fafc",
-                          display: "block",
-                        }}
-                      />
-                    </td>
-                    <td
-                      style={{
-                        padding: "12px 16px",
-                        fontWeight: 700,
-                        color: "var(--primary)",
-                      }}
-                    >
-                      {item.partNo}
-                    </td>
-                    <td
-                      style={{
-                        padding: "12px 16px",
-                        fontWeight: 600,
-                        color: "#1e293b",
-                      }}
-                    >
-                      {item.name}
-                      {item.desc && (
-                        <div style={{ fontSize: "11px", color: "#64748b" }}>
-                          {item.desc}
-                        </div>
-                      )}
-                    </td>
-                    <td style={{ padding: "12px 16px", color: "#334155" }}>
-                      {item.core} {item.pe} {item.size}
-                    </td>
-                    <td style={{ padding: "12px 16px", color: "#64748b" }}>
-                      {item.outerDia ? `${item.outerDia} mm` : "—"}
-                    </td>
-                    <td style={{ padding: "12px 16px", color: "#64748b" }}>
-                      {item.copperIndex ? `${item.copperIndex} kg` : "—"}
-                    </td>
-                    <td
-                      style={{
-                        padding: "12px 16px",
-                        fontWeight: 700,
-                        color: "#0f172a",
-                      }}
-                    >
-                      ₹{item.price.toFixed(2)}
-                    </td>
-                    <td style={{ padding: "12px 16px", color: "#64748b" }}>
-                      ₹{item.gst.toFixed(2)}
-                    </td>
-                    <td
-                      style={{
-                        padding: "12px 16px",
-                        fontWeight: 700,
-                        color: "#e11d48",
-                      }}
-                    >
-                      ₹{item.mrp.toFixed(2)}
-                    </td>
-                    <td style={{ padding: "12px 16px", textAlign: "center" }}>
-                      <input
-                        type="number"
-                        min="1"
-                        step="50"
-                        value={qty}
-                        onChange={(e) =>
-                          handleQtyChange(
-                            item.partNo,
-                            parseInt(e.target.value) || 1,
-                          )
-                        }
-                        style={{
-                          width: "70px",
-                          padding: "4px 6px",
-                          textAlign: "center",
-                          border: "1px solid #cbd5e1",
-                          borderRadius: "4px",
-                          fontSize: "12.5px",
-                        }}
-                      />
-                    </td>
-                    <td style={{ padding: "12px 16px", textAlign: "center" }}>
-                      <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => handleAddToCart(item)}
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "4px",
-                          padding: "5px 12px",
-                        }}
-                      >
-                        <ShoppingCart size={13} />
-                        Add RFQ
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        {groups.map((group) => {
+          const products = baseFilteredProducts.filter(group.filter).slice(0, 150);
+          return (
+            <section className="olflex-reference-section" id={`section-${group.key}`} key={group.key}>
+              <div className="olflex-subgroup-info">
+                <div className="olflex-subgroup-heading">
+                  <h2>{group.title}</h2>
+                  <span>{group.pill}</span>
+                  <em>{products.length} Items</em>
+                </div>
+                <p>{group.description}</p>
+                <div className="olflex-subgroup-specs">{group.specs}</div>
+              </div>
+              <div className="olflex-products-heading">
+                <strong>{group.title.replace(/^\d\. /, "")} Products: {products.length}</strong>
+                <span>Scroll horizontally →</span>
+              </div>
+              <div className="olflex-reference-track">
+                {products.map(renderProductCard)}
+              </div>
+            </section>
+          );
+        })}
+
+        <div className="olflex-comparison-card">
+          <h2>▧ Technical Comparison · Lapp Control Cable Sub-Groups</h2>
+          <div className="olflex-comparison-scroll">
+            <table>
+              <thead><tr><th>Product Group</th><th>Core Coding Scheme</th><th>Internal Protection / Screening</th><th>Outer Sheath Type</th><th>Standard / Certification</th><th>Primary Use Case</th></tr></thead>
+              <tbody>
+                <tr><td>ÖLFLEX® CLASSIC 110</td><td>Black cores with white numbers</td><td>None (Standard Flexible)</td><td>Special Oil-Resistant PVC</td><td>VDE Reg. No. 7030, CE</td><td>General machine tools &amp; control cabinets</td></tr>
+                <tr><td>ÖLFLEX® CLASSIC 110 SY</td><td>Black cores with white numbers</td><td><b>Galvanised Steel Wire Braid (SY)</b></td><td>Transparent PVC</td><td>VDE-based, CE</td><td>Heavy mechanical duty &amp; cable trays</td></tr>
+                <tr><td>ÖLFLEX® CLASSIC 110 CY</td><td>Black cores with white numbers</td><td><b>Tinned Copper Wire Braid (CY)</b></td><td>Special PVC (EMC)</td><td>VDE-based, CE, EMC</td><td>Plant engineering and EMC environments</td></tr>
+                <tr><td>ÖLFLEX® 100 I</td><td><b>Colour coded as per IS 694</b></td><td>Unshielded</td><td>Flame Retardant PVC</td><td><b>BIS IS 694:2010</b></td><td>Indian plant engineering &amp; infrastructure</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

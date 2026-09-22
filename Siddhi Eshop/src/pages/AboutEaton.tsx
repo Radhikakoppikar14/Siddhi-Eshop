@@ -113,27 +113,6 @@ export const AboutEaton: React.FC = () => {
                 alt="Eaton Logo"
                 style={{ height: "36px", width: "auto", objectFit: "contain" }}
               />
-              <div>
-                <span
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    color: "#64748b",
-                  }}
-                >
-                  EATON POWER QUALITY PVT LTD
-                </span>
-                <h1
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: 800,
-                    color: "#0f172a",
-                    margin: 0,
-                  }}
-                >
-                  EATON MOELLER INDUSTRIAL ELECTRICAL
-                </h1>
-              </div>
             </div>
             <span
               style={{
@@ -150,6 +129,19 @@ export const AboutEaton: React.FC = () => {
               OFFICIAL INDUSTRIAL DISTRIBUTOR
             </span>
           </div>
+
+          <h1
+            style={{
+              borderTop: "2px solid #f1f5f9",
+              paddingTop: "16px",
+              fontSize: "24px",
+              fontWeight: 800,
+              color: "#0f172a",
+              margin: "0 0 18px",
+            }}
+          >
+            About EATON Moeller Switchgear
+          </h1>
 
           <div
             style={{
@@ -184,8 +176,15 @@ export const AboutEaton: React.FC = () => {
                 }}
               >
                 Eaton is a global intelligent power management company dedicated
-                to improving power quality, safety, and efficiency across
-                electrical and industrial applications.
+                to improving the quality of life and protecting the environment
+                for people everywhere. With over a century of electrical
+                engineering innovation, Eaton&apos;s Electrical Sector is a
+                worldwide benchmark in power distribution, circuit protection,
+                motor control, industrial automation, and harsh environment
+                solutions. In India, Eaton operates state-of-the-art
+                manufacturing and engineering development centers delivering
+                certified, high-reliability switchgear designed for continuous
+                industrial operation.
               </p>
             </div>
             <div
@@ -213,9 +212,14 @@ export const AboutEaton: React.FC = () => {
                   margin: 0,
                 }}
               >
-                Motor protection, contactors, circuit breakers, pilot devices,
-                and PowerXL drives for panel builders, OEMs, and process
-                industries.
+                Recognized across panel builders, machine tool manufacturers,
+                and process industries, the world-famous Moeller series
+                portfolio provides unmatched reliability. Key product families
+                include PKZM0® &amp; PKE motor-protective circuit breakers up to
+                65A, DILM® contactors and thermal overload relays up to 1000A,
+                NZM® molded case circuit breakers up to 1600A, FAZ® miniature
+                circuit breakers, RMQ-Titan® pilot devices, and PowerXL®
+                variable speed drives.
               </p>
             </div>
           </div>
@@ -287,8 +291,16 @@ export const AboutEaton: React.FC = () => {
                   {description}
                 </p>
                 <button
-                  className="btn btn-primary btn-sm"
-                  style={{ width: "100%", fontSize: "10px" }}
+                  className="eaton-quote-link"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#005ea6",
+                    padding: 0,
+                    fontSize: "10px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
                   onClick={() => scrollToRfqTopic(`Eaton ${title}`)}
                 >
                   Request Quotation &rarr;

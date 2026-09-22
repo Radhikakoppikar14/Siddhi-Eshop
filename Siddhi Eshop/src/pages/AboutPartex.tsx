@@ -111,29 +111,8 @@ export const AboutPartex: React.FC = () => {
               <img
                 src="/images/logo-partex.png"
                 alt="Partex Logo"
-                style={{ height: "36px", width: "auto", objectFit: "contain" }}
+                style={{ height: "42px", width: "auto", objectFit: "contain" }}
               />
-              <div>
-                <span
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    color: "#64748b",
-                  }}
-                >
-                  PARTEX MARKING SYSTEMS SWEDEN
-                </span>
-                <h1
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: 800,
-                    color: "#0f172a",
-                    margin: 0,
-                  }}
-                >
-                  PARTEX INDUSTRIAL MARKING SOLUTIONS
-                </h1>
-              </div>
             </div>
             <span
               style={{
@@ -150,6 +129,19 @@ export const AboutPartex: React.FC = () => {
               AUTHORIZED DISTRIBUTOR
             </span>
           </div>
+
+          <h1
+            style={{
+              borderTop: "2px solid #f1f5f9",
+              paddingTop: "14px",
+              fontSize: "20px",
+              fontWeight: 800,
+              color: "#0f172a",
+              margin: "0 0 14px",
+            }}
+          >
+            About PARTEX Sweden Marking Systems
+          </h1>
 
           <div
             style={{
@@ -183,9 +175,13 @@ export const AboutPartex: React.FC = () => {
                   margin: 0,
                 }}
               >
-                Founded in Sweden in 1948, Partex has developed specialist
-                identification products for electrical, rail, defense, marine,
-                and energy applications.
+                Founded in Sweden in 1948,{" "}
+                <strong>Partex Marking Systems</strong> is a world leader in
+                high-durability industrial wire, cable, pipe, and component
+                identification systems. With over 75 years of manufacturing
+                expertise and operations in more than 60 countries, Partex
+                supplies certified marking solutions engineered for electrical
+                switchgear, rail, defense, marine, and energy automation.
               </p>
             </div>
             <div
@@ -213,8 +209,12 @@ export const AboutPartex: React.FC = () => {
                   margin: 0,
                 }}
               >
-                PA, PC, PO, PKS markers, ProMark printers, and cable ties are
-                available for panel builders and industrial maintenance teams.
+                Siddhi Kabel maintains ex-stock availability in Bangalore for
+                the complete Partex product line: PA closed chevron-cut wire
+                sleeves, PC clip-on snap markers, PO/POZ printable heat-shrink
+                and oval tubing, PKS acid-proof 316 stainless steel cable
+                markers, high-speed ProMark T-1000 thermal transfer printing
+                systems, and heavy-duty cable ties.
               </p>
             </div>
           </div>
@@ -286,8 +286,16 @@ export const AboutPartex: React.FC = () => {
                   {description}
                 </p>
                 <button
-                  className="btn btn-primary btn-sm"
-                  style={{ width: "100%", fontSize: "10px" }}
+                  className="partex-quote-link"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#dc2626",
+                    padding: 0,
+                    fontSize: "10px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
                   onClick={() => scrollToRfqTopic(`Partex ${title}`)}
                 >
                   Request Quotation &rarr;
