@@ -91,8 +91,7 @@ export const ProductDetail: React.FC = () => {
         </div>
 
         {/* Main 3-Column Layout */}
-        <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1.6fr 1fr", gap: "24px", alignItems: "start" }}>
-          
+<div className="product-detail-grid">          
           {/* Column 1: Image Gallery & Zoom Preview */}
           <div>
             <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px", textAlign: "center", marginBottom: "12px", height: "340px", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
