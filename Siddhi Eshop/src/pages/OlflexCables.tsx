@@ -13,6 +13,7 @@ import { useCart } from "../context/CartContext";
 import { useToast } from "../context/ToastContext";
 import type { OlflexProduct } from "../types";
 import { isValidPositiveNumber } from "../utils/validation";
+import { RFQModal } from "../assets/components/ui/RFQModal.tsx";
 
 export const OlflexCables: React.FC = () => {
   const [subgroup, setSubgroup] = useState<
@@ -22,6 +23,7 @@ export const OlflexCables: React.FC = () => {
   const [selectedCore, setSelectedCore] = useState("all");
   const [selectedSize, setSelectedSize] = useState("all");
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   const { addCustomItem } = useCart();
   const { showToast } = useToast();
@@ -139,8 +141,12 @@ export const OlflexCables: React.FC = () => {
       pill: "PVC outer sheath and numbered cores",
       description:
         "The benchmark oil-resistant flexible control cable for universal installation in electrical engineering, automation, and machine tooling.",
-      specs: "Conductor: Bare copper wire, Class 5 fine strand | Outer Sheath: Special PVC, Silver-grey (RAL 7001), Oil-resistant | Cores: Black with continuous white numbers | Voltage: U0/U: 300/500 V",
-      filter: (item: OlflexProduct) => !item.name.includes("SY") && !item.name.includes("CY") && !item.name.includes("100"),
+      specs:
+        "Conductor: Bare copper wire, Class 5 fine strand | Outer Sheath: Special PVC, Silver-grey (RAL 7001), Oil-resistant | Cores: Black with continuous white numbers | Voltage: U0/U: 300/500 V",
+      filter: (item: OlflexProduct) =>
+        !item.name.includes("SY") &&
+        !item.name.includes("CY") &&
+        !item.name.includes("100"),
     },
     {
       key: "110sy",
@@ -148,7 +154,8 @@ export const OlflexCables: React.FC = () => {
       pill: "Steel wire braid · Mechanically protected",
       description:
         "Reinforced flexible control cable with galvanised steel wire braid for superior mechanical protection against crush, tensile forces, and rodents.",
-      specs: "Protection: Galvanised steel wire braid (SY) | Outer Sheath: Transparent PVC | Cores: Black cores with white numbers | Application: Heavy machinery and production lines",
+      specs:
+        "Protection: Galvanised steel wire braid (SY) | Outer Sheath: Transparent PVC | Cores: Black cores with white numbers | Application: Heavy machinery and production lines",
       filter: (item: OlflexProduct) => item.name.includes("SY"),
     },
     {
@@ -157,7 +164,8 @@ export const OlflexCables: React.FC = () => {
       pill: "Copper wire braid · EMC Screened",
       description:
         "Screened flexible control cable with tinned copper wire braid offering high electromagnetic compatibility against interference in automation, PLC, and drive systems.",
-      specs: "Screening: Tinned copper wire braid (CY) approx. 85% | Outer Sheath: Special PVC | Cores: Black with white numbers | Primary Use: Plant engineering and EMC environments",
+      specs:
+        "Screening: Tinned copper wire braid (CY) approx. 85% | Outer Sheath: Special PVC | Cores: Black with white numbers | Primary Use: Plant engineering and EMC environments",
       filter: (item: OlflexProduct) => item.name.includes("CY"),
     },
     {
@@ -166,7 +174,8 @@ export const OlflexCables: React.FC = () => {
       pill: "PVC outer sheath · Colour coded as per IS 694 cores",
       description:
         "Engineered for the Indian industrial and infrastructure market in compliance with BIS IS 694, with vivid colour-coded cores for intuitive identification.",
-      specs: "Standard: IS 694:2010 (ISI Mark) & Flame Retardant (FR) | Outer Sheath: Premium FR PVC | Cores: Colour coded as per IS 694 | Voltage: Up to 1100 V",
+      specs:
+        "Standard: IS 694:2010 (ISI Mark) & Flame Retardant (FR) | Outer Sheath: Premium FR PVC | Cores: Colour coded as per IS 694 | Voltage: Up to 1100 V",
       filter: (item: OlflexProduct) => item.name.includes("100"),
     },
   ] as const;
@@ -181,15 +190,28 @@ export const OlflexCables: React.FC = () => {
           <img src="/images/cable-olflex-thumb.png" alt={item.name} />
         </div>
         <div className="olflex-reference-card-body">
-          <span className="olflex-card-category">{item.category || "Power and control cables"}</span>
-          <span className="olflex-card-subcategory">{item.desc || item.subCategory || "PVC outer sheath and numbered cores"}</span>
+          <span className="olflex-card-category">
+            {item.category || "Power and control cables"}
+          </span>
+          <span className="olflex-card-subcategory">
+            {item.desc ||
+              item.subCategory ||
+              "PVC outer sheath and numbered cores"}
+          </span>
           <h3>{item.name}</h3>
-          <p>Part No: <strong>{item.partNo}</strong></p>
-          <span className="olflex-card-spec">{item.core} Cores · {item.size} mm² ({item.pe === "G" ? "With Earth" : "Numbered"})</span>
+          <p>
+            Part No: <strong>{item.partNo}</strong>
+          </p>
+          <span className="olflex-card-spec">
+            {item.core} Cores · {item.size} mm² (
+            {item.pe === "G" ? "With Earth" : "Numbered"})
+          </span>
           <div className="olflex-card-price">
             <strong>₹ {item.price.toFixed(2)}</strong>
             <span>+ ₹{item.gst.toFixed(2)} GST</span>
-            <small>MRP ₹{item.mrp.toFixed(2)} <b>45% OFF</b></small>
+            <small>
+              MRP ₹{item.mrp.toFixed(2)} <b>45% OFF</b>
+            </small>
           </div>
           <div className="olflex-card-actions">
             <input
@@ -198,10 +220,21 @@ export const OlflexCables: React.FC = () => {
               step="50"
               value={qty}
               aria-label={`Order length for ${item.name}`}
-              onChange={(event) => handleQtyChange(item.partNo, Number(event.target.value))}
+              onChange={(event) =>
+                handleQtyChange(item.partNo, Number(event.target.value))
+              }
             />
             <button type="button" onClick={() => handleAddToCart(item)}>
               <ShoppingCart size={13} /> Add to Enquiry
+            </button>
+            <button
+              type="button"
+              className="olflex-quote-button"
+              onClick={() =>
+                setSelectedProduct(`${item.name} (${item.partNo})`)
+              }
+            >
+              Request Quote
             </button>
           </div>
         </div>
@@ -211,6 +244,7 @@ export const OlflexCables: React.FC = () => {
 
   return (
     <div
+      className="olflex-page"
       style={{
         background: "#f8fafc",
         minHeight: "100vh",
@@ -244,6 +278,27 @@ export const OlflexCables: React.FC = () => {
             ÖLFLEX® Power &amp; Control Cables
           </span>
         </div>
+
+        <section className="olflex-compact-hero">
+          <div className="olflex-compact-copy">
+            <div className="olflex-compact-title">
+              <span>ÖLFLEX®</span>
+              <h1>Power and Control Cables</h1>
+            </div>
+            <p>
+              ÖLFLEX® is used in machinery, machine tools, system and appliance
+              engineering, measuring, control, heating and air conditioning
+              technologies.
+            </p>
+            <div className="olflex-compact-tags">
+              <span>✓ Machinery &amp; Machine Tools</span>
+              <span>✓ System &amp; Appliance Engineering</span>
+              <span>✓ Measuring &amp; Control Systems</span>
+              <span>✓ Heating &amp; Air Conditioning (HVAC)</span>
+            </div>
+          </div>
+          <strong>LAPP GERMANY INDUSTRIAL CABLING</strong>
+        </section>
 
         {/* Top Hero Card */}
         <div
@@ -382,13 +437,13 @@ export const OlflexCables: React.FC = () => {
           <span
             style={{ fontSize: "12.5px", fontWeight: 700, color: "#334155" }}
           >
-            Sub-Groups:
+            Jump to:
           </span>
           <button
             className={`subgroup-jump-btn ${subgroup === "all" ? "active" : ""}`}
             onClick={() => setSubgroup("all")}
           >
-            All Lapp Cables{" "}
+            All{" "}
             <span className="count-badge">
               {ALL_OLFLEX_PRODUCTS?.length || OLFLEX_110_PRODUCTS.length}
             </span>
@@ -453,7 +508,7 @@ export const OlflexCables: React.FC = () => {
               }}
             >
               <Filter size={16} style={{ color: "#ff6600" }} />
-              <span>Catalog Filter &amp; Search Engine</span>
+              <span>Master Cable Filter (Filters in All Groups Below)</span>
             </div>
             <div
               style={{
@@ -466,7 +521,7 @@ export const OlflexCables: React.FC = () => {
                 fontWeight: 600,
               }}
             >
-              Showing {filteredProducts.length} Verified Cable Configurations
+              {filteredProducts.length} Total Matches
             </div>
           </div>
 
@@ -491,7 +546,7 @@ export const OlflexCables: React.FC = () => {
               />
               <input
                 type="text"
-                placeholder="Search Part No. (e.g. 1119752) or Dimension (e.g. 3G1.5)..."
+                placeholder="Search by Part No (e.g. 1119003, 1125003)..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{
@@ -543,7 +598,7 @@ export const OlflexCables: React.FC = () => {
                   background: "#fff",
                 }}
               >
-                <option value="all">All Sizes (sq mm)</option>
+                <option value="all">All Sizes</option>
                 <option value="0.5">0.5 sq mm</option>
                 <option value="0.75">0.75 sq mm</option>
                 <option value="1">1.0 sq mm</option>
@@ -565,16 +620,22 @@ export const OlflexCables: React.FC = () => {
                   height: "38px",
                 }}
               >
-                <RotateCcw size={14} /> Reset
+                <RotateCcw size={14} /> Clear Filters
               </button>
             </div>
           </div>
         </div>
 
         {groups.map((group) => {
-          const products = baseFilteredProducts.filter(group.filter).slice(0, 150);
+          const products = baseFilteredProducts
+            .filter(group.filter)
+            .slice(0, 150);
           return (
-            <section className="olflex-reference-section" id={`section-${group.key}`} key={group.key}>
+            <section
+              className="olflex-reference-section"
+              id={`section-${group.key}`}
+              key={group.key}
+            >
               <div className="olflex-subgroup-info">
                 <div className="olflex-subgroup-heading">
                   <h2>{group.title}</h2>
@@ -585,7 +646,10 @@ export const OlflexCables: React.FC = () => {
                 <div className="olflex-subgroup-specs">{group.specs}</div>
               </div>
               <div className="olflex-products-heading">
-                <strong>{group.title.replace(/^\d\. /, "")} Products: {products.length}</strong>
+                <strong>
+                  {group.title.replace(/^\d\. /, "")} Products:{" "}
+                  {products.length}
+                </strong>
                 <span>Scroll horizontally →</span>
               </div>
               <div className="olflex-reference-track">
@@ -599,17 +663,68 @@ export const OlflexCables: React.FC = () => {
           <h2>▧ Technical Comparison · Lapp Control Cable Sub-Groups</h2>
           <div className="olflex-comparison-scroll">
             <table>
-              <thead><tr><th>Product Group</th><th>Core Coding Scheme</th><th>Internal Protection / Screening</th><th>Outer Sheath Type</th><th>Standard / Certification</th><th>Primary Use Case</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Product Group</th>
+                  <th>Core Coding Scheme</th>
+                  <th>Internal Protection / Screening</th>
+                  <th>Outer Sheath Type</th>
+                  <th>Standard / Certification</th>
+                  <th>Primary Use Case</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td>ÖLFLEX® CLASSIC 110</td><td>Black cores with white numbers</td><td>None (Standard Flexible)</td><td>Special Oil-Resistant PVC</td><td>VDE Reg. No. 7030, CE</td><td>General machine tools &amp; control cabinets</td></tr>
-                <tr><td>ÖLFLEX® CLASSIC 110 SY</td><td>Black cores with white numbers</td><td><b>Galvanised Steel Wire Braid (SY)</b></td><td>Transparent PVC</td><td>VDE-based, CE</td><td>Heavy mechanical duty &amp; cable trays</td></tr>
-                <tr><td>ÖLFLEX® CLASSIC 110 CY</td><td>Black cores with white numbers</td><td><b>Tinned Copper Wire Braid (CY)</b></td><td>Special PVC (EMC)</td><td>VDE-based, CE, EMC</td><td>Plant engineering and EMC environments</td></tr>
-                <tr><td>ÖLFLEX® 100 I</td><td><b>Colour coded as per IS 694</b></td><td>Unshielded</td><td>Flame Retardant PVC</td><td><b>BIS IS 694:2010</b></td><td>Indian plant engineering &amp; infrastructure</td></tr>
+                <tr>
+                  <td>ÖLFLEX® CLASSIC 110</td>
+                  <td>Black cores with white numbers</td>
+                  <td>None (Standard Flexible)</td>
+                  <td>Special Oil-Resistant PVC</td>
+                  <td>VDE Reg. No. 7030, CE</td>
+                  <td>General machine tools &amp; control cabinets</td>
+                </tr>
+                <tr>
+                  <td>ÖLFLEX® CLASSIC 110 SY</td>
+                  <td>Black cores with white numbers</td>
+                  <td>
+                    <b>Galvanised Steel Wire Braid (SY)</b>
+                  </td>
+                  <td>Transparent PVC</td>
+                  <td>VDE-based, CE</td>
+                  <td>Heavy mechanical duty &amp; cable trays</td>
+                </tr>
+                <tr>
+                  <td>ÖLFLEX® CLASSIC 110 CY</td>
+                  <td>Black cores with white numbers</td>
+                  <td>
+                    <b>Tinned Copper Wire Braid (CY)</b>
+                  </td>
+                  <td>Special PVC (EMC)</td>
+                  <td>VDE-based, CE, EMC</td>
+                  <td>Plant engineering and EMC environments</td>
+                </tr>
+                <tr>
+                  <td>ÖLFLEX® 100 I</td>
+                  <td>
+                    <b>Colour coded as per IS 694</b>
+                  </td>
+                  <td>Unshielded</td>
+                  <td>Flame Retardant PVC</td>
+                  <td>
+                    <b>BIS IS 694:2010</b>
+                  </td>
+                  <td>Indian plant engineering &amp; infrastructure</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
+      {selectedProduct && (
+        <RFQModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { RFQModal } from "../assets/components/ui/RFQModal.tsx";
 
 const MENNEKES_PRODUCTS = [
   [
@@ -41,19 +42,10 @@ const MENNEKES_PRODUCTS = [
 ] as const;
 
 export const AboutMennekes: React.FC = () => {
-  const navigate = useNavigate();
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   const scrollToRfqTopic = (topic: string) => {
-    navigate("/#rfqSection");
-    setTimeout(() => {
-      const el = document.getElementById("rfqSection");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-      const notes = document.getElementById("rfqNotes") as HTMLTextAreaElement;
-      if (notes) {
-        notes.value = `Official RFQ for Mennekes Germany Products: ${topic}. Please provide tiered OEM box rates and dispatch schedule.`;
-        notes.focus();
-      }
-    }, 200);
+    setSelectedProduct(topic);
   };
 
   return (
@@ -326,6 +318,12 @@ export const AboutMennekes: React.FC = () => {
           </button>
         </div>
       </div>
+      {selectedProduct && (
+        <RFQModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </div>
   );
 };

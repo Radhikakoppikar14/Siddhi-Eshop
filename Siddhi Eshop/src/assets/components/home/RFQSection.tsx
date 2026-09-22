@@ -10,7 +10,13 @@ import {
   sanitizeInput,
 } from "../../../utils/validation";
 
-export const RFQSection: React.FC = () => {
+interface RFQSectionProps {
+  initialNotes?: string;
+}
+
+export const RFQSection: React.FC<RFQSectionProps> = ({
+  initialNotes = "",
+}) => {
   const { currentUser, openAuthModal, addOffer } = useAuth();
   const { showToast } = useToast();
 
@@ -21,7 +27,7 @@ export const RFQSection: React.FC = () => {
   const [cat, setCat] = useState("lapp");
   const [quantity, setQuantity] = useState("1");
   const [city, setCity] = useState("");
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState(initialNotes);
   const [files, setFiles] = useState<File[]>([]);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
