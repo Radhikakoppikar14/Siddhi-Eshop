@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "../../../context/CartContext";
 
 export const HeroBanner: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(1);
   const totalSlides = 4;
   const { addToCart } = useCart();
 
