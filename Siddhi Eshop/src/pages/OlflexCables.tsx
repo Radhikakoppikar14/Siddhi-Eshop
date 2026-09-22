@@ -522,6 +522,7 @@ export const OlflexCables: React.FC = () => {
                   textTransform: "uppercase",
                 }}
               >
+                <th style={{ padding: "12px 16px" }}>Image</th>
                 <th style={{ padding: "12px 16px" }}>Part No</th>
                 <th style={{ padding: "12px 16px" }}>Dimension &amp; Spec</th>
                 <th style={{ padding: "12px 16px" }}>Cores x mm²</th>
@@ -549,6 +550,22 @@ export const OlflexCables: React.FC = () => {
                       transition: "background 0.15s ease",
                     }}
                   >
+                    <td style={{ padding: "8px 16px" }}>
+                      <img
+                        src="/images/cable-olflex-thumb.png"
+                        alt={item.name}
+                        width="72"
+                        height="56"
+                        style={{
+                          width: "72px",
+                          height: "56px",
+                          objectFit: "contain",
+                          borderRadius: "6px",
+                          background: "#f8fafc",
+                          display: "block",
+                        }}
+                      />
+                    </td>
                     <td
                       style={{
                         padding: "12px 16px",

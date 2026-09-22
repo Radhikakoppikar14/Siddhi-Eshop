@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { HeroBanner } from "../assets/components/home/HeroBanner";
 import { PromoCards } from "../assets/components/home/PromoCards";
 import { BrandPortfolio } from "../assets/components/home/BrandPortfolio";
-import { CatalogGrid } from "../assets/components/home/CatalogGrid";
 import { AboutSection } from "../assets/components/home/AboutSection";
 import { BrandsShowcase } from "../assets/components/home/BrandsShowcase";
 import { RFQSection } from "../assets/components/home/RFQSection";
@@ -31,7 +30,6 @@ export const Home: React.FC = () => {
       <HeroBanner />
       <PromoCards />
       <BrandPortfolio />
-      <CatalogGrid />
       <AboutSection />
       <BrandsShowcase />
       <RFQSection />

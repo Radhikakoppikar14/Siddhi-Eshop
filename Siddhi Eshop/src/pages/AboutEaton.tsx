@@ -1,15 +1,54 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const EATON_PRODUCTS = [
+  [
+    "PKZM0®",
+    "Motor-Protective Breakers",
+    "/images/eaton-pkzm0.jpg",
+    "PKZM0 & PKZM4 rotary motor starters up to 65A with short-circuit and thermal overload protection.",
+  ],
+  [
+    "DILM®",
+    "Power Contactors & Relays",
+    "/images/eaton-dilm.jpg",
+    "DILM 3-pole and 4-pole contactors from 7A to 1000A with electronic coils and auxiliary accessories.",
+  ],
+  [
+    "NZM®",
+    "Molded Case Circuit Breakers",
+    "/images/eaton-nzm.jpg",
+    "NZM circuit breakers up to 1600A with thermal-magnetic and electronic trip units.",
+  ],
+  [
+    "FAZ®",
+    "Miniature Circuit Breakers",
+    "/images/eaton-faz.jpg",
+    "Industrial DIN-rail MCBs from 0.5A to 63A with reliable breaking capacity and trip curves.",
+  ],
+  [
+    "RMQ-TITAN®",
+    "Push Buttons & Pilot Lights",
+    "/images/eaton-rmq.jpg",
+    "M22 pilot lights, selector switches, emergency stops, and illuminated control devices.",
+  ],
+  [
+    "POWERXL®",
+    "Variable Speed Drives",
+    "/images/eaton-drives.jpg",
+    "DC1 and DA1 high-performance AC frequency inverters for motors and automation panels.",
+  ],
+] as const;
 
 export const AboutEaton: React.FC = () => {
   const navigate = useNavigate();
 
   const scrollToRfqTopic = (topic: string) => {
-    navigate('/#rfqSection');
+    navigate("/#rfqSection");
     setTimeout(() => {
-      const el = document.getElementById('rfqSection');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-      const notes = document.getElementById('rfqNotes') as HTMLTextAreaElement;
+      const el = document.getElementById("rfqSection");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+      const notes = document.getElementById("rfqNotes") as HTMLTextAreaElement;
       if (notes) {
         notes.value = `Official RFQ for Eaton Moeller Products: ${topic}. Please provide bulk pricing, availability, and delivery lead time.`;
         notes.focus();
@@ -18,115 +57,272 @@ export const AboutEaton: React.FC = () => {
   };
 
   return (
-    <div style={{ background: '#f8fafc', minHeight: '100vh', padding: '20px 0 60px' }}>
+    <div
+      style={{
+        background: "#f8fafc",
+        minHeight: "100vh",
+        padding: "20px 0 60px",
+      }}
+    >
       <div className="container">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#64748b', marginBottom: '14px' }}>
-          <Link to="/" style={{ color: '#005ea6', textDecoration: 'none' }}>Home</Link>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "13px",
+            color: "#64748b",
+            marginBottom: "14px",
+          }}
+        >
+          <Link to="/" style={{ color: "#005ea6", textDecoration: "none" }}>
+            Home
+          </Link>
           <span>/</span>
-          <span style={{ color: '#0f172a', fontWeight: 600 }}>About EATON Moeller</span>
+          <span style={{ color: "#0f172a", fontWeight: 600 }}>
+            About EATON Moeller
+          </span>
         </div>
 
-        {/* Hero Card */}
-        <div className="sheet-hero-card" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '20px', boxShadow: '0 2px 12px rgba(15, 23, 42, 0.04)', marginBottom: '20px', borderLeft: '5px solid #005ea6' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <img src="/images/logo-eaton.png" alt="Eaton Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
+        {/* Compact Eaton overview */}
+        <div
+          className="sheet-hero-card"
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "10px",
+            padding: "20px",
+            boxShadow: "0 2px 12px rgba(15, 23, 42, 0.04)",
+            marginBottom: "20px",
+            borderLeft: "5px solid #005ea6",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "12px",
+              marginBottom: "12px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+              <img
+                src="/images/logo-eaton.png"
+                alt="Eaton Logo"
+                style={{ height: "36px", width: "auto", objectFit: "contain" }}
+              />
               <div>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>EATON POWER QUALITY PVT LTD</span>
-                <h1 style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', margin: 0 }}>EATON MOELLER INDUSTRIAL ELECTRICAL</h1>
+                <span
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    color: "#64748b",
+                  }}
+                >
+                  EATON POWER QUALITY PVT LTD
+                </span>
+                <h1
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: 800,
+                    color: "#0f172a",
+                    margin: 0,
+                  }}
+                >
+                  EATON MOELLER INDUSTRIAL ELECTRICAL
+                </h1>
               </div>
             </div>
-            <span style={{ background: '#e0f2fe', border: '1px solid #bae6fd', color: '#0369a1', fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '16px', textTransform: 'uppercase' }}>
+            <span
+              style={{
+                background: "#e0f2fe",
+                border: "1px solid #bae6fd",
+                color: "#0369a1",
+                fontSize: "11px",
+                fontWeight: 700,
+                padding: "4px 12px",
+                borderRadius: "16px",
+                textTransform: "uppercase",
+              }}
+            >
               OFFICIAL INDUSTRIAL DISTRIBUTOR
             </span>
           </div>
 
-          <p style={{ fontSize: '13.5px', lineHeight: 1.6, color: '#475569', margin: '0 0 16px' }}>
-            <strong>Eaton</strong> is a global power management leader helping businesses manage electrical, hydraulic, and mechanical power safely and efficiently. Through the legacy of <strong>Moeller Germany</strong>, Eaton delivers industry-leading motor protection circuit breakers (<strong>PKZM0® / PKZM4®</strong>), power contactors (<strong>DILM®</strong>), molded case circuit breakers (<strong>NZM®</strong>), miniature breakers (<strong>FAZ®</strong>), command and signaling devices (<strong>RMQ-Titan®</strong>), and variable speed drives (<strong>PowerXL®</strong>).
-          </p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#005ea6' }}>150 kA</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>PKZM0 Short-Circuit Breaking</div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: "12px",
+            }}
+          >
+            <div
+              style={{
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+                borderRadius: "8px",
+                padding: "14px",
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: "14px",
+                  margin: "0 0 6px",
+                  color: "#0f172a",
+                }}
+              >
+                Global Power Management Leadership
+              </h2>
+              <p
+                style={{
+                  fontSize: "11.5px",
+                  lineHeight: 1.5,
+                  color: "#64748b",
+                  margin: 0,
+                }}
+              >
+                Eaton is a global intelligent power management company dedicated
+                to improving power quality, safety, and efficiency across
+                electrical and industrial applications.
+              </p>
             </div>
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>SmartWire-DT</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>Intelligent Panel Wiring</div>
-            </div>
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#005ea6' }}>Bangalore Hub</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>Panel Builder Ready Stock</div>
-            </div>
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>Global Certs</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>IEC/EN 60947, UL, CSA, CE</div>
+            <div
+              style={{
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+                borderRadius: "8px",
+                padding: "14px",
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: "14px",
+                  margin: "0 0 6px",
+                  color: "#0f172a",
+                }}
+              >
+                Comprehensive Moeller Series Automation Portfolio
+              </h2>
+              <p
+                style={{
+                  fontSize: "11.5px",
+                  lineHeight: 1.5,
+                  color: "#64748b",
+                  margin: 0,
+                }}
+              >
+                Motor protection, contactors, circuit breakers, pilot devices,
+                and PowerXL drives for panel builders, OEMs, and process
+                industries.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Product Series Directory */}
-        <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>
-          Eaton Moeller Key Product Lines
+        <h2
+          style={{
+            fontSize: "18px",
+            fontWeight: 800,
+            color: "#005ea6",
+            marginBottom: "16px",
+          }}
+        >
+          EATON Industrial Switchgear Available at Siddhi Kabel
         </h2>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-          {/* Card 1 */}
-          <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-            <img src="/images/eaton-pkzm0.jpg" alt="PKZM0 Motor Breakers" style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
-            <div style={{ padding: '20px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#005ea6', textTransform: 'uppercase' }}>PKZM0® / PKZM4®</span>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '4px 0 8px' }}>Motor-Protective Circuit Breakers</h3>
-              <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5, marginBottom: '14px' }}>
-                Rotary handle motor starter protectors up to 65A with 150 kA short circuit breaking capacity, phase failure sensitivity, and snap-on accessories.
-              </p>
-              <button className="btn btn-primary btn-sm" style={{ width: '100%' }} onClick={() => scrollToRfqTopic('Eaton PKZM0 Motor Breakers')}>
-                Request PKZM0 Quote
-              </button>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gap: "14px",
+            marginBottom: "30px",
+          }}
+        >
+          {EATON_PRODUCTS.map(([tag, title, image, description]) => (
+            <div
+              key={tag}
+              style={{
+                background: "#ffffff",
+                border: "1px solid #e2e8f0",
+                borderRadius: "8px",
+                overflow: "hidden",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+              }}
+            >
+              <img
+                src={image}
+                alt={title}
+                style={{ width: "100%", height: "130px", objectFit: "cover" }}
+              />
+              <div style={{ padding: "12px" }}>
+                <span
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: 800,
+                    color: "#005ea6",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {tag}
+                </span>
+                <h3
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    margin: "4px 0 6px",
+                  }}
+                >
+                  {title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: "11px",
+                    color: "#64748b",
+                    lineHeight: 1.45,
+                    minHeight: "48px",
+                    margin: "0 0 10px",
+                  }}
+                >
+                  {description}
+                </p>
+                <button
+                  className="btn btn-primary btn-sm"
+                  style={{ width: "100%", fontSize: "10px" }}
+                  onClick={() => scrollToRfqTopic(`Eaton ${title}`)}
+                >
+                  Request Quotation &rarr;
+                </button>
+              </div>
             </div>
-          </div>
-
-          {/* Card 2 */}
-          <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-            <img src="/images/eaton-dilm.jpg" alt="DILM Power Contactors" style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
-            <div style={{ padding: '20px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#005ea6', textTransform: 'uppercase' }}>DILM®</span>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '4px 0 8px' }}>Power Contactors &amp; Overload Relays</h3>
-              <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5, marginBottom: '14px' }}>
-                3-pole and 4-pole contactors from 7A up to 1000A AC-3, featuring low coil consumption, electronic actuation, and ultra-high mechanical lifespan.
-              </p>
-              <button className="btn btn-primary btn-sm" style={{ width: '100%' }} onClick={() => scrollToRfqTopic('Eaton DILM Contactors')}>
-                Request DILM Quote
-              </button>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-            <img src="/images/eaton-nzm.jpg" alt="NZM Breakers" style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
-            <div style={{ padding: '20px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#005ea6', textTransform: 'uppercase' }}>NZM® &amp; FAZ®</span>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '4px 0 8px' }}>MCCBs &amp; Industrial MCBs</h3>
-              <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5, marginBottom: '14px' }}>
-                NZM molded case circuit breakers up to 1600A with electronic trip units and FAZ industrial DIN rail MCBs with 15kA breaking capacity.
-              </p>
-              <button className="btn btn-primary btn-sm" style={{ width: '100%' }} onClick={() => scrollToRfqTopic('Eaton NZM / FAZ Breakers')}>
-                Request Breaker Quote
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* CTA */}
-        <div style={{ background: '#e0f2fe', border: '2px solid #bae6fd', borderRadius: '10px', padding: '24px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0369a1', marginBottom: '8px' }}>
-            Panel Builders: Get Formal Eaton Moeller Project Pricing
-          </h3>
-          <p style={{ fontSize: '13.5px', color: '#075985', maxWidth: '650px', margin: '0 auto 16px' }}>
-            Send us your switchgear schedule. We arrange direct supply from our Bangalore warehouse with factory compliance certs.
-          </p>
-          <button className="btn btn-primary" onClick={() => scrollToRfqTopic('EATON SWITCHGEAR FULL BOM')}>
-            Submit Eaton Quotation Request
+        <div
+          style={{
+            background: "#0f172a",
+            color: "#ffffff",
+            borderRadius: "8px",
+            padding: "12px 16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "12px",
+            flexWrap: "wrap",
+            fontSize: "11px",
+          }}
+        >
+          <span>
+            Authorized Eaton Distributor:{" "}
+            <strong>Siddhi Kabel Corporation Private Limited</strong> •
+            Bangalore ready stock • Phone: 09620000947
+          </span>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => scrollToRfqTopic("EATON SWITCHGEAR FULL BOM")}
+          >
+            Submit Official RFQ / BOM &rarr;
           </button>
         </div>
       </div>

@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Check,
-  Upload,
-  Paperclip,
-  X,
-  ShieldAlert,
-  ShieldCheck,
-  CheckCircle2,
-} from "lucide-react";
+import { Check, Upload, Paperclip, X, CheckCircle2 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../context/ToastContext";
 import {
@@ -19,7 +11,7 @@ import {
 } from "../../../utils/validation";
 
 export const RFQSection: React.FC = () => {
-  const { currentUser, openAuthModal, logout, addOffer } = useAuth();
+  const { currentUser, openAuthModal, addOffer } = useAuth();
   const { showToast } = useToast();
 
   const [name, setName] = useState("");
@@ -170,58 +162,6 @@ export const RFQSection: React.FC = () => {
   return (
     <section className="rfq-section" id="rfqSection">
       <div className="container">
-        {/* Customer Auth Notice Banner */}
-        <div style={{ marginBottom: "24px" }}>
-          {currentUser ? (
-            <div className="rfq-auth-notice authenticated">
-              <div className="auth-notice-body">
-                <div className="auth-notice-icon-success">
-                  <ShieldCheck size={22} strokeWidth={2.2} />
-                </div>
-                <div className="auth-notice-text">
-                  <strong>
-                    Verified Customer: {currentUser.companyName} (
-                    {currentUser.contactPerson})
-                  </strong>
-                  <span>
-                    GSTIN: {currentUser.gstNo} • Ready to dispatch formal
-                    quotation request
-                  </span>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="btn btn-outline-secondary btn-sm"
-                onClick={logout}
-              >
-                Sign Out
-              </button>
-            </div>
-          ) : (
-            <div className="rfq-auth-notice unauthenticated">
-              <div className="auth-notice-body">
-                <div className="auth-notice-icon">
-                  <ShieldAlert size={22} strokeWidth={2.2} />
-                </div>
-                <div className="auth-notice-text">
-                  <strong>Customer Account Required to Send Offer</strong>
-                  <span>
-                    Please create an account or sign in to dispatch your
-                    official commercial offer &amp; BOM.
-                  </span>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={() => openAuthModal("login")}
-              >
-                Sign In / Create Account
-              </button>
-            </div>
-          )}
-        </div>
-
         <div className="rfq-wrapper">
           {/* Left Column */}
           <div className="rfq-info-col">
