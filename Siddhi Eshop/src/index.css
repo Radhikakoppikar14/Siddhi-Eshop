@@ -5494,16 +5494,23 @@ h6 {
   }
 }
 
+
 /* ====================================================================
-   FINAL MOBILE POLISH: HIDE CAROUSEL ARROWS & FIX MENU DRAWER LAYOUT
+   CLEAN 4-ITEM MOBILE NAVIGATION MENU (NO NESTED SUBMENUS)
    ==================================================================== */
 @media (max-width: 768px) {
-  /* Hide the carousel arrows on mobile */
-  .banner-nav-arrow {
-    display: none !important;
+  .main-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
   }
 
-  /* Fix mobile menu drawer layout alignment and vertical flow */
+  .nav-bar {
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  /* Dropdown menu container neatly positioned right below header */
   .nav-links.show {
     display: flex !important;
     flex-direction: column !important;
@@ -5513,15 +5520,15 @@ h6 {
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    background: #252033 !important;
+    background: #1e1b29 !important;
+    border-top: 3px solid var(--primary) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
     padding: 16px 20px 24px !important;
     gap: 10px !important;
-    z-index: 1000 !important;
+    z-index: 9999 !important;
     box-sizing: border-box !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
   }
 
-  /* Make each mobile menu item a clean full-width block */
   .nav-links .nav-item {
     width: 100% !important;
     margin: 0 !important;
@@ -5533,17 +5540,35 @@ h6 {
     justify-content: space-between !important;
     width: 100% !important;
     padding: 12px 16px !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
     background: rgba(255, 255, 255, 0.05) !important;
     border-radius: 6px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-sizing: border-box !important;
   }
 
-  /* Make the RFQ button span cleanly across the mobile menu */
-  .nav-links .nav-cta,
-  .nav-links .btn-rfq-nav {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    box-sizing: border-box !important;
+  .nav-links .nav-link:hover {
+    background: var(--primary) !important;
+  }
+
+  /* Completely hide all nested submenus and flyouts on mobile viewports */
+  .nav-links .cat-dropdown,
+  .nav-links .submenu-list,
+  .nav-links .dropdown-submenu {
+    display: none !important;
+  }
+}
+/* ====================================================================
+   MOBILE NAV HOVER/ACTIVE RED HIGHLIGHT
+   ==================================================================== */
+@media (max-width: 768px) {
+  .nav-links .nav-link:hover,
+  .nav-links .nav-link:active,
+  .nav-links .nav-item.active .nav-link {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #ffffff !important;
   }
 }
