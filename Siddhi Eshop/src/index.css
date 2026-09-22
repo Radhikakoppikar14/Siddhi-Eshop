@@ -5162,3 +5162,98 @@ h6 {
     overflow-x: hidden !important;
   }
 }
+/* ====================================================================
+   FINAL POLISHED MOBILE RESPONSIVE TWEAKS
+   ==================================================================== */
+@media (max-width: 768px) {
+  /* 1. Top Bar Fix: Stack phone numbers and email cleanly */
+  .top-bar-inner {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 4px !important;
+  }
+  .top-links {
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  /* 2. Header Search and Layout */
+  .header-inner {
+    flex-wrap: wrap !important;
+    padding: 10px 0 !important;
+    gap: 10px !important;
+  }
+  .brand-logo-wrap img {
+    height: 36px !important;
+  }
+  .header-search-wrap {
+    order: 3 !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 3. Product Catalog Grid (2-Column) */
+  .olflex-reference-track,
+  .lapp-cards-grid,
+  .brand-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    overflow-x: visible !important;
+    padding: 4px 2px 14px !important;
+  }
+  .olflex-reference-card,
+  .lapp-photo-card,
+  .brand-photo-card {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 195px !important;
+  }
+
+  /* 4. Product Detail Page: Full Image on Top, Details Below */
+  .product-detail-container, 
+  .product-main-grid,
+  .modal-body {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  .product-image-section,
+  .modal-img-col,
+  .product-gallery-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    margin-bottom: 16px !important;
+  }
+
+  .product-image-section img,
+  .modal-product-image {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 300px !important;
+    object-fit: contain !important;
+  }
+
+  .product-info-section,
+  .modal-content-col,
+  .product-details-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Prevent side-scrolling overflow */
+  body, html {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+}
