@@ -5572,3 +5572,13 @@ h6 {
     color: #ffffff !important;
   }
 }
+/* ====================================================================
+   HIDE BANNER CAROUSEL ARROWS ON MOBILE
+   ==================================================================== */
+@media (max-width: 768px) {
+  .banner-nav-arrow,
+  .prev-arrow,
+  .next-arrow {
+    display: none !important;
+  }
+}
