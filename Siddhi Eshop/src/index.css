@@ -5395,43 +5395,58 @@ h6 {
 }
 
 /* ====================================================================
-   DESKTOP BANNER LOCK & MOBILE RESPONSIVE ADAPTATION
+   PRO-GRADE MOBILE SLIDER BANNER (ONE AD AT A TIME)
    ==================================================================== */
-
-/* Ensure desktop view remains completely untouched */
-@media (min-width: 769px) {
-  .desktop-banner-section {
-    height: 320px !important;
-  }
-  .slide-body-split {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-  }
-}
-
-/* Mobile-only adaptation so the ad banner looks clean and readable on phones */
 @media (max-width: 768px) {
   .desktop-banner-section {
     height: auto !important;
-    min-height: 420px !important;
-    padding: 20px 0 !important;
+    min-height: 380px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .banner-carousel-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    height: 100% !important;
+    gap: 0 !important;
+    padding: 0 !important;
+  }
+
+  .banner-carousel-wrapper::-webkit-scrollbar {
+    display: none !important;
   }
 
   .moglix-slide {
-    padding: 16px 12px !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100% !important;
+    min-height: 380px !important;
     position: relative !important;
     opacity: 1 !important;
     visibility: visible !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 20px 16px !important;
+    box-sizing: border-box !important;
   }
 
   .slide-body-split {
     display: flex !important;
     flex-direction: column !important;
-    gap: 16px !important;
+    gap: 14px !important;
     align-items: center !important;
     text-align: center !important;
+    width: 100% !important;
   }
 
   .slide-text-col {
@@ -5440,152 +5455,41 @@ h6 {
   }
 
   .slide-heading-main {
-    font-size: 24px !important;
+    font-size: 20px !important;
     line-height: 1.25 !important;
   }
 
   .slide-paragraph {
-    font-size: 12.5px !important;
+    font-size: 12px !important;
     max-width: 100% !important;
+    margin-bottom: 12px !important;
   }
 
   .slide-product-showcase {
     width: 100% !important;
-    max-width: 320px !important;
+    max-width: 280px !important;
     height: auto !important;
-    min-height: 180px !important;
+    min-height: 140px !important;
     margin: 0 auto !important;
+    padding: 8px !important;
+  }
+
+  .slide-showcase-img-box {
+    width: 80px !important;
+    min-width: 80px !important;
+    height: 110px !important;
   }
 
   .slide-action-btns {
     flex-direction: column !important;
     width: 100% !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
 
   .slide-action-btns .btn,
   .slide-showcase-btn {
     width: 100% !important;
-  }
-}
-
-
-/* ====================================================================
-   PRO-GRADE CLEAN MOBILE NAVIGATION DRAWER
-   ==================================================================== */
-@media (max-width: 768px) {
-  .nav-bar {
-    position: relative;
-    width: 100%;
-  }
-
-  .nav-bar-inner {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 10px 16px !important;
-  }
-
-  /* Hamburger Toggler Button */
-  .mobile-toggler {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    background: transparent !important;
-    border: none !important;
-    color: #ffffff !important;
-    font-size: 22px !important;
-    cursor: pointer;
-    padding: 6px !important;
-  }
-
-  /* Hide default nav links until toggled */
-  .nav-links {
-    display: none;
-  }
-
-  /* Professional Mobile Drawer */
-  .nav-links.show {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    position: absolute !important;
-    top: 100% !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    background: #1e1b29 !important; /* Rich deep corporate dark */
-    border-top: 3px solid var(--primary) !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
-    padding: 20px !important;
-    gap: 8px !important;
-    z-index: 1000 !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Navigation Link Rows */
-  .nav-links .nav-item {
-    width: 100% !important;
-    margin: 0 !important;
-  }
-
-  .nav-links .nav-link {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    padding: 12px 16px !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    color: #cbd5e1 !important;
-    border-radius: 6px !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    box-sizing: border-box !important;
-    transition: all 0.2s ease !important;
-  }
-
-  .nav-links .nav-link:hover,
-  .nav-links .nav-item.active .nav-link {
-    background: var(--primary) !important;
-    color: #ffffff !important;
-    border-color: var(--primary) !important;
-    padding-left: 20px !important;
-  }
-
-  /* Clean up duplicate close elements if generated by JS */
-  .nav-links > button.btn-close-drawer {
-    display: none !important;
-  }
-
-  /* Action CTA Button at the bottom of the drawer */
-  .nav-cta {
-    width: 100% !important;
-    margin-top: 10px !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .btn-rfq-nav {
-    display: flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 14px 16px !important;
-    background: var(--primary) !important;
-    color: #ffffff !important;
-    font-size: 13px !important;
-    font-weight: 800 !important;
-    border-radius: 6px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    box-sizing: border-box !important;
-    border: none !important;
-    box-shadow: 0 4px 12px rgba(195, 33, 37, 0.3) !important;
-  }
-
-  .btn-rfq-nav:hover {
-    background: var(--primary-dark) !important;
+    padding: 8px 12px !important;
+    font-size: 10.5px !important;
   }
 }
