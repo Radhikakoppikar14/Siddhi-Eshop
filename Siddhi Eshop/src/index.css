@@ -5942,6 +5942,37 @@ h6 {
 }
 
 
+/* ====================================================================
+   GLOBAL MODAL & DIALOG Z-INDEX FIX (STRICT OVERRIDE)
+   ==================================================================== */
+.auth-modal-overlay,
+.modal-overlay,
+.dialog-overlay,
+div[class*="modal-backdrop"],
+div[class*="modal-overlay"],
+div[class*="dialog-overlay"] {
+  z-index: 999999 !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
+.auth-modal-content,
+.modal-content,
+.dialog-content,
+div[class*="modal-container"],
+div[class*="modal-box"],
+div[class*="modal-content"] {
+  z-index: 1000000 !important;
+  position: relative !important;
+}
+
+/* Ensure sticky elements stay safely below modals */
+.main-header,
+header.sticky,
+.sticky-header {
+  z-index: 900 !important;
+}
+
 
 
 
