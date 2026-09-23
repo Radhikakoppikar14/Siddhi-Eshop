@@ -196,7 +196,7 @@ export const AuthModal: React.FC = () => {
                 setLoginError("");
               }}
             >
-              Sign In (Login)
+              Sign In 
             </button>
             <button
               type="button"
