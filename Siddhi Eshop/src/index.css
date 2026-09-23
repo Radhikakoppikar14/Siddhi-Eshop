@@ -5582,3 +5582,20 @@ h6 {
     display: none !important;
   }
 }
+
+/* ====================================================================
+   FIX QUOTATION CART Z-INDEX & LAYER OVERLAY
+   ==================================================================== */
+@media (max-width: 768px) {
+  /* Ensure the cart overlay covers the entire screen above everything */
+  .cart-drawer-overlay {
+    z-index: 99999 !important;
+  }
+
+  /* Ensure the cart drawer sits at the highest layer */
+  .cart-drawer {
+    z-index: 100000 !important;
+    width: 85vw !important;
+    max-width: 360px !important;
+  }
+}
