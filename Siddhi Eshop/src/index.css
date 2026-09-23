@@ -5599,3 +5599,249 @@ h6 {
     max-width: 360px !important;
   }
 }
+
+/* ====================================================================
+   FIX RFQ DIRECT HELP BOX TEXT OVERFLOW ON MOBILE
+   ==================================================================== */
+@media (max-width: 768px) {
+  .rfq-direct-help {
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-direct-help strong,
+  .rfq-direct-help span {
+    font-size: 11.5px !important;
+    word-break: break-all !important;
+    white-space: normal !important;
+  }
+}
+
+/* ====================================================================
+   FINAL PROFESSIONAL MOBILE RFQ MODAL LAYOUT FIX
+   ==================================================================== */
+@media (max-width: 768px) {
+  /* Fix the outer modal wrapper and dialog to fill the mobile screen nicely */
+  .rfq-modal-overlay {
+    padding: 10px !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .rfq-modal-dialog {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 94vh !important;
+    border-radius: 12px !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-modal-header {
+    padding: 16px 16px 8px !important;
+  }
+
+  .rfq-modal-dialog .rfq-section {
+    padding: 10px 16px 20px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Make sure the inner wrapper spans 100% cleanly */
+  .rfq-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-info-col,
+  .rfq-form-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 20px 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-info-col {
+    border-radius: 8px 8px 0 0 !important;
+  }
+
+  .rfq-form-col {
+    background: #ffffff !important;
+    border-radius: 0 0 8px 8px !important;
+  }
+
+  /* Prevent text and cards inside info col from overflowing */
+  .rfq-direct-help {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .rfq-direct-help strong,
+  .rfq-direct-help span {
+    font-size: 11.5px !important;
+    white-space: normal !important;
+  }
+
+  /* Align all form elements to 100% width with correct padding */
+  .rfq-form {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .form-group,
+  .form-group.full-width,
+  .form-group input,
+  .form-group select,
+  .form-group textarea,
+  .file-upload-box,
+  .btn-primary {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+}
+
+/* ====================================================================
+   CLIENT-READY POLISHED HEADER & ACTION ITEMS (MOBILE)
+   ==================================================================== */
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+
+  .brand-logo-wrap {
+    gap: 10px !important;
+  }
+
+  .brand-logo-wrap img,
+  .brand-lockup-img,
+  .brand-logo-img {
+    height: 38px !important;
+    max-height: 38px !important;
+    max-width: 180px !important;
+  }
+
+  .brand-name {
+    font-size: 20px !important;
+  }
+
+  .brand-tag {
+    font-size: 8.5px !important;
+    letter-spacing: 1.2px !important;
+  }
+
+  .top-bar-inner {
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    text-align: center !important;
+  }
+
+  /* 3-column action cards layout with perfect spacing and no text clipping */
+  .header-actions {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    width: 100% !important;
+    gap: 6px !important;
+    margin-top: 6px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid var(--gray-200) !important;
+    box-sizing: border-box !important;
+  }
+
+  .action-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 2px !important;
+    padding: 6px 4px !important;
+    height: auto !important;
+    min-height: 54px !important;
+    background: var(--gray-100) !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+  }
+
+  .action-icon-wrap {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .action-text {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    line-height: 1.15 !important;
+  }
+
+  .action-label {
+    font-size: 8.5px !important;
+    color: var(--gray-600) !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+  }
+
+  .action-val {
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    color: var(--gray-900) !important;
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.15 !important;
+    overflow: visible !important;
+  }
+
+  /* Seamless responsive search bar layout */
+  .header-search-wrap {
+    width: 100% !important;
+    margin-top: 6px !important;
+    box-sizing: border-box !important;
+  }
+
+  .search-form {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .search-cat-select {
+    max-width: 85px !important;
+    font-size: 10.5px !important;
+    padding: 0 4px !important;
+  }
+
+  .search-input {
+    min-width: 0 !important;
+    flex: 1 !important;
+    font-size: 11px !important;
+    padding: 8px 6px !important;
+  }
+
+  .search-btn {
+    padding: 0 12px !important;
+    flex-shrink: 0 !important;
+  }
+}
