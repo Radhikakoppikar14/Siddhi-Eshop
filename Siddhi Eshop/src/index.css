@@ -5719,6 +5719,10 @@ h6 {
   }
 }
 
+
+
+
+
 /* ====================================================================
    CLIENT-READY POLISHED HEADER & ACTION ITEMS (MOBILE)
    ==================================================================== */
@@ -5845,3 +5849,105 @@ h6 {
     flex-shrink: 0 !important;
   }
 }
+
+
+
+
+
+
+
+
+
+
+/* ====================================================================
+   CLEAN NON-OVERLAPPING MOBILE TOP BAR LAYOUT
+   ==================================================================== */
+@media (max-width: 768px) {
+  .main-header ~ div:first-child,
+  header ~ div:first-child,
+  .top-bar, 
+  .announcement-bar,
+  div[class*="top-bar"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    position: relative !important;
+    padding: 10px 12px !important;
+    gap: 6px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Anchor the OFFICIAL badge cleanly to the left without absolute positioning overlap */
+  .main-header ~ div:first-child span.badge,
+  header ~ div:first-child span.badge,
+  .official-badge,
+  .top-bar-badge,
+  span[class*="badge"] {
+    align-self: flex-start !important;
+    margin: 0 0 2px 0 !important;
+    font-size: 8px !important;
+    padding: 2px 6px !important;
+    display: inline-block !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Center the company name & tagline nicely below the badge */
+  .main-header ~ div:first-child span:not(.badge),
+  header ~ div:first-child span:not(.badge),
+  .top-bar-title,
+  .top-bar p {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Stack phone and emails centered neatly at the bottom with a clean border */
+  .main-header ~ div:first-child div,
+  header ~ div:first-child div,
+  .top-bar-contact {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 3px !important;
+    font-size: 9.5px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding-top: 6px !important;
+    margin-top: 2px !important;
+    width: 100% !important;
+  }
+
+  /* Force both email items to combine into a single inline row */
+  .top-bar-contact a,
+  .top-bar-contact span:nth-of-type(n+2),
+  .top-bar-contact div:nth-child(n+2) {
+    display: inline-block !important;
+    white-space: nowrap !important;
+  }
+
+  /* Target the container holding the emails to display inline */
+  .top-bar-contact > div:last-child {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
