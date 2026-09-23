@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { X, Trash2, ShoppingBag } from "lucide-react";
+import React from "react";
+import { ShoppingCart, X, Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "../../../context/CartContext";
-import { RFQModal } from "./RFQModal";
+import { useAuth } from "../../../context/AuthContext";
+import { useToast } from "../../../context/ToastContext";
+import { useNavigate } from "react-router-dom";
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -10,293 +12,145 @@ export const CartDrawer: React.FC = () => {
     closeCartDrawer,
     updateQty,
     removeFromCart,
-    clearCart,
-    subtotal,
   } = useCart();
-
-  const [isRFQModalOpen, setIsRFQModalOpen] = useState(false);
+  const { currentUser, openAuthModal } = useAuth();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
 
   if (!isCartOpen) return null;
 
+  const handleCheckoutRfq = () => {
+    if (cart.length === 0) {
+      showToast(
+        "Your RFQ Cart is empty. Please add items before requesting a quotation.",
+      );
+      return;
+    }
+
+    if (!currentUser) {
+      showToast(
+        "Customer Account Required: Please Sign In or Create an Account to request formal quotation.",
+      );
+      closeCartDrawer();
+      openAuthModal("login");
+      return;
+    }
+
+    // Close the cart drawer and navigate directly to the GST Quotation itemized page
+    closeCartDrawer();
+    navigate("/gst-quotation");
+  };
+
   return (
     <>
-      {/* Backdrop */}
       <div
+        className={`cart-drawer-overlay ${isCartOpen ? "open" : ""}`}
         onClick={closeCartDrawer}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          backgroundColor: "rgba(15, 23, 42, 0.5)",
-          zIndex: 998,
-        }}
       />
-
-      {/* Drawer Container */}
       <aside
-        style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          width: "100%",
-          maxWidth: "420px",
-          height: "100vh",
-          backgroundColor: "#ffffff",
-          boxShadow: "-4px 0 20px rgba(0, 0, 0, 0.15)",
-          zIndex: 999,
-          display: "flex",
-          flexDirection: "column",
-        }}
+        className={`cart-drawer ${isCartOpen ? "open" : ""}`}
+        id="cartDrawer"
       >
-        {/* Drawer Header */}
-        <div
-          style={{
-            padding: "16px 20px",
-            borderBottom: "1px solid #e2e8f0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <ShoppingBag size={20} color="#0f172a" />
-            <h2
+        <div className="cart-drawer-header">
+          <h3>
+            <ShoppingCart
+              size={18}
               style={{
-                fontSize: "16px",
-                fontWeight: 800,
-                color: "#0f172a",
-                margin: 0,
+                marginRight: "8px",
+                display: "inline-block",
+                verticalAlign: "middle",
               }}
-            >
-              Quotation Cart
-            </h2>
-          </div>
+            />
+            Quotation Cart
+          </h3>
           <button
+            className="btn-close-drawer"
             onClick={closeCartDrawer}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "#64748b",
-            }}
+            aria-label="Close Cart"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        {/* Drawer Items Body */}
-        <div
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            padding: "16px 20px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
+        <div className="cart-drawer-items" id="cartItemsList">
           {cart.length === 0 ? (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "40px 0",
-                color: "#64748b",
-              }}
-            >
-              <ShoppingBag size={48} style={{ opacity: 0.3, marginBottom: "12px" }} />
-              <p style={{ margin: 0, fontSize: "14px", fontWeight: 600 }}>
-                Your quotation cart is empty.
-              </p>
+            <div className="cart-empty-state">
+              <ShoppingCart
+                size={48}
+                strokeWidth={1.2}
+                style={{ color: "var(--gray-500)", marginBottom: "16px" }}
+              />
+              <p>Your industrial quotation cart is empty.</p>
+              <button
+                className="btn btn-primary btn-sm"
+                style={{ marginTop: "15px" }}
+                onClick={closeCartDrawer}
+              >
+                Browse Catalog
+              </button>
             </div>
           ) : (
             cart.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  borderBottom: "1px solid #f1f5f9",
-                  paddingBottom: "16px",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    color: "#dc2626",
-                    textTransform: "uppercase",
-                    display: "block",
-                    marginBottom: "2px",
-                  }}
-                >
-                  {item.brand} | {item.partNo}
-                </span>
-                <strong
-                  style={{
-                    fontSize: "13px",
-                    color: "#0f172a",
-                    display: "block",
-                    lineHeight: "1.4",
-                    marginBottom: "6px",
-                  }}
-                >
-                  {item.name}
-                </strong>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span
+              <div className="cart-item-row" key={item.id}>
+                <div className="cart-item-info">
+                  <div
                     style={{
-                      fontSize: "13px",
-                      fontWeight: 800,
-                      color: "#dc2626",
+                      fontSize: "10px",
+                      color: "var(--primary)",
+                      fontWeight: 700,
                     }}
                   >
-                    ₹{item.price} / {item.unit || "meter"}
-                  </span>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    {/* Quantity increment / decrement */}
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        border: "1px solid #cbd5e1",
-                        borderRadius: "4px",
-                        overflow: "hidden",
-                        background: "#fff",
-                      }}
-                    >
-                      <button
-                        onClick={() => updateQty(item.id, -1)}
-                        style={{
-                          width: "26px",
-                          height: "26px",
-                          background: "#f8fafc",
-                          border: "none",
-                          cursor: "pointer",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        -
-                      </button>
-                      <span
-                        style={{
-                          padding: "0 8px",
-                          fontSize: "12px",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {item.qty}
-                      </span>
-                      <button
-                        onClick={() => updateQty(item.id, 1)}
-                        style={{
-                          width: "26px",
-                          height: "26px",
-                          background: "#f8fafc",
-                          border: "none",
-                          cursor: "pointer",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    {/* Delete Item */}
-                    <button
-                      onClick={() => removeFromCart(item.id)}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "#94a3b8",
-                      }}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    {item.brand} | {item.partNo}
+                  </div>
+                  <div className="cart-item-title">{item.name}</div>
+                  <div className="cart-item-price">
+                    ₹{item.price.toFixed(2)} / {item.unit}
                   </div>
                 </div>
+                <div className="cart-qty-ctrl">
+                  <button
+                    onClick={() => updateQty(item.id, -1)}
+                    aria-label="Decrease"
+                  >
+                    <Minus size={12} />
+                  </button>
+                  <span>{item.qty}</span>
+                  <button
+                    onClick={() => updateQty(item.id, 1)}
+                    aria-label="Increase"
+                  >
+                    <Plus size={12} />
+                  </button>
+                </div>
+                <button
+                  className="cart-item-remove"
+                  onClick={() => removeFromCart(item.id)}
+                  title="Remove"
+                >
+                  <Trash2 size={14} />
+                </button>
               </div>
             ))
           )}
         </div>
 
-        {/* Drawer Footer */}
-        {cart.length > 0 && (
+        <div className="cart-drawer-footer">
           <div
-            style={{
-              padding: "20px",
-              borderTop: "1px solid #e2e8f0",
-              background: "#ffffff",
-            }}
+            className="cart-checkout-actions"
+            style={{ display: "flex", flexDirection: "column", gap: "8px" }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "16px",
-              }}
-            >
-              <span style={{ fontSize: "14px", fontWeight: 700, color: "#0f172a" }}>
-                Estimated Subtotal (excl. GST):
-              </span>
-              <strong style={{ fontSize: "16px", fontWeight: 900, color: "#0f172a" }}>
-                ₹{subtotal.toFixed(2)}
-              </strong>
-            </div>
-
-            {/* Request Official Quotation Button */}
-            <button
-              onClick={() => setIsRFQModalOpen(true)}
-              style={{
-                width: "100%",
-                background: "#dc2626",
-                color: "#ffffff",
-                border: "none",
-                borderRadius: "6px",
-                padding: "14px",
-                fontSize: "13px",
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-                cursor: "pointer",
-                marginBottom: "8px",
-              }}
-            >
-              REQUEST QUOTATION
+            <button className="btn btn-primary" onClick={handleCheckoutRfq}>
+              Request Official GST Quotation
             </button>
-
-            {/* Clear Cart Button */}
             <button
-              onClick={clearCart}
-              style={{
-                width: "100%",
-                background: "transparent",
-                border: "none",
-                color: "#64748b",
-                fontSize: "12px",
-                cursor: "pointer",
-                padding: "6px",
-                textDecoration: "underline",
-              }}
+              className="btn btn-outline-primary btn-sm"
+              onClick={closeCartDrawer}
             >
-              Clear Cart
+              Continue Browsing
             </button>
           </div>
-        )}
+        </div>
       </aside>
-
-      {/* RFQ Modal Summary Table & Submission */}
-      {isRFQModalOpen && (
-        <RFQModal onClose={() => setIsRFQModalOpen(false)} />
-      )}
     </>
   );
 };

@@ -9,7 +9,6 @@ import {
 import { ToastProvider } from "./context/ToastContext";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
-
 import { TopBar } from "./assets/components/layout/TopBar";
 import { Header } from "./assets/components/layout/Header";
 import { Navigation } from "./assets/components/layout/Navigation";
@@ -29,7 +28,7 @@ import { AboutLapp } from "./pages/AboutLapp";
 import { AboutEaton } from "./pages/AboutEaton";
 import { AboutPartex } from "./pages/AboutPartex";
 import { AboutMennekes } from "./pages/AboutMennekes";
-
+import { GstQuotationPage } from "./pages/GstQuotationPage";
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
 
@@ -65,6 +64,8 @@ export const App: React.FC = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/olflex-cables" element={<OlflexCables />} />
                   <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/gst-quotation" element={<GstQuotationPage />} />
+
                   <Route path="/about-lapp" element={<AboutLapp />} />
                   <Route path="/about-eaton" element={<AboutEaton />} />
                   <Route path="/about-partex" element={<AboutPartex />} />

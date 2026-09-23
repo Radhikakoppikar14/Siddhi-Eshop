@@ -108,7 +108,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       quantity = Math.floor(quantity);
       
       setCart((prev) => {
-        // Match strictly by exact unique item ID (which includes partNo + configuration variations)
         const existing = prev.find((i) => i.id === item.id);
         if (existing) {
           return prev.map((i) =>

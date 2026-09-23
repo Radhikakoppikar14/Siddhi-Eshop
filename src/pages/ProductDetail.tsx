@@ -3,10 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import { ShoppingCart, CheckCircle2, FileText } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { isValidPositiveNumber } from "../utils/validation";
-import { RFQModal } from "../assets/components/ui/RFQModal.tsx";
+import { RFQModal } from "../assets/components/ui/RFQModal";
 
 export const ProductDetail: React.FC = () => {
-const { id: _id } = useParams<{ id: string }>();
+  const { id: _id } = useParams<{ id: string }>();
   const { addCustomItem } = useCart();
 
   // Interactive selectors state
@@ -84,7 +84,6 @@ const { id: _id } = useParams<{ id: string }>();
   const handleAddToCart = () => {
     if (!isValidPositiveNumber(qty)) return;
     
-    // Create a unique composite ID for this exact variation configuration
     const uniqueVariationId = `${currentPartData.partNo}-${selectedCore}-${selectedSize}-${selectedConductor}`;
 
     addCustomItem(
@@ -233,7 +232,7 @@ const { id: _id } = useParams<{ id: string }>();
               </div>
             </div>
 
-            {/* 3. Protective Conductor Selector with Tooltips */}
+            {/* 3. Protective Conductor Selector */}
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", fontWeight: "700", marginBottom: "6px", color: "#1e293b" }}>
                 <span>3. Protective conductor (with/without Yellow/Green)</span>
@@ -273,7 +272,7 @@ const { id: _id } = useParams<{ id: string }>();
             </div>
           </div>
 
-          {/* Column 3: Pricing & Summary Boxes (Sticky on scroll) */}
+          {/* Column 3: Pricing & Summary Boxes */}
           <div style={{ display: "flex", flexDirection: "column", gap: "16px", position: "sticky", top: "20px" }}>
             
             {/* Dynamic Price Box */}
@@ -287,7 +286,7 @@ const { id: _id } = useParams<{ id: string }>();
                 MRP <span style={{ textDecoration: "line-through" }}>₹{currentPricing.mrp}</span> <strong style={{ color: "#c32125" }}>45% OFF</strong>
               </div>
 
-              {/* Quantity Controller (+1 / -1 step) */}
+              {/* Quantity Controller */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px", background: "#f8fafc", padding: "8px 12px", borderRadius: "6px", border: "1px solid #cbd5e1" }}>
                 <span style={{ fontSize: "12px", fontWeight: 700, color: "#334155" }}>Update Qty (Mtrs)</span>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -349,75 +348,6 @@ const { id: _id } = useParams<{ id: string }>();
 
           </div>
 
-        </div>
-
-        {/* Bottom Section: Detailed Product Description & Full Technical Specifications Table */}
-        <div style={{ marginTop: "30px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "30px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "40px" }}>
-            
-            <div>
-              <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#0f172a", marginBottom: "16px" }}>Product Description</h3>
-              
-              <h4 style={{ fontSize: "12.5px", fontWeight: "700", color: "#334155", marginBottom: "6px" }}>Benefits</h4>
-              <ul style={{ fontSize: "12px", color: "#64748b", paddingLeft: "16px", marginBottom: "16px", lineHeight: "1.6" }}>
-                <li>High electrical performance due to 4 kV test voltage</li>
-                <li>Oil-resistant according to DIN EN 50290-2-22 (TM54)</li>
-                <li>Space-saving installation due to small cable diameters ({currentPartData.outerDia} mm outer diameter)</li>
-                <li>High flexibility thanks to fine-wire strand copper conductor construction</li>
-              </ul>
-
-              <h4 style={{ fontSize: "12.5px", fontWeight: "700", color: "#334155", marginBottom: "6px" }}>Application Range</h4>
-              <ul style={{ fontSize: "12px", color: "#64748b", paddingLeft: "16px", marginBottom: "16px", lineHeight: "1.6" }}>
-                <li>Plant engineering, Industrial machinery, Heating and air-conditioning systems</li>
-                <li>Machine tools, automated production lines, and conveyor systems</li>
-                <li>Mainly used in dry, damp and wet interiors (including water-oil mixtures)</li>
-              </ul>
-
-              <h4 style={{ fontSize: "12.5px", fontWeight: "700", color: "#334155", marginBottom: "6px" }}>Norm references / Approvals</h4>
-              <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: "1.5" }}>
-                VDE reg. no. 7030, CE compliant according to Low Voltage Directive 2014/35/EU
-              </p>
-            </div>
-
-            <div>
-              <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#0f172a", marginBottom: "16px" }}>Technical Data</h3>
-              <table style={{ width: "100%", fontSize: "12px", borderCollapse: "collapse" }}>
-                <tbody>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "8px 0", fontWeight: "600", color: "#475569", width: "40%" }}>Classification ETIM 5 / ETIM 6</td>
-                    <td style={{ padding: "8px 0", color: "#1e293b" }}>ETIM 5.0 / 6.0 Class-ID: EC000104 (Control cable)</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "8px 0", fontWeight: "600", color: "#475569" }}>Core identification code</td>
-                    <td style={{ padding: "8px 0", color: "#1e293b" }}>
-                      {selectedConductor.includes("With") ? "Black with white numbers + Green/Yellow earth core" : "Black with white numbers acc. to VDE 0293-334"}
-                    </td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "8px 0", fontWeight: "600", color: "#475569" }}>Conductor stranding</td>
-                    <td style={{ padding: "8px 0", color: "#1e293b" }}>Fine wire according to DIN EN 60228 (VDE 0295), class 5</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "8px 0", fontWeight: "600", color: "#475569" }}>Minimum bending radius</td>
-                    <td style={{ padding: "8px 0", color: "#1e293b" }}>Occasional flexing: 10 x outer diameter ({currentPartData.outerDia} mm) | Fixed: 4 x outer diameter</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "8px 0", fontWeight: "600", color: "#475569" }}>Nominal voltage</td>
-                    <td style={{ padding: "8px 0", color: "#1e293b" }}>U0/U: 300/500 V</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "8px 0", fontWeight: "600", color: "#475569" }}>Test voltage</td>
-                    <td style={{ padding: "8px 0", color: "#1e293b" }}>4000 V AC</td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "8px 0", fontWeight: "600", color: "#475569" }}>Temperature range</td>
-                    <td style={{ padding: "8px 0", color: "#1e293b" }}>Occasional flexing: -5°C to +70°C | Fixed: -40°C to +80°C</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
         </div>
 
       </div>

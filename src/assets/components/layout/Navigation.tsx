@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, Menu, X, ArrowDownToLine } from "lucide-react";
+import { useCart } from "../../../context/CartContext";
 
 export const Navigation: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { isCartOpen } = useCart();
+
+  // Hide the navigation header completely when the cart drawer is open[cite: 14]
+  if (isCartOpen) return null;
 
   const handleNavClick = (hash: string) => {
     setMobileOpen(false);
@@ -22,6 +27,7 @@ export const Navigation: React.FC = () => {
       <div className="container">
         <div className="nav-bar-inner">
           <button
+            type="button"
             className="mobile-toggler"
             id="mobileMenuBtn"
             aria-label="Toggle Menu"
@@ -55,7 +61,7 @@ export const Navigation: React.FC = () => {
                   handleNavClick("#lappPortfolioSection");
                 }}
               >
-                <span>Products & Categories</span>
+                <span>Products &amp; Categories</span>
                 <ChevronDown size={14} style={{ marginLeft: "4px" }} />
               </a>
               <ul className="cat-dropdown">
@@ -338,6 +344,7 @@ export const Navigation: React.FC = () => {
 
           <div className="nav-cta">
             <button
+              type="button"
               className="btn-rfq-nav"
               style={{ border: "none", cursor: "pointer" }}
               onClick={() => handleNavClick("#rfqSection")}

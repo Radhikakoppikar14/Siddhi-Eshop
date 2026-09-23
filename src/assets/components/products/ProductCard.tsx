@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Eye, ShoppingCart } from "lucide-react";
+import { Eye, ShoppingCart, FileText } from "lucide-react";
 import type { Product } from "../../../types";
 import { useCart } from "../../../context/CartContext";
 import { useAuth } from "../../../context/AuthContext";
@@ -54,6 +54,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         <div className="product-quick-actions" style={{ position: "absolute", top: "35px", right: "8px" }}>
           <button
+            type="button"
             className="btn-icon-action"
             onClick={(e) => {
               e.preventDefault();
@@ -116,28 +117,59 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
           </div>
 
-          <button
-            className="btn-add-cart"
-            onClick={() => addToCart(product.id)}
-            style={{
-              width: "100%",
-              background: "#ff6600",
-              color: "#fff",
-              border: "none",
-              padding: "10px",
-              borderRadius: "8px",
-              fontWeight: "700",
-              fontSize: "12px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "6px"
-            }}
-          >
-            <ShoppingCart size={14} />
-            ADD TO ENQUIRY
-          </button>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <button
+              type="button"
+              className="btn-add-cart"
+              onClick={() => addToCart(product.id)}
+              style={{
+                width: "100%",
+                background: "#ff6600",
+                color: "#fff",
+                border: "none",
+                padding: "10px",
+                borderRadius: "8px",
+                fontWeight: "700",
+                fontSize: "12px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px"
+              }}
+            >
+              <ShoppingCart size={14} />
+              ADD TO ENQUIRY
+            </button>
+
+            {/* Request Quotation Button Popup Trigger */}
+            <button
+              type="button"
+              onClick={() => {
+                // Scroll down or open your RFQ modal directly
+                document.getElementById("rfqSection")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              style={{
+                width: "100%",
+                background: "#fff",
+                color: "#c32125",
+                border: "1px solid #c32125",
+                padding: "8px",
+                borderRadius: "8px",
+                fontWeight: "700",
+                fontSize: "11px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                textTransform: "uppercase"
+              }}
+            >
+              <FileText size={13} />
+              Request Quotation →
+            </button>
+          </div>
         </div>
       </div>
     </div>

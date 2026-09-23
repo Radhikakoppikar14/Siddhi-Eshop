@@ -17,9 +17,12 @@ export const Header: React.FC = () => {
     setSearchCategory,
   } = useAuth();
 
-  const { totalItems, subtotal, openCartDrawer } = useCart();
+  const { totalItems, subtotal, openCartDrawer, isCartOpen } = useCart();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Completely hide header when the cart drawer is open[cite: 14]
+  if (isCartOpen) return null;
 
   const handleAccountClick = () => {
     if (currentUser) {
@@ -169,7 +172,7 @@ export const Header: React.FC = () => {
               {currentUser && isDropdownOpen && (
                 <div
                   className="absolute top-full left-0 mt-2 bg-white text-slate-800 border border-slate-200 rounded-xl shadow-2xl py-2 z-50 overflow-hidden"
-                  style={{ left: 0, right: "auto", width: "100%", minWidth: "180px", maxWidth: "200px" }}
+                  style={{ top: "100%", left: 0, right: "auto", marginTop: "8px", width: "100%", minWidth: "200px" }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="py-1">
