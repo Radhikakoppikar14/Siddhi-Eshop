@@ -160,7 +160,7 @@ export const Header: React.FC = () => {
                 </span>
                 <span className="action-val" id="headerAuthVal">
                   {currentUser
-                    ? `${currentUser.contactPerson.split(" ")[0]} (${currentUser.companyName.companyName ? currentUser.companyName.slice(0, 12) : ''}...)`
+                    ? `${currentUser.contactPerson.split(" ")[0]} (${currentUser.companyName ? currentUser.companyName.slice(0, 12) : ""}...)`
                     : "Customer Account"}
                 </span>
               </div>
