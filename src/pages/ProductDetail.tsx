@@ -6,7 +6,7 @@ import { isValidPositiveNumber } from "../utils/validation";
 import { RFQModal } from "../assets/components/ui/RFQModal.tsx";
 
 export const ProductDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+const { id: _id } = useParams<{ id: string }>();
   const { addCustomItem } = useCart();
 
   // Interactive selectors state
