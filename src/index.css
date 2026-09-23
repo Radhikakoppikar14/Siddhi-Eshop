@@ -5070,6 +5070,7 @@ h6 {
    MOBILE RESPONSIVE TWEAKS (RFQ, ACCOUNT MODALS, & PRODUCT DETAILS)
    ==================================================================== */
 @media (max-width: 768px) {
+  /* 1. Top Bar Centered & Stacked */
   .top-bar-inner {
     display: flex !important;
     flex-direction: column !important;
@@ -5102,6 +5103,7 @@ h6 {
     width: 100% !important;
   }
 
+  /* 2. Header layout */
   .header-inner {
     flex-wrap: wrap !important;
     padding: 10px 0 !important;
@@ -5113,6 +5115,7 @@ h6 {
     max-width: 100% !important;
   }
 
+  /* 3. Product Detail Grid Stacking (Mobile Only) */
   .product-detail-grid {
     display: flex !important;
     flex-direction: column !important;
@@ -5146,6 +5149,7 @@ h6 {
     margin: 0 auto !important;
   }
 
+  /* 4. RFQ Section / Modal Alignment (Mobile Only) */
   .rfq-wrapper {
     display: flex !important;
     flex-direction: column !important;
@@ -5185,6 +5189,7 @@ h6 {
     margin: 0 !important;
   }
 
+  /* 5. Create Account & Login Form Field Alignment Fixes */
   .auth-modal-dialog,
   .auth-modal-card {
     width: 95% !important;
@@ -5230,6 +5235,7 @@ h6 {
     white-space: normal !important;
   }
 
+  /* 6. Fix Mobile Menu alignment and overlap */
   .nav-links.show {
     display: flex !important;
     flex-direction: column !important;
@@ -5246,6 +5252,7 @@ h6 {
     justify-content: space-between !important;
   }
 
+  /* Prevent side-scrolling entirely */
   body, html {
     max-width: 100vw !important;
     overflow-x: hidden !important;
@@ -5265,52 +5272,812 @@ h6 {
 }
 
 /* ====================================================================
-   CLEAN MOBILE PROFILE DROPDOWN (ALIGNED TO THE RIGHT)
+   FINAL CLEAN MOBILE VERTICAL CARD STACK (DESKTOP UNTOUCHED)
    ==================================================================== */
 @media (max-width: 768px) {
-  .user-profile-dropdown,
-  .account-dropdown-menu,
-  div[class*="dropdown"],
-  div[class*="profile-menu"] {
-    position: absolute !important;
-    top: calc(100% + 6px) !important;
-    left: auto !important;
-    right: 10px !important;
-    width: 220px !important;
-    max-width: calc(100vw - 20px) !important;
-    z-index: 999999 !important;
+  .lapp-cards-grid,
+  .brand-cards-grid,
+  .olflex-reference-track,
+  .olflex-reference-section div[class*="track"],
+  div[class*="cards-grid"],
+  div[class*="reference-track"] {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+    padding: 10px 0 !important;
+  }
+
+  .lapp-cards-grid > *,
+  .brand-cards-grid > *,
+  .olflex-reference-track > *,
+  .olflex-reference-section div[class*="track"] > *,
+  div[class*="cards-grid"] > *,
+  div[class*="reference-card"] {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 220px !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
     background: #ffffff !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
-    border-radius: 8px !important;
-    border: 1px solid #cbd5e1 !important;
+    border: 1px solid var(--gray-200) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  }
+}
+
+/* ====================================================================
+   UNIFORM MOBILE PAGE STACKING (EXACTLY LIKE PRODUCT DETAIL PAGE)
+   ==================================================================== */
+@media (max-width: 768px) {
+  /* Force all brand grids and card tracks into vertical column flows */
+  .lapp-cards-grid,
+  .brand-cards-grid,
+  .olflex-reference-track,
+  .lapp-product-card-grid,
+  .products-grid,
+  .category-grid,
+  .brands-grid,
+  div[class*="cards-grid"],
+  div[class*="reference-track"],
+  div[class*="product-grid"],
+  div[class*="portfolio-grid"] {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+    padding: 10px 0 !important;
+  }
+
+  /* Force every child card to be a full-width professional box */
+  .lapp-cards-grid > *,
+  .brand-cards-grid > *,
+  .olflex-reference-track > *,
+  .lapp-product-card-grid > *,
+  .products-grid > *,
+  .category-grid > *,
+  .brands-grid > *,
+  div[class*="cards-grid"] > *,
+  div[class*="reference-card"],
+  .lapp-photo-card,
+  .brand-photo-card,
+  .olflex-reference-card,
+  .product-card,
+  .cat-card,
+  .brand-partner-card {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 220px !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    border: 1px solid var(--gray-200) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  }
+}
+
+/* ====================================================================
+   FORCE MOBILE GRID & CARD STACKING (OVERRIDES INLINE STYLES)
+   ==================================================================== */
+@media (max-width: 768px) {
+  div[style*="grid"],
+  div[class*="grid"],
+  .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+  }
+
+  div[style*="grid"] > *,
+  div[class*="grid"] > *,
+  .grid > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
     box-sizing: border-box !important;
   }
 }
 
 /* ====================================================================
-   CLEAN MOBILE PROFILE DROPDOWN (SNAPPED TO PROFILE CARD WIDTH)
+   PRO-GRADE MOBILE SLIDER BANNER (ONE AD AT A TIME)
    ==================================================================== */
 @media (max-width: 768px) {
-  .action-auth-item {
+  .desktop-banner-section {
+    height: auto !important;
+    min-height: 380px !important;
     position: relative !important;
+    overflow: hidden !important;
+    border-radius: var(--radius-md) !important;
   }
 
+  .banner-carousel-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    height: 100% !important;
+    gap: 0 !important;
+    padding: 0 !important;
+  }
+
+  .banner-carousel-wrapper::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .moglix-slide {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100% !important;
+    min-height: 380px !important;
+    position: relative !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 20px 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .slide-body-split {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .slide-text-col {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .slide-heading-main {
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+  }
+
+  .slide-paragraph {
+    font-size: 12px !important;
+    max-width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+
+  .slide-product-showcase {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: auto !important;
+    min-height: 140px !important;
+    margin: 0 auto !important;
+    padding: 8px !important;
+  }
+
+  .slide-showcase-img-box {
+    width: 80px !important;
+    min-width: 80px !important;
+    height: 110px !important;
+  }
+
+  .slide-action-btns {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 6px !important;
+  }
+
+  .slide-action-btns .btn,
+  .slide-showcase-btn {
+    width: 100% !important;
+    padding: 8px 12px !important;
+    font-size: 10.5px !important;
+  }
+}
+
+/* ====================================================================
+   CLEAN 4-ITEM MOBILE NAVIGATION MENU (NO NESTED SUBMENUS)
+   ==================================================================== */
+@media (max-width: 768px) {
+  .main-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+  }
+
+  .nav-bar {
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  .nav-links.show {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    background: #1e1b29 !important;
+    border-top: 3px solid var(--primary) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+    padding: 16px 20px 24px !important;
+    gap: 10px !important;
+    z-index: 9999 !important;
+    box-sizing: border-box !important;
+  }
+
+  .nav-links .nav-item {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .nav-links .nav-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 12px 16px !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-sizing: border-box !important;
+  }
+
+  .nav-links .nav-link:hover {
+    background: var(--primary) !important;
+  }
+
+  .nav-links .cat-dropdown,
+  .nav-links .submenu-list,
+  .nav-links .dropdown-submenu {
+    display: none !important;
+  }
+}
+
+/* ====================================================================
+   MOBILE NAV HOVER/ACTIVE RED HIGHLIGHT
+   ==================================================================== */
+@media (max-width: 768px) {
+  .nav-links .nav-link:hover,
+  .nav-links .nav-link:active,
+  .nav-links .nav-item.active .nav-link {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #ffffff !important;
+  }
+}
+
+/* ====================================================================
+   HIDE BANNER CAROUSEL ARROWS ON MOBILE
+   ==================================================================== */
+@media (max-width: 768px) {
+  .banner-nav-arrow,
+  .prev-arrow,
+  .next-arrow {
+    display: none !important;
+  }
+}
+
+/* ====================================================================
+   FIX QUOTATION CART Z-INDEX & LAYER OVERLAY
+   ==================================================================== */
+@media (max-width: 768px) {
+  .cart-drawer-overlay {
+    z-index: 99999 !important;
+  }
+
+  .cart-drawer {
+    z-index: 100000 !important;
+    width: 85vw !important;
+    max-width: 360px !important;
+  }
+}
+
+/* ====================================================================
+   FIX RFQ DIRECT HELP BOX TEXT OVERFLOW ON MOBILE
+   ==================================================================== */
+@media (max-width: 768px) {
+  .rfq-direct-help {
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-direct-help strong,
+  .rfq-direct-help span {
+    font-size: 11.5px !important;
+    word-break: break-all !important;
+    white-space: normal !important;
+  }
+}
+
+/* ====================================================================
+   FINAL PROFESSIONAL MOBILE RFQ MODAL LAYOUT FIX
+   ==================================================================== */
+@media (max-width: 768px) {
+  .rfq-modal-overlay {
+    padding: 10px !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .rfq-modal-dialog {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 94vh !important;
+    border-radius: 12px !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-modal-header {
+    padding: 16px 16px 8px !important;
+  }
+
+  .rfq-modal-dialog .rfq-section {
+    padding: 10px 16px 20px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-info-col,
+  .rfq-form-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 20px 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .rfq-info-col {
+    border-radius: 8px 8px 0 0 !important;
+  }
+
+  .rfq-form-col {
+    background: #ffffff !important;
+    border-radius: 0 0 8px 8px !important;
+  }
+
+  .rfq-direct-help {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .rfq-direct-help strong,
+  .rfq-direct-help span {
+    font-size: 11.5px !important;
+    white-space: normal !important;
+  }
+
+  .rfq-form {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .form-group,
+  .form-group.full-width,
+  .form-group input,
+  .form-group select,
+  .form-group textarea,
+  .file-upload-box,
+  .btn-primary {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+}
+
+/* ====================================================================
+   CLIENT-READY POLISHED HEADER & ACTION ITEMS (MOBILE)
+   ==================================================================== */
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+
+  .brand-logo-wrap {
+    gap: 10px !important;
+  }
+
+  .brand-logo-wrap img,
+  .brand-lockup-img,
+  .brand-logo-img {
+    height: 38px !important;
+    max-height: 38px !important;
+    max-width: 180px !important;
+  }
+
+  .brand-name {
+    font-size: 20px !important;
+  }
+
+  .brand-tag {
+    font-size: 8.5px !important;
+    letter-spacing: 1.2px !important;
+  }
+
+  .top-bar-inner {
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    text-align: center !important;
+  }
+
+  .header-actions {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    width: 100% !important;
+    gap: 6px !important;
+    margin-top: 6px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid var(--gray-200) !important;
+    box-sizing: border-box !important;
+  }
+
+  .action-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 2px !important;
+    padding: 6px 4px !important;
+    height: auto !important;
+    min-height: 54px !important;
+    background: var(--gray-100) !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+  }
+
+  .action-icon-wrap {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .action-text {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    line-height: 1.15 !important;
+  }
+
+  .action-label {
+    font-size: 8.5px !important;
+    color: var(--gray-600) !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+  }
+
+  .action-val {
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    color: var(--gray-900) !important;
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.15 !important;
+    overflow: visible !important;
+  }
+
+  .header-search-wrap {
+    width: 100% !important;
+    margin-top: 6px !important;
+    box-sizing: border-box !important;
+  }
+
+  .search-form {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .search-cat-select {
+    max-width: 85px !important;
+    font-size: 10.5px !important;
+    padding: 0 4px !important;
+  }
+
+  .search-input {
+    min-width: 0 !important;
+    flex: 1 !important;
+    font-size: 11px !important;
+    padding: 8px 6px !important;
+  }
+
+  .search-btn {
+    padding: 0 12px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ====================================================================
+   CLEAN NON-OVERLAPPING MOBILE TOP BAR LAYOUT
+   ==================================================================== */
+@media (max-width: 768px) {
+  .main-header ~ div:first-child,
+  header ~ div:first-child,
+  .top-bar, 
+  .announcement-bar,
+  div[class*="top-bar"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    position: relative !important;
+    padding: 10px 12px !important;
+    gap: 6px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .main-header ~ div:first-child span.badge,
+  header ~ div:first-child span.badge,
+  .official-badge,
+  .top-bar-badge,
+  span[class*="badge"] {
+    align-self: flex-start !important;
+    margin: 0 0 2px 0 !important;
+    font-size: 8px !important;
+    padding: 2px 6px !important;
+    display: inline-block !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .main-header ~ div:first-child span:not(.badge),
+  header ~ div:first-child span:not(.badge),
+  .top-bar-title,
+  .top-bar p {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    box-sizing: border-box !important;
+  }
+
+  .main-header ~ div:first-child div,
+  header ~ div:first-child div,
+  .top-bar-contact {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 3px !important;
+    font-size: 9.5px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding-top: 6px !important;
+    margin-top: 2px !important;
+    width: 100% !important;
+  }
+
+  .top-bar-contact a,
+  .top-bar-contact span:nth-of-type(n+2),
+  .top-bar-contact div:nth-child(n+2) {
+    display: inline-block !important;
+    white-space: nowrap !important;
+  }
+
+  .top-bar-contact > div:last-child {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+}
+
+/* ====================================================================
+   GLOBAL MODAL & DIALOG Z-INDEX FIX (STRICT OVERRIDE)
+   ==================================================================== */
+.auth-modal-overlay,
+.modal-overlay,
+.dialog-overlay,
+div[class*="modal-backdrop"],
+div[class*="modal-overlay"],
+div[class*="dialog-overlay"] {
+  z-index: 999999 !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
+.auth-modal-content,
+.modal-content,
+.dialog-content,
+div[class*="modal-container"],
+div[class*="modal-box"],
+div[class*="modal-content"] {
+  z-index: 1000000 !important;
+  position: relative !important;
+}
+
+.main-header,
+header.sticky,
+.sticky-header {
+  z-index: 900 !important;
+}
+
+/* ====================================================================
+   FIX USER PROFILE DROPDOWN VISIBILITY ON MOBILE
+   ==================================================================== */
+.user-profile-dropdown,
+.account-dropdown-menu,
+div[class*="dropdown"],
+div[class*="profile-menu"] {
+  position: absolute !important;
+  top: 100% !important;
+  right: 0 !important;
+  left: auto !important;
+  z-index: 100000 !important;
+  background: #ffffff !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 8px 0 !important;
+  min-width: 180px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 768px) {
   .user-profile-dropdown,
   .account-dropdown-menu,
   div[class*="dropdown"],
   div[class*="profile-menu"] {
-    position: absolute !important;
-    top: calc(100% + 4px) !important;
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
     left: 0 !important;
-    right: auto !important;
+    right: 0 !important;
     width: 100% !important;
-    min-width: 170px !important;
-    max-width: 200px !important;
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3) !important;
+    padding: 16px !important;
     z-index: 999999 !important;
-    background: #ffffff !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
-    border-radius: 8px !important;
-    border: 1px solid #cbd5e1 !important;
-    box-sizing: border-box !important;
+    animation: slideUpMobile 0.25s ease-out !important;
   }
+
+  @keyframes slideUpMobile {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ====================================================================
+   CLEAN AUTH MODAL TWEAKS FOR CLIENT MEETING
+   ==================================================================== */
+.auth-modal-desc,
+.auth-field-group .auth-subtext,
+.auth-input-wrap + .auth-subtext {
+  display: none !important;
+}
+
+.product-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 24px;
+  align-items: start !important;
+}
+
+@media (max-width: 1024px) {
+  .product-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Fix product pricing card to be static and sticky/fixed on scroll */
+.product-pricing-card, 
+div[style*="position: relative"] > .bg-white.border {
+  position: sticky !important;
+  top: 90px !important;
+  z-index: 40 !important;
+}
+
+
+/* ====================================================================
+   PROPER BANNER SIZING & CONTAINER FIT FIX
+   ==================================================================== */
+.desktop-banner-section {
+  height: 320px !important;
+  max-height: 320px !important;
+  overflow: hidden !important;
+}
+
+.moglix-slide {
+  height: 320px !important;
+  max-height: 320px !important;
+  padding: 0 40px !important;
+  box-sizing: border-box !important;
+}
+
+.slide-body-split {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  height: 100% !important;
+  gap: 20px !important;
+}
+
+.slide-text-col {
+  max-width: 540px !important;
+  flex: 1 !important;
+}
+
+.slide-heading-main {
+  font-size: 26px !important;
+  line-height: 1.15 !important;
+  margin-bottom: 8px !important;
+}
+
+.slide-paragraph {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  margin-bottom: 14px !important;
+}
+
+.slide-product-showcase {
+  width: 340px !important;
+  max-width: 340px !important;
+  height: 200px !important;
+  max-height: 200px !important;
+  padding: 10px !important;
+  box-sizing: border-box !important;
+}
+
+.slide-showcase-img-box {
+  width: 110px !important;
+  min-width: 110px !important;
+  height: 180px !important;
 }
