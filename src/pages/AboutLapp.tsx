@@ -330,7 +330,7 @@ export const AboutLapp: React.FC = () => {
               <button
                 className="btn btn-primary btn-sm"
                 style={{ width: "100%", textAlign: "center" }}
-                onClick={() => scrollToRfqTopic("UNITRONIC Cables")}
+                onClick={() => scrollToRfqTopic("UNITRONIC Data Communication Cables")}
               >
                 Request Quote
               </button>
@@ -387,7 +387,7 @@ export const AboutLapp: React.FC = () => {
               <button
                 className="btn btn-primary btn-sm"
                 style={{ width: "100%", textAlign: "center" }}
-                onClick={() => scrollToRfqTopic("SKINTOP Glands")}
+                onClick={() => scrollToRfqTopic("SKINTOP Cable Glands & Accessories")}
               >
                 Request Quote
               </button>
@@ -395,19 +395,19 @@ export const AboutLapp: React.FC = () => {
           </div>
 
           {/* Card 4: UNIPLUS (Request Quote) */}
-          <div className="lapp-product-card">
-            <img src="/images/card-uniplus.jpg" alt="UNIPLUS Single Cores" />
-            <div className="lapp-product-card-body">
-              <span className="lapp-product-badge">UNIPLUS®</span>
-              <h3>Cabinet Single Cores</h3>
-              <p>
+          <div className="lapp-product-card" style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
+            <img src="/images/card-uniplus.jpg" alt="UNIPLUS Single Cores" style={{ width: "100%", height: "180px", objectFit: "cover" }} />
+            <div className="lapp-product-card-body" style={{ padding: "20px" }}>
+              <span className="lapp-product-badge" style={{ fontSize: "11px", fontWeight: 800, color: "#ff6600", textTransform: "uppercase" }}>UNIPLUS®</span>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, margin: "4px 0 8px" }}>Cabinet Single Cores</h3>
+              <p style={{ fontSize: "13px", color: "#64748b", marginBottom: "14px" }}>
                 Flexible single-core wires for control cabinets, panels, and
                 internal machine wiring.
               </p>
               <button
                 className="btn btn-primary btn-sm"
                 style={{ width: "100%", textAlign: "center" }}
-                onClick={() => scrollToRfqTopic("UNIPLUS Single Cores")}
+                onClick={() => scrollToRfqTopic("UNIPLUS Cabinet Single Cores")}
               >
                 Request Quote
               </button>
@@ -415,19 +415,19 @@ export const AboutLapp: React.FC = () => {
           </div>
 
           {/* Card 5: SILVYN (Request Quote) */}
-          <div className="lapp-product-card">
-            <img src="/images/card-conduit.jpg" alt="SILVYN Conduit Systems" />
-            <div className="lapp-product-card-body">
-              <span className="lapp-product-badge">SILVYN®</span>
-              <h3>Rill, Conduit &amp; Klick</h3>
-              <p>
+          <div className="lapp-product-card" style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
+            <img src="/images/card-conduit.jpg" alt="SILVYN Conduit Systems" style={{ width: "100%", height: "180px", objectFit: "cover" }} />
+            <div className="lapp-product-card-body" style={{ padding: "20px" }}>
+              <span className="lapp-product-badge" style={{ fontSize: "11px", fontWeight: 800, color: "#ff6600", textTransform: "uppercase" }}>SILVYN®</span>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, margin: "4px 0 8px" }}>Rill, Conduit &amp; Klick</h3>
+              <p style={{ fontSize: "13px", color: "#64748b", marginBottom: "14px" }}>
                 Corrugated flexible conduits and connectors for mechanical and
                 environmental protection.
               </p>
               <button
                 className="btn btn-primary btn-sm"
                 style={{ width: "100%", textAlign: "center" }}
-                onClick={() => scrollToRfqTopic("SILVYN Conduits")}
+                onClick={() => scrollToRfqTopic("SILVYN Conduit Systems")}
               >
                 Request Quote
               </button>
@@ -435,19 +435,19 @@ export const AboutLapp: React.FC = () => {
           </div>
 
           {/* Card 6: LAPP INFRA (Request Quote) */}
-          <div className="lapp-product-card">
-            <img src="/images/card-infra.jpg" alt="LAPP INFRA Building Wires" />
-            <div className="lapp-product-card-body">
-              <span className="lapp-product-badge">LAPP INFRA</span>
-              <h3>Domestic / House Wiring</h3>
-              <p>
+          <div className="lapp-product-card" style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
+            <img src="/images/card-infra.jpg" alt="LAPP INFRA Building Wires" style={{ width: "100%", height: "180px", objectFit: "cover" }} />
+            <div className="lapp-product-card-body" style={{ padding: "20px" }}>
+              <span className="lapp-product-badge" style={{ fontSize: "11px", fontWeight: 800, color: "#ff6600", textTransform: "uppercase" }}>LAPP INFRA</span>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, margin: "4px 0 8px" }}>Domestic / House Wiring</h3>
+              <p style={{ fontSize: "13px", color: "#64748b", marginBottom: "14px" }}>
                 Flame-retardant FR-LSH building wires for residential and
                 commercial installations.
               </p>
               <button
                 className="btn btn-primary btn-sm"
                 style={{ width: "100%", textAlign: "center" }}
-                onClick={() => scrollToRfqTopic("LAPP INFRA House Wiring")}
+                onClick={() => scrollToRfqTopic("LAPP INFRA Domestic House Wiring")}
               >
                 Request Quote
               </button>
@@ -455,20 +455,21 @@ export const AboutLapp: React.FC = () => {
           </div>
         </div>
 
-        <div className="lapp-distributor-bar">
-          <span>
+        <div className="lapp-distributor-bar" style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+          <span style={{ fontSize: "12.5px", color: "#334155" }}>
             Authorized Lapp Channel Partner:{" "}
             <strong>Siddhi Kabel Corporation Private Limited</strong> •
             Banashankari 3rd Stage, Bangalore 560085 • Phone: 09620000947
           </span>
           <button
             className="btn btn-primary btn-sm"
-            onClick={() => scrollToRfqTopic("LAPP FULL SCHEDULE")}
+            onClick={() => scrollToRfqTopic("LAPP FULL SCHEDULE / BOM")}
           >
             Submit Official RFQ / BOM →
           </button>
         </div>
       </div>
+
       {selectedProduct && (
         <RFQModal
           product={selectedProduct}

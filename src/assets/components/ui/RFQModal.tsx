@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import { RFQSection } from "../home/RFQSection";
 
 interface RFQModalProps {
-  product: string;
+  product?: string | null;
   onClose: () => void;
 }
 
@@ -13,17 +13,34 @@ export const RFQModal: React.FC<RFQModalProps> = ({ product, onClose }) => {
       if (event.key === "Escape") onClose();
     };
 
+    // Lock background scroll while the modal is open, without the page
+    // jumping sideways when the page scrollbar disappears (desktop only).
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    const prevOverflow = document.body.style.overflow;
+    const prevPaddingRight = document.body.style.paddingRight;
     document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
     document.addEventListener("keydown", handleEscape);
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = prevOverflow;
+      document.body.style.paddingRight = prevPaddingRight;
       document.removeEventListener("keydown", handleEscape);
     };
   }, [onClose]);
 
+  let cleanProduct = product && product.trim() !== "" ? product : "General Inquiry";
+  cleanProduct = cleanProduct
+    .replace(/^(quote for bulk order rfq:\s*)+/gi, "")
+    .replace(/^(bulk order rfq:\s*)+/gi, "")
+    .trim();
+
   return (
     <div
-      className="rfq-modal-overlay"
+      className="rfqm-overlay"
       role="presentation"
       onMouseDown={onClose}
       style={{
@@ -34,112 +51,295 @@ export const RFQModal: React.FC<RFQModalProps> = ({ product, onClose }) => {
         bottom: 0,
         backgroundColor: "rgba(15, 23, 42, 0.75)",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
         zIndex: 99999,
-        padding: "16px",
+        overflow: "hidden", // the overlay itself never scrolls
       }}
     >
+      {/*
+        All new classes use the unique "rfqm-" prefix so they can't collide with
+        older .rfq-modal-* rules in your global stylesheet (a collision like that
+        can add stray borders or make header text invisible).
+      */}
       <style>{`
-        .rfq-modal-dialog .rfq-section > div:first-child:has(button),
-        .rfq-modal-dialog .rfq-section header,
-        .rfq-modal-dialog .rfq-header-banner,
-        .rfq-modal-dialog div[style*="background: rgb(15, 23, 42)"],
-        .rfq-modal-dialog div[style*="background: #0f172a"] {
-          display: none !important;
+        /* ---------- Base (desktop) ---------- */
+        .rfqm-overlay {
+          align-items: center;
+          padding: 16px;
         }
 
-        /* Force table container to scroll horizontally and prevent clipping */
-        .rfq-modal-dialog .rfq-section form,
-        .rfq-modal-dialog .rfq-section div {
-          overflow-x: visible !important;
+        .rfqm-dialog {
+          background: #ffffff;
+          width: 100%;
+          max-width: 1100px;
+          max-height: 92vh;
+          max-height: 92dvh;
+          border-radius: 16px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden; /* dialog never scrolls; only the body does */
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
         }
 
-        .rfq-modal-dialog table {
+        /* Header: FIXED. It sits outside the scroll area, so it never scrolls away. */
+        .rfqm-dialog .rfqm-header {
+          flex: 0 0 auto;
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 24px 36px 18px 36px;
+          background: #ffffff;
+          border-bottom: 1px solid #eef2f7;
+        }
+        .rfqm-dialog .rfqm-header-text {
+          flex: 1 1 auto;
+          min-width: 0;
+        }
+
+        .rfqm-dialog .rfqm-eyebrow {
+          display: block;
+          margin: 0 0 4px 0;
+          font-size: 11px;
+          font-weight: 700;
+          line-height: 1.3;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          color: #b91c1c;
+        }
+
+        /* Weight 800 fills in the Q's tail so it reads like an O.
+           700 + a full line box keeps the glyph intact. */
+        .rfqm-dialog .rfqm-title {
+          font-family: inherit;
+          font-size: 22px;
+          font-weight: 700;
+          line-height: 1.35;
+          padding-bottom: 2px;
+          margin: 0;
+          color: #0f172a;
+          overflow: visible !important;
+          text-overflow: clip !important;
+          white-space: normal !important;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: geometricPrecision;
+        }
+
+        .rfqm-dialog .rfqm-close {
+          flex: 0 0 auto;
+          width: 38px;
+          height: 38px;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          border-radius: 50%;
+          background: #f1f5f9;
+          color: #475569;
+          cursor: pointer;
+        }
+
+        /* The body is the ONLY scroll container. */
+        .rfqm-dialog .rfqm-body {
+          flex: 1 1 auto;
+          min-height: 0;
+          padding: 20px 36px 36px 36px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          overscroll-behavior: contain;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        /* Neutralise inner scroll areas so no second scrollbar appears. */
+        .rfqm-dialog .rfqm-body section,
+        .rfqm-dialog .rfqm-body .rfq-wrapper,
+        .rfqm-dialog .rfqm-body .rfq-form {
+          height: auto !important;
+          max-height: none !important;
+          overflow: visible !important;
+        }
+
+        .rfqm-dialog .rfq-wrapper {
+          display: grid !important;
+          grid-template-columns: 320px 1fr !important;
+          gap: 24px !important;
           width: 100% !important;
-          min-width: 600px !important;
+        }
+        .rfqm-dialog .rfq-wrapper > * {
+          min-width: 0;
         }
 
-        /* Force all price and subtotal text to dark black */
-        .rfq-modal-dialog table td,
-        .rfq-modal-dialog table th {
-          color: #0f172a !important;
+        .rfqm-dialog .rfq-form {
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+          gap: 16px !important;
+        }
+        .rfqm-dialog .form-group {
+          min-width: 0;
+        }
+        .rfqm-dialog .form-group.full-width {
+          grid-column: span 2 !important;
+        }
+        .rfqm-dialog .rfq-form input,
+        .rfqm-dialog .rfq-form select,
+        .rfqm-dialog .rfq-form textarea {
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        /* ---------- Tablet (<= 850px): stack info panel above the form ---------- */
+        @media (max-width: 850px) {
+          .rfqm-dialog .rfqm-header {
+            padding: 20px 24px 14px 24px;
+          }
+          .rfqm-dialog .rfqm-body {
+            padding: 16px 24px 28px 24px;
+          }
+          .rfqm-dialog .rfq-wrapper {
+            grid-template-columns: 1fr !important;
+          }
+        }
+
+        /* ---------- Phone (<= 640px): compact fixed header, floating card ---------- */
+        @media (max-width: 640px) {
+          .rfqm-overlay {
+            align-items: center;
+            padding: 12px;
+          }
+          .rfqm-dialog {
+            max-height: 92vh;
+            max-height: 92dvh;
+            border-radius: 16px;
+          }
+
+          .rfqm-dialog .rfqm-header {
+            padding: 14px 14px 12px 16px;
+            gap: 10px;
+          }
+          .rfqm-dialog .rfqm-eyebrow {
+            font-size: 10px;
+            margin-bottom: 2px;
+          }
+          .rfqm-dialog .rfqm-title {
+            font-size: 18px;
+            line-height: 1.3;
+          }
+          /* Shorter title on phones: "Quote for <product>" */
+          .rfqm-dialog .rfqm-title-extra {
+            display: none;
+          }
+          .rfqm-dialog .rfqm-close {
+            width: 40px;  /* comfortable tap target */
+            height: 40px;
+          }
+
+          .rfqm-dialog .rfqm-body {
+            padding: 14px 16px 20px 16px;
+          }
+          .rfqm-dialog .rfq-wrapper {
+            gap: 16px !important;
+          }
+
+          /* Purple info panel: tighter padding and smaller heading */
+          .rfqm-dialog .rfq-wrapper > *:first-child {
+            padding: 16px !important;
+          }
+          .rfqm-dialog .rfq-wrapper > *:first-child h2,
+          .rfqm-dialog .rfq-wrapper > *:first-child h3 {
+            font-size: 20px !important;
+            line-height: 1.25 !important;
+          }
+
+          /* Single-column form */
+          .rfqm-dialog .rfq-form {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+          }
+          .rfqm-dialog .form-group.full-width {
+            grid-column: auto !important;
+          }
+          /* 16px stops iOS Safari from zooming when a field is focused */
+          .rfqm-dialog .rfq-form input,
+          .rfqm-dialog .rfq-form select,
+          .rfqm-dialog .rfq-form textarea {
+            width: 100%;
+            font-size: 16px !important;
+          }
+          .rfqm-dialog .rfq-form button[type="submit"] {
+            width: 100%;
+          }
+        }
+
+        /* ---------- Very small phones (<= 360px) ---------- */
+        @media (max-width: 360px) {
+          .rfqm-dialog .rfqm-title {
+            font-size: 16px;
+          }
+          .rfqm-dialog .rfqm-body {
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+        }
+
+        /* ---------- Short landscape phones ---------- */
+        @media (max-height: 480px) and (orientation: landscape) {
+          .rfqm-overlay {
+            padding: 0;
+          }
+          .rfqm-dialog {
+            max-height: 100vh;
+            max-height: 100dvh;
+            border-radius: 0;
+          }
+          .rfqm-dialog .rfqm-header {
+            padding-top: 10px;
+            padding-bottom: 8px;
+          }
         }
       `}</style>
 
       <div
-        className="rfq-modal-dialog"
+        className="rfqm-dialog"
         role="dialog"
         aria-modal="true"
         aria-labelledby="rfq-modal-title"
         onMouseDown={(event) => event.stopPropagation()}
-        style={{
-          background: "#ffffff",
-          width: "100%",
-          maxWidth: "850px", // Expanded width so all columns fit naturally
-          maxHeight: "92vh",
-          borderRadius: "12px",
-          display: "flex",
-          flexDirection: "column",
-          overflowY: "auto",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)",
-        }}
       >
-        {/* Professional Modal Header */}
-        <div 
-          className="rfq-modal-header"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "18px 24px",
-            borderBottom: "1px solid #e2e8f0",
-            position: "sticky",
-            top: 0,
-            background: "#ffffff",
-            zIndex: 10,
-          }}
-        >
-          <div>
-            <span 
-              className="rfq-modal-eyebrow"
-              style={{ fontSize: "11px", fontWeight: 800, color: "#ff6600", textTransform: "uppercase", display: "block", marginBottom: "2px" }}
-            >
-              Request for quotation
+        {/* Fixed header (outside the scroll area) */}
+        <div className="rfqm-header">
+          <div className="rfqm-header-text">
+            <span className="rfqm-eyebrow" style={{ color: "#b91c1c" }}>
+              Request For Quotation
             </span>
-            <h2 
+            <h2
               id="rfq-modal-title"
-              style={{ fontSize: "18px", fontWeight: 900, color: "#0f172a", margin: 0 }}
+              className="rfqm-title"
+              style={{ color: "#0f172a" }}
             >
-              Quote for {product}
+              Quote for{" "}
+              <span className="rfqm-title-extra">Bulk Order RFQ: </span>
+              {cleanProduct}
             </h2>
           </div>
           <button
-            className="rfq-modal-close"
             type="button"
+            className="rfqm-close"
             onClick={onClose}
             aria-label="Close quotation form"
-            style={{
-              background: "#f1f5f9",
-              border: "none",
-              borderRadius: "50%",
-              width: "32px",
-              height: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "#64748b",
-            }}
           >
             <X size={18} />
           </button>
         </div>
-        
-        {/* Modal Content Body */}
-        <div style={{ padding: "20px 24px", overflowX: "auto" }}>
+
+        {/* Scrolling body: the single scroll area */}
+        <div className="rfqm-body">
           <RFQSection
-            initialNotes={`Official RFQ for ${product}. Please share formal pricing and delivery details.`}
+            initialNotes={`Official RFQ for ${cleanProduct}. Please share formal pricing and delivery details.`}
           />
         </div>
       </div>

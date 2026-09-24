@@ -6493,3 +6493,113 @@ h3.section-title,
   position: relative;
   z-index: 10 !important;
 }
+
+/* Hero Banner Mobile Responsiveness */
+@media (max-width: 850px) {
+  .slide-body-split {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .slide-text-col {
+    padding: 20px 16px !important;
+    text-align: center;
+  }
+  .slide-action-btns {
+    justify-content: center;
+  }
+  .slide-graphic-col {
+    padding: 0 16px 20px 16px !important;
+  }
+}
+
+
+.rfq-modal-dialog {
+  padding-top: 24px;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.rfq-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 24px 16px 24px;
+  gap: 16px;
+}
+
+.rfq-modal-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.rfq-modal-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  color: #b91c1c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+
+
+
+@media (max-width: 768px) {
+  /* Ensure variant buttons wrap into clean grids on mobile */
+  .variant-selector-grid, 
+  .core-options-grid, 
+  .size-options-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)) !important;
+    gap: 8px !important;
+  }
+  
+  .variant-btn, 
+  .core-btn, 
+  .size-btn {
+    width: 100% !important;
+    padding: 8px 4px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+}
+/* Core and Size Selection Button Grids - Perfectly Aligned for Desktop & Mobile */
+.core-options-grid,
+.size-options-grid,
+.variant-selector-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important; /* 5 columns on desktop */
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) {
+  .core-options-grid,
+  .size-options-grid,
+  .variant-selector-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .core-options-grid,
+  .size-options-grid,
+  .variant-selector-grid {
+    grid-template-columns: repeat(3, 1fr) !important; /* 3 columns on mobile for perfect spacing */
+    gap: 8px !important;
+  }
+  
+  .core-options-grid button,
+  .size-options-grid button,
+  .variant-selector-grid button {
+    padding: 8px 6px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+}

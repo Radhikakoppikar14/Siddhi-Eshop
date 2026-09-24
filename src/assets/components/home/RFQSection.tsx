@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Check, Upload, Paperclip, X, CheckCircle2 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../context/ToastContext";
@@ -20,7 +20,6 @@ export const RFQSection: React.FC<RFQSectionProps> = ({
   const { currentUser, openAuthModal, addOffer } = useAuth();
   const { showToast } = useToast();
 
-  // Initialized as blank strings for manual entry during your meeting
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
@@ -38,6 +37,16 @@ export const RFQSection: React.FC<RFQSectionProps> = ({
     refNo: string;
     date: string;
   } | null>(null);
+
+  useEffect(() => {
+    if (currentUser) {
+      setName(currentUser.contactPerson);
+      setCompany(currentUser.companyName);
+      setEmail(currentUser.email);
+      setPhone(currentUser.phone);
+      setCity(`${currentUser.city}, ${currentUser.state}`);
+    }
+  }, [currentUser]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -117,16 +126,16 @@ export const RFQSection: React.FC<RFQSectionProps> = ({
     addOffer({
       refNo,
       customerId: currentUser.id,
-      company: cleanCompany || "Enterprise Client",
-      name: cleanName || "Valued Client",
-      email: cleanEmail,
-      phone: cleanPhone,
+      company: cleanCompany || currentUser.companyName,
+      name: cleanName || currentUser.contactPerson,
+      email: cleanEmail || currentUser.email,
+      phone: cleanPhone || currentUser.phone,
       category: catLabelMap[cat] || "Electrical Products",
       notes: `${cleanNotes}${cleanNotes ? "\n\n" : ""}Requested quantity: ${quantity}`,
       filesCount: files.length,
     });
 
-    let msg = `Commercial Offer & RFQ (${refNo}) dispatched successfully for ${cleanCompany || "Client"}!`;
+    let msg = `Commercial Offer & RFQ (${refNo}) dispatched successfully for ${company || currentUser.companyName}!`;
     if (files.length > 0) {
       msg += ` (${files.length} file attachment(s) sent)`;
     }
