@@ -139,14 +139,7 @@ export const ProductDetail: React.FC = () => {
 
   return (
     <div style={{ background: "#f8fafc", minHeight: "100vh", padding: "20px 0 60px" }}>
-      {/*
-        Option-button styles. Self-contained, so nothing else is needed.
-        Class names avoid the word "grid" on purpose: index.css has a mobile rule
-        div[class*="grid"] { display:flex; flex-direction:column !important } that
-        would stack them into one column on phones.
-      */}
       <style>{`
-        /* Heading row:  "1. Number of core"  ............  "3 Core" */
         .cfg-head {
           display: flex;
           align-items: baseline;
@@ -168,8 +161,6 @@ export const ProductDetail: React.FC = () => {
           color: #f97316;
           white-space: nowrap;
         }
-
-        /* Every button gets exactly the same width, in straight columns */
         .cfg-options {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -179,7 +170,6 @@ export const ProductDetail: React.FC = () => {
         .cfg-group:last-child .cfg-options {
           margin-bottom: 0;
         }
-
         .cfg-opt {
           box-sizing: border-box;
           width: 100%;
@@ -206,19 +196,12 @@ export const ProductDetail: React.FC = () => {
         .cfg-opt:hover {
           border-color: #94a3b8;
         }
-        .cfg-opt:focus-visible {
-          outline: 2px solid #c32125;
-          outline-offset: 2px;
-        }
-        /* Selected: red border + red text (box-shadow so nothing shifts by 1px) */
         .cfg-opt.is-active {
           color: #c32125;
           background: #fff5f5;
           border-color: #c32125;
           box-shadow: 0 0 0 1px #c32125;
         }
-
-        /* Full-width stacked buttons: "With Earth (Yellow/Green - G)" */
         .cfg-options--stack {
           grid-template-columns: 1fr;
         }
@@ -231,17 +214,6 @@ export const ProductDetail: React.FC = () => {
           background: #0f172a;
           border-color: #0f172a;
           box-shadow: none;
-        }
-
-        /* Narrow phones: still 4 columns, slightly tighter so "0.75 Sqmm" fits */
-        @media (max-width: 380px) {
-          .cfg-options {
-            gap: 8px;
-          }
-          .cfg-opt {
-            font-size: 11.5px;
-            padding: 8px 2px;
-          }
         }
       `}</style>
 
@@ -325,18 +297,20 @@ export const ProductDetail: React.FC = () => {
                 </button>
               </div>
 
-              <img 
-                src={selectedImg} 
-                alt="ÖLFLEX CLASSIC 110" 
-                style={{ 
-                  maxHeight: "280px", 
-                  maxWidth: "100%", 
-                  objectFit: "contain",
-                  transform: `scale(${zoomLevel})`,
-                  transformOrigin: `${mousePos.x}% ${mousePos.y}%`,
-                  transition: isZoomed ? "transform 0.1s ease-out" : "transform 0.3s ease"
-                }} 
-              />
+              <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                <img 
+                  src={selectedImg} 
+                  alt="ÖLFLEX CLASSIC 110" 
+                  style={{ 
+                    maxHeight: "100%", 
+                    maxWidth: "100%", 
+                    objectFit: "contain",
+                    transform: `scale(${zoomLevel})`,
+                    transformOrigin: `${mousePos.x}% ${mousePos.y}%`,
+                    transition: isZoomed ? "transform 0.1s ease-out" : "transform 0.3s ease"
+                  }} 
+                />
+              </div>
             </div>
 
             <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "4px" }}>
@@ -439,7 +413,6 @@ export const ProductDetail: React.FC = () => {
             <div className="cfg-group">
               <div className="cfg-head">
                 <span className="cfg-label">3. Protective conductor (with/without Yellow/Green)</span>
-                {/* startsWith, because "Without…" also contains the text "With" */}
                 <span className="cfg-value">
                   {selectedConductor.startsWith("With Earth") ? "With Earth (G)" : "Without (X)"}
                 </span>

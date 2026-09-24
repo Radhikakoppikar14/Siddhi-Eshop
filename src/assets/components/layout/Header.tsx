@@ -232,7 +232,8 @@ export const Header: React.FC = () => {
 
           {/* Header Actions */}
           <div className="header-actions">
-            {/* Customer Account / Sign In */}
+            
+            {/* 1. Customer Account / Sign In */}
             <div
               className="action-item action-auth-item"
               id="headerAuthAction"
@@ -265,7 +266,7 @@ export const Header: React.FC = () => {
               </div>
               <ChevronDown size={14} style={{ color: "#64748b", marginLeft: "2px" }} />
 
-              {/* Professional Compact Dropdown Menu */}
+              {/* Professional Dropdown Menu */}
               {currentUser && isDropdownOpen && (
                 <div
                   style={{
@@ -329,12 +330,12 @@ export const Header: React.FC = () => {
               )}
             </div>
 
-            {/* Quick RFQ */}
+            {/* 2. Quick RFQ */}
             <div
               className="action-item"
               onClick={scrollToRfq}
               style={{ cursor: "pointer" }}
-              title="Bulk Inquiry / RFQ"
+              title="Bulk Inquiry / Quick RFQ"
             >
               <div className="action-icon-wrap">
                 <FileText size={18} strokeWidth={2} />
@@ -345,7 +346,7 @@ export const Header: React.FC = () => {
               </div>
             </div>
 
-            {/* Cart Drawer Button */}
+            {/* 3. Cart Button */}
             <button
               className="action-item"
               onClick={openCartDrawer}
@@ -374,6 +375,7 @@ export const Header: React.FC = () => {
                 </span>
               </div>
             </button>
+
           </div>
         </div>
       </div>

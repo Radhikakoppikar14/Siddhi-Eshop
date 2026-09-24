@@ -79,33 +79,11 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const DEFAULT_RADHIKA_USER: Customer = {
-  id: "SK-CUST-DEFAULT",
-  companyName: "Taarruni",
-  contactPerson: "Radhika Koppikar",
-  phone: "08431409627",
-  email: "koppikarradhika@gmail.com",
-  gstNo: "29AB2I30DNNJ",
-  state: "Karnataka",
-  city: "Bangalore",
-  address: "flat no:2 peeny industry, Bangalore, Karnataka",
-  password: "password123",
-  createdAt: new Date().toISOString(),
-};
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [currentUser, setCurrentUser] = useState<Customer | null>(() => {
-    try {
-      const raw = localStorage.getItem("siddhi_current_user");
-      if (raw) return JSON.parse(raw);
-      return null;
-    } catch {
-      localStorage.removeItem("siddhi_current_user");
-      return null;
-    }
-  });
+  // Starts completely logged out (null) by default on fresh page loads / shared links
+  const [currentUser, setCurrentUser] = useState<Customer | null>(null);
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<"login" | "register">(
@@ -142,13 +120,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getStoredCustomers = (): Customer[] => {
     try {
-      const stored = JSON.parse(
-        localStorage.getItem("siddhi_customers") || "[]",
-      );
-      if (stored.length === 0) return [DEFAULT_RADHIKA_USER];
-      return stored;
+      return JSON.parse(localStorage.getItem("siddhi_customers") || "[]");
     } catch {
-      return [DEFAULT_RADHIKA_USER];
+      return [];
     }
   };
 
@@ -187,11 +161,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         return (phoneMatch || emailMatch) && c.password === password;
       });
 
-      if (
-        !user &&
-        identifier.toLowerCase() !== "koppikarradhika@gmail.com" &&
-        identifier !== "08431409627"
-      ) {
+      if (!user) {
         return {
           success: false,
           message:
@@ -199,11 +169,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         };
       }
 
-      const loggedUser = user || DEFAULT_RADHIKA_USER;
-      setCurrentUser(loggedUser);
+      setCurrentUser(user);
       setAuthModalOpen(false);
       showToast(
-        `Welcome back, ${loggedUser.contactPerson} (${loggedUser.companyName})!`,
+        `Welcome back, ${user.contactPerson} (${user.companyName})!`,
       );
       return { success: true };
     },
