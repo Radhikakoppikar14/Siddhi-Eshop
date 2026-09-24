@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ShoppingCart, CheckCircle2, FileText } from "lucide-react";
+import { ShoppingCart, CheckCircle2, FileText, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { isValidPositiveNumber } from "../utils/validation";
 import { RFQModal } from "../assets/components/ui/RFQModal";
@@ -13,9 +13,14 @@ export const ProductDetail: React.FC = () => {
   const [selectedCore, setSelectedCore] = useState("3 Core");
   const [selectedSize, setSelectedSize] = useState("0.5 Sqmm");
   const [selectedConductor, setSelectedConductor] = useState("With Earth (Yellow/Green - G)");
-  const [qty, setQty] = useState(10);
+  const [qty, setQty] = useState(50);
   const [selectedImg, setSelectedImg] = useState("/images/cable-olflex-thumb.png");
   
+  // Zoom functionality state
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+
   // State to manage RFQ Modal pop-up
   const [selectedProductForRFQ, setSelectedProductForRFQ] = useState<string | null>(null);
 
@@ -37,6 +42,34 @@ export const ProductDetail: React.FC = () => {
     { src: "/images/cable-olflex-cores.png", label: "Numbered Cores" },
     { src: "/images/cable-olflex-drum.png", label: "Wooden Drum" },
   ];
+
+  // Zoom control handlers
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.4, 3.0));
+    setIsZoomed(true);
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => {
+      const next = Math.max(prev - 0.4, 1.0);
+      if (next === 1) setIsZoomed(false);
+      return next;
+    });
+  };
+
+  const handleResetZoom = () => {
+    setZoomLevel(1);
+    setIsZoomed(false);
+    setMousePos({ x: 50, y: 50 });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isZoomed) return;
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setMousePos({ x, y });
+  };
 
   // Dynamic Part Number & Specs generation based on selections
   const getDynamicPartData = () => {
@@ -115,21 +148,94 @@ export const ProductDetail: React.FC = () => {
         </div>
 
         {/* Main 3-Column Layout */}
-        <div className="product-detail-grid" style={{ alignItems: "start" }}>         
+        <div className="product-detail-grid" style={{ alignItems: "start" }}>        
           
           {/* Column 1: Image Gallery & Zoom Preview */}
           <div>
-            <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px", textAlign: "center", marginBottom: "12px", height: "340px", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-              <div style={{ position: "absolute", top: "10px", right: "10px", background: "#ff6600", color: "#fff", fontSize: "10px", fontWeight: 800, padding: "3px 8px", borderRadius: "4px" }}>
-                Zoom: 220%
+            <div 
+              style={{ 
+                background: "#ffffff", 
+                border: "1px solid #e2e8f0", 
+                borderRadius: "8px", 
+                padding: "16px", 
+                textAlign: "center", 
+                marginBottom: "12px", 
+                height: "340px", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                position: "relative",
+                overflow: "hidden",
+                cursor: isZoomed ? "zoom-out" : "zoom-in"
+              }}
+              onMouseMove={handleMouseMove}
+              onClick={() => {
+                if (!isZoomed) {
+                  setIsZoomed(true);
+                  setZoomLevel(2.2);
+                } else {
+                  handleResetZoom();
+                }
+              }}
+            >
+              {/* Zoom Percentage Badge */}
+              <div style={{ position: "absolute", top: "10px", right: "10px", background: "#ff6600", color: "#fff", fontSize: "10px", fontWeight: 800, padding: "3px 8px", borderRadius: "4px", zIndex: 10 }}>
+                Zoom: {Math.round(zoomLevel * 100)}%
               </div>
-              <img src={selectedImg} alt="ÖLFLEX CLASSIC 110" style={{ maxHeight: "280px", maxWidth: "100%", objectFit: "contain" }} />
+
+              {/* Floating Toolbar Controls */}
+              <div 
+                style={{ position: "absolute", bottom: "10px", right: "10px", display: "flex", gap: "4px", zIndex: 10 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button 
+                  type="button" 
+                  onClick={handleZoomIn} 
+                  title="Zoom In"
+                  style={{ background: "rgba(15, 23, 42, 0.75)", color: "#fff", border: "none", borderRadius: "4px", padding: "6px", cursor: "pointer", display: "flex", alignItems: "center" }}
+                >
+                  <ZoomIn size={15} />
+                </button>
+                <button 
+                  type="button" 
+                  onClick={handleZoomOut} 
+                  title="Zoom Out"
+                  style={{ background: "rgba(15, 23, 42, 0.75)", color: "#fff", border: "none", borderRadius: "4px", padding: "6px", cursor: "pointer", display: "flex", alignItems: "center" }}
+                >
+                  <ZoomOut size={15} />
+                </button>
+                <button 
+                  type="button" 
+                  onClick={handleResetZoom} 
+                  title="Reset Zoom"
+                  style={{ background: "rgba(15, 23, 42, 0.75)", color: "#fff", border: "none", borderRadius: "4px", padding: "6px", cursor: "pointer", display: "flex", alignItems: "center" }}
+                >
+                  <RotateCcw size={15} />
+                </button>
+              </div>
+
+              <img 
+                src={selectedImg} 
+                alt="ÖLFLEX CLASSIC 110" 
+                style={{ 
+                  maxHeight: "280px", 
+                  maxWidth: "100%", 
+                  objectFit: "contain",
+                  transform: `scale(${zoomLevel})`,
+                  transformOrigin: `${mousePos.x}% ${mousePos.y}%`,
+                  transition: isZoomed ? "transform 0.1s ease-out" : "transform 0.3s ease"
+                }} 
+              />
             </div>
+
             <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "4px" }}>
               {galleryImages.map((img, i) => (
                 <button
                   key={i}
-                  onClick={() => setSelectedImg(img.src)}
+                  onClick={() => {
+                    setSelectedImg(img.src);
+                    handleResetZoom();
+                  }}
                   style={{
                     width: "60px",
                     height: "60px",
@@ -234,9 +340,9 @@ export const ProductDetail: React.FC = () => {
 
             {/* 3. Protective Conductor Selector */}
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", fontWeight: "700", marginBottom: "6px", color: "#1e293b" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", fontWeight: "700", marginBottom: "6px", color: "#1e293b", width: "100%" }}>
                 <span>3. Protective conductor (with/without Yellow/Green)</span>
-                <span style={{ color: "#ff6600" }}>{selectedConductor.includes("With") ? "With Earth (G)" : "Without (X)"}</span>
+                <span style={{ color: "#ff6600", flexShrink: 0, marginLeft: "8px" }}>{selectedConductor.includes("With") ? "With Earth (G)" : "Without (X)"}</span>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                 {[
@@ -250,8 +356,8 @@ export const ProductDetail: React.FC = () => {
                       onClick={() => setSelectedConductor(cond.value)}
                       title={cond.label}
                       style={{
-                        padding: "8px 6px",
-                        fontSize: "10.5px",
+                        padding: "8px 10px",
+                        fontSize: "11px",
                         fontWeight: 700,
                         borderRadius: "4px",
                         border: isSelected ? "2px solid #0f172a" : "1px solid #cbd5e1",
@@ -261,7 +367,8 @@ export const ProductDetail: React.FC = () => {
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        textAlign: "center"
+                        textAlign: "center",
+                        width: "100%"
                       }}
                     >
                       {cond.label}

@@ -5392,14 +5392,13 @@ h6 {
     box-sizing: border-box !important;
   }
 }
-
 /* ====================================================================
-   PRO-GRADE MOBILE SLIDER BANNER (ONE AD AT A TIME)
+   CLIENT-READY MOBILE SLIDER BANNER (FULLY VISIBLE, NO SCROLL)
    ==================================================================== */
 @media (max-width: 768px) {
   .desktop-banner-section {
     height: auto !important;
-    min-height: 380px !important;
+    min-height: 600px !important;
     position: relative !important;
     overflow: hidden !important;
     border-radius: var(--radius-md) !important;
@@ -5426,8 +5425,8 @@ h6 {
     flex: 0 0 100% !important;
     width: 100% !important;
     min-width: 100% !important;
-    height: 100% !important;
-    min-height: 380px !important;
+    height: auto !important;
+    min-height: 600px !important;
     position: relative !important;
     opacity: 1 !important;
     visibility: visible !important;
@@ -5435,14 +5434,14 @@ h6 {
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
-    padding: 20px 16px !important;
+    padding: 14px 10px 20px 10px !important;
     box-sizing: border-box !important;
   }
 
   .slide-body-split {
     display: flex !important;
     flex-direction: column !important;
-    gap: 14px !important;
+    gap: 8px !important;
     align-items: center !important;
     text-align: center !important;
     width: 100% !important;
@@ -5453,46 +5452,79 @@ h6 {
     padding: 0 !important;
   }
 
+  .slide-top-pill {
+    padding: 2px 6px !important;
+    font-size: 9px !important;
+    margin-bottom: 4px !important;
+  }
+
   .slide-heading-main {
-    font-size: 20px !important;
-    line-height: 1.25 !important;
+    font-size: 15px !important;
+    line-height: 1.15 !important;
+    margin-bottom: 3px !important;
   }
 
   .slide-paragraph {
-    font-size: 12px !important;
+    font-size: 10px !important;
+    line-height: 1.3 !important;
     max-width: 100% !important;
-    margin-bottom: 12px !important;
-  }
-
-  .slide-product-showcase {
-    width: 100% !important;
-    max-width: 280px !important;
-    height: auto !important;
-    min-height: 140px !important;
-    margin: 0 auto !important;
-    padding: 8px !important;
-  }
-
-  .slide-showcase-img-box {
-    width: 80px !important;
-    min-width: 80px !important;
-    height: 110px !important;
+    margin-bottom: 6px !important;
   }
 
   .slide-action-btns {
     flex-direction: column !important;
     width: 100% !important;
-    gap: 6px !important;
+    gap: 4px !important;
+    margin-bottom: 4px !important;
   }
 
-  .slide-action-btns .btn,
-  .slide-showcase-btn {
+  .slide-action-btns .btn {
     width: 100% !important;
-    padding: 8px 12px !important;
+    padding: 6px 8px !important;
+    font-size: 9px !important;
+  }
+
+  .slide-graphic-col {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    margin-top: 2px !important;
+  }
+
+  .slide-product-showcase {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    height: auto !important;
+    min-height: 115px !important;
+    margin: 0 auto !important;
+    padding: 6px !important;
+    box-sizing: border-box !important;
+    background: rgba(18, 24, 34, 0.95) !important;
+  }
+
+  .slide-showcase-img-box {
+    width: 70px !important;
+    min-width: 70px !important;
+    height: 95px !important;
+  }
+
+  .slide-showcase-name {
     font-size: 10.5px !important;
   }
-}
 
+  .slide-showcase-bullets {
+    font-size: 8.5px !important;
+    gap: 1px !important;
+    margin: 1px 0 !important;
+  }
+
+  .slide-showcase-btn {
+    padding: 3px 5px !important;
+    font-size: 9px !important;
+  }
+}
 /* ====================================================================
    CLEAN 4-ITEM MOBILE NAVIGATION MENU (NO NESTED SUBMENUS)
    ==================================================================== */
@@ -6024,7 +6056,6 @@ div[style*="position: relative"] > .bg-white.border {
   z-index: 40 !important;
 }
 
-
 /* ====================================================================
    PROPER BANNER SIZING & CONTAINER FIT FIX
    ==================================================================== */
@@ -6041,78 +6072,223 @@ div[style*="position: relative"] > .bg-white.border {
   box-sizing: border-box !important;
 }
 
-.slide-body-split {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  height: 100% !important;
-  gap: 20px !important;
-}
+@media (max-width: 768px) {
+  .desktop-banner-section,
+  .banner-carousel-wrapper,
+  .moglix-slide {
+    height: auto !important;
+    max-height: none !important;
+    min-height: 520px !important;
+  }
 
-.slide-text-col {
-  max-width: 540px !important;
-  flex: 1 !important;
-}
+  .moglix-slide {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 16px 12px !important;
+  }
 
-.slide-heading-main {
-  font-size: 26px !important;
-  line-height: 1.15 !important;
-  margin-bottom: 8px !important;
-}
+  .slide-body-split {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
 
-.slide-paragraph {
-  font-size: 12px !important;
-  line-height: 1.4 !important;
-  margin-bottom: 14px !important;
-}
+  .slide-text-col {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
 
-.slide-product-showcase {
-  width: 340px !important;
-  max-width: 340px !important;
-  height: 200px !important;
-  max-height: 200px !important;
-  padding: 10px !important;
-  box-sizing: border-box !important;
-}
+  .slide-heading-main {
+    font-size: 17px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+  }
 
-.slide-showcase-img-box {
-  width: 110px !important;
-  min-width: 110px !important;
-  height: 180px !important;
-}
-/* Align profile dropdown directly below the account button */
-.action-item .absolute,
-.header-actions div[class*="absolute"] {
-  top: 100% !important;
-  left: 0 !important;
-  right: auto !important;
-  margin-top: 8px !important;
+  .slide-paragraph {
+    font-size: 10.5px !important;
+    line-height: 1.35 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .slide-action-btns {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .slide-action-btns .btn {
+    width: 100% !important;
+    padding: 8px 10px !important;
+    font-size: 10px !important;
+  }
+
+  .slide-product-showcase {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    max-width: 330px !important;
+    height: auto !important;
+    min-height: 120px !important;
+    margin: 0 auto !important;
+    padding: 8px !important;
+    background: rgba(18, 24, 34, 0.95) !important;
+    border-radius: 10px !important;
+  }
+
+  .slide-showcase-img-box {
+    width: 80px !important;
+    min-width: 80px !important;
+    height: 100px !important;
+  }
+
+  .slide-showcase-name {
+    font-size: 11.5px !important;
+  }
+
+  .slide-showcase-bullets {
+    font-size: 9px !important;
+    gap: 1px !important;
+    margin: 2px 0 !important;
+  }
+
+  .slide-showcase-btn {
+    padding: 4px 8px !important;
+    font-size: 9.5px !important;
+  }
 }
 
 
 /* ====================================================================
-   PROFESSIONAL PROFILE DROPDOWN ALIGNMENT
+   PROFESSIONAL USER PROFILE DROPDOWN MENU
    ==================================================================== */
 .action-auth-item {
   position: relative !important;
 }
 
 .action-auth-item .absolute,
-.header-actions div[class*="absolute"] {
+.header-actions div[class*="absolute"],
+.user-profile-dropdown,
+.account-dropdown-menu {
   position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: auto !important;
-  margin-top: 10px !important;
-  min-width: 220px !important;
+  top: calc(100% + 12px) !important;
+  right: 0 !important;
+  left: auto !important;
+  min-width: 240px !important;
   background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
+  border: 1px solid #cbd5e1 !important;
   border-radius: 10px !important;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
-  z-index: 99999 !important;
+  box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.2) !important;
+  z-index: 999999 !important;
   overflow: hidden !important;
+  padding: 8px 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
 }
+
+/* Dropdown Links / Action Rows Styling */
+.action-auth-item .absolute a,
+.action-auth-item .absolute button,
+.user-profile-dropdown a,
+.user-profile-dropdown button,
+.account-dropdown-menu a,
+.account-dropdown-menu button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 18px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  background: transparent !important;
+  border: none !important;
+  width: 100% !important;
+  text-align: left !important;
+  text-decoration: none !important;
+  transition: background 0.2s ease, color 0.2s ease !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+}
+
+.action-auth-item .absolute a:hover,
+.action-auth-item .absolute button:hover,
+.user-profile-dropdown a:hover,
+.user-profile-dropdown button:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Distinct styling for Sign Out / Danger action */
+.action-auth-item .absolute a.text-red-600,
+.action-auth-item .absolute button[class*="red"],
+.user-profile-dropdown button:last-child {
+  color: #c32125 !important;
+  border-top: 1px solid #f1f5f9 !important;
+  margin-top: 4px !important;
+  padding-top: 12px !important;
+}
+
+.action-auth-item .absolute a.text-red-600:hover,
+.action-auth-item .absolute button[class*="red"]:hover,
+.user-profile-dropdown button:last-child:hover {
+  background-color: #fef2f2 !important;
+  color: #a7181c !important;
+}
+
+@media (max-width: 768px) {
+  .action-auth-item .absolute,
+  .header-actions div[class*="absolute"],
+  .user-profile-dropdown {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    padding: 16px !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+/* ====================================================================
+   FIX DARK HEADER TEXT VISIBILITY IN MODALS
+   ==================================================================== */
+.account-modal-header,
+.auth-modal-header,
+div[class*="modal-header"] {
+  color: #ffffff !important;
+}
+
+.account-modal-header h2,
+.account-modal-header h3,
+.account-modal-header span,
+.account-modal-header strong,
+.auth-modal-header h2,
+.auth-modal-header h3,
+.auth-modal-header span,
+.auth-modal-header strong,
+div[class*="modal-header"] h2,
+div[class*="modal-header"] h3,
+div[class*="modal-header"] span,
+div[class*="modal-header"] strong {
+  color: #ffffff !important;
+}
+
+.account-modal-header p,
+.auth-modal-header p,
+div[class*="modal-header"] p {
+  color: #e2e8f0 !important;
+}
+
+
 /* ====================================================================
    FIX MOBILE DROPDOWN CONTAINER CLIPPING
    ==================================================================== */
@@ -6174,3 +6350,146 @@ div[style*="position: relative"] > .bg-white.border {
 
 
 
+
+
+@media (max-width: 768px) {
+  /* Target the top bar contact container in mobile view */
+  .top-bar-contact, .header-top-info, .topbar-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+}
+
+/* Make RFQ table fully responsive and mobile-friendly */
+.rfq-modal-dialog table, 
+.rfq-section table,
+.rfq-table {
+  width: 100% !important;
+  table-layout: auto !important;
+  display: block !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure table cells don't wrap awkwardly and numbers are fully visible */
+.rfq-modal-dialog th, 
+.rfq-modal-dialog td,
+.rfq-section th,
+.rfq-section td {
+  padding: 8px 10px !important;
+  font-size: 12.5px !important;
+  white-space: nowrap !important;
+}
+
+/* Allow product description column to wrap safely */
+.rfq-modal-dialog td:first-child,
+.rfq-section td:first-child {
+  white-space: normal !important;
+  min-width: 140px;
+}
+
+
+/* Keep product option labels and badges strictly on a single line */
+.product-option-label,
+.selection-title,
+.option-badge-inline {
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+
+/* Ensure the table wrapper allows smooth horizontal scrolling for all columns */
+.rfq-modal-dialog .table-responsive,
+.rfq-modal-dialog form,
+.rfq-modal-dialog .rfq-section {
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Give the table a strict minimum width so Rate and Subtotal columns never get cut off */
+.rfq-modal-dialog table {
+  width: 100% !important;
+  min-width: 580px !important;
+  table-layout: auto !important;
+}
+
+/* Force price and subtotal text to dark black */
+.rfq-modal-dialog td:nth-child(3),
+.rfq-modal-dialog td:nth-child(4),
+.rfq-modal-dialog td strong {
+  color: #0f172a !important;
+}
+
+/* Fix modal content spacing so elements don't overlap */
+.rfq-modal-dialog {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Ensure the sticky header stays neat with proper padding */
+.rfq-modal-dialog .rfq-modal-header {
+  flex-shrink: 0;
+  padding: 16px 20px !important;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff !important;
+}
+
+/* Give the scrollable body proper top spacing so the table starts cleanly below the header */
+.rfq-modal-dialog .rfq-section,
+.rfq-modal-dialog > div:not(.rfq-modal-header) {
+  flex-grow: 1;
+  overflow-y: auto !important;
+  padding: 16px 20px !important;
+}
+
+/* Hide the duplicate dark header banner inside the modal if it's rendering */
+.rfq-modal-dialog .rfq-section-header,
+.rfq-modal-dialog header.rfq-header {
+  display: none !important;
+}
+
+
+
+
+
+
+/* Keep section title labels completely on a single line */
+.rfq-section label,
+.rfq-section .section-label,
+.form-group label,
+h3.section-title,
+.spec-group-title {
+  white-space: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+
+/* Ensure user account dropdown always breaks out and floats above all headers and bars */
+.main-header .action-auth-item {
+  position: relative;
+}
+
+.main-header .action-auth-item > div[style*="position: absolute"],
+.main-header .action-auth-item div[style*="zIndex"] {
+  z-index: 999999 !important;
+}
+/* Force the main header and dropdown container above all subsequent bars */
+.main-header {
+  position: relative;
+  z-index: 1000 !important;
+}
+
+/* Ensure the navigation bar has a lower stacking order */
+.nav-bar, 
+.navigation-bar {
+  position: relative;
+  z-index: 10 !important;
+}

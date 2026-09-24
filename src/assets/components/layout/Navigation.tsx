@@ -9,7 +9,7 @@ export const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const { isCartOpen } = useCart();
 
-  // Hide the navigation header completely when the cart drawer is open[cite: 14]
+  // Hide the navigation header completely when the cart drawer is open
   if (isCartOpen) return null;
 
   const handleNavClick = (hash: string) => {

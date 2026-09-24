@@ -223,7 +223,7 @@ export const AboutLapp: React.FC = () => {
             marginBottom: "30px",
           }}
         >
-          {/* Card 1 */}
+          {/* Card 1: ÖLFLEX (View Products) */}
           <div
             style={{
               background: "#ffffff",
@@ -273,14 +273,14 @@ export const AboutLapp: React.FC = () => {
               <Link
                 to="/olflex-cables"
                 className="btn btn-primary btn-sm"
-                style={{ width: "100%", textAlign: "center" }}
+                style={{ width: "100%", textAlign: "center", display: "block" }}
               >
-                View Products (113) →
+                View Products →
               </Link>
             </div>
           </div>
 
-          {/* Card 2 */}
+          {/* Card 2: UNITRONIC (Request Quote) */}
           <div
             style={{
               background: "#ffffff",
@@ -327,19 +327,17 @@ export const AboutLapp: React.FC = () => {
                 sensors, instrumentation, RS485 serial communication, and
                 industrial automation.
               </p>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button
-                  className="btn btn-primary btn-sm"
-                  style={{ flex: 1 }}
-                  onClick={() => scrollToRfqTopic("UNITRONIC Cables")}
-                >
-                  Request Unitronic Quote
-                </button>
-              </div>
+              <button
+                className="btn btn-primary btn-sm"
+                style={{ width: "100%", textAlign: "center" }}
+                onClick={() => scrollToRfqTopic("UNITRONIC Cables")}
+              >
+                Request Quote
+              </button>
             </div>
           </div>
 
-          {/* Card 3 */}
+          {/* Card 3: SKINTOP (Request Quote) */}
           <div
             style={{
               background: "#ffffff",
@@ -386,18 +384,17 @@ export const AboutLapp: React.FC = () => {
                 cable glands with integrated strain relief and vibration
                 protection. Metric &amp; PG threads.
               </p>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button
-                  className="btn btn-primary btn-sm"
-                  style={{ flex: 1 }}
-                  onClick={() => scrollToRfqTopic("SKINTOP Glands")}
-                >
-                  Request Gland Quote
-                </button>
-              </div>
+              <button
+                className="btn btn-primary btn-sm"
+                style={{ width: "100%", textAlign: "center" }}
+                onClick={() => scrollToRfqTopic("SKINTOP Glands")}
+              >
+                Request Quote
+              </button>
             </div>
           </div>
 
+          {/* Card 4: UNIPLUS (Request Quote) */}
           <div className="lapp-product-card">
             <img src="/images/card-uniplus.jpg" alt="UNIPLUS Single Cores" />
             <div className="lapp-product-card-body">
@@ -409,13 +406,15 @@ export const AboutLapp: React.FC = () => {
               </p>
               <button
                 className="btn btn-primary btn-sm"
+                style={{ width: "100%", textAlign: "center" }}
                 onClick={() => scrollToRfqTopic("UNIPLUS Single Cores")}
               >
-                Request Uniplus Quote
+                Request Quote
               </button>
             </div>
           </div>
 
+          {/* Card 5: SILVYN (Request Quote) */}
           <div className="lapp-product-card">
             <img src="/images/card-conduit.jpg" alt="SILVYN Conduit Systems" />
             <div className="lapp-product-card-body">
@@ -427,13 +426,15 @@ export const AboutLapp: React.FC = () => {
               </p>
               <button
                 className="btn btn-primary btn-sm"
+                style={{ width: "100%", textAlign: "center" }}
                 onClick={() => scrollToRfqTopic("SILVYN Conduits")}
               >
-                Request Silvyn Quote
+                Request Quote
               </button>
             </div>
           </div>
 
+          {/* Card 6: LAPP INFRA (Request Quote) */}
           <div className="lapp-product-card">
             <img src="/images/card-infra.jpg" alt="LAPP INFRA Building Wires" />
             <div className="lapp-product-card-body">
@@ -445,9 +446,10 @@ export const AboutLapp: React.FC = () => {
               </p>
               <button
                 className="btn btn-primary btn-sm"
+                style={{ width: "100%", textAlign: "center" }}
                 onClick={() => scrollToRfqTopic("LAPP INFRA House Wiring")}
               >
-                Request Infra Quote
+                Request Quote
               </button>
             </div>
           </div>

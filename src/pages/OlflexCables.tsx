@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useMemo, useRef, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Search,
   Filter,
@@ -17,23 +17,49 @@ import { RFQModal } from "../assets/components/ui/RFQModal.tsx";
 
 export const OlflexCables: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  
+  // Capture search query from URL parameters if passed from the header search bar
+  const urlSearchQuery = searchParams.get("search") || "";
+
   const [subgroup, setSubgroup] = useState<
     "all" | "110" | "110sy" | "110cy" | "100"
   >("all");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(urlSearchQuery);
   const [selectedCore, setSelectedCore] = useState("all");
   const [selectedSize, setSelectedSize] = useState("all");
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
+  // Ref to target product results for auto-scrolling
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const { addCustomItem } = useCart();
   const { showToast } = useToast();
+
+  // Keep search state synchronized if URL search parameter changes
+  useEffect(() => {
+    const query = searchParams.get("search");
+    if (query !== null) {
+      setSearchTerm(query);
+    }
+  }, [searchParams]);
 
   const handleQtyChange = (partNo: string, val: number) => {
     setQuantities((prev) => ({
       ...prev,
       [partNo]: isValidPositiveNumber(val) ? Math.floor(val) : 1,
     }));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchTerm(val);
+    
+    // Automatically smooth-scroll down to results when user types a search query
+    if (val.trim().length > 0 && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const filteredProducts = useMemo(() => {
@@ -66,13 +92,17 @@ export const OlflexCables: React.FC = () => {
     }
 
     if (searchTerm.trim()) {
-      const q = searchTerm.toLowerCase().trim();
-      list = list.filter(
-        (p) =>
-          p.partNo.toLowerCase().includes(q) ||
-          p.name.toLowerCase().includes(q) ||
-          (p.desc && p.desc.toLowerCase().includes(q)),
-      );
+      const searchTerms = searchTerm.toLowerCase().trim().split(/\s+/);
+      list = list.filter((p) => {
+        const searchableText = `
+          ${p.partNo || ""} 
+          ${p.name || ""} 
+          ${p.desc || ""} 
+          ${p.subCategory || ""}
+          ${p.category || ""}
+        `.toLowerCase();
+        return searchTerms.every((term) => searchableText.includes(term));
+      });
     }
 
     return list;
@@ -219,7 +249,6 @@ export const OlflexCables: React.FC = () => {
               "PVC outer sheath and numbered cores"}
           </span>
 
-          {/* Product Title: Black by default, highlights Orange on hover */}
           <h3
             onClick={() => navigate(`/product/${item.partNo}`)}
             style={{
@@ -582,7 +611,7 @@ export const OlflexCables: React.FC = () => {
                 type="text"
                 placeholder="Search by Part No (e.g. 1119003, 1125003)..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
                 style={{
                   width: "100%",
                   height: "38px",
@@ -660,38 +689,41 @@ export const OlflexCables: React.FC = () => {
           </div>
         </div>
 
-        {groups.map((group) => {
-          const products = baseFilteredProducts
-            .filter(group.filter)
-            .slice(0, 150);
-          return (
-            <section
-              className="olflex-reference-section"
-              id={`section-${group.key}`}
-              key={group.key}
-            >
-              <div className="olflex-subgroup-info">
-                <div className="olflex-subgroup-heading">
-                  <h2>{group.title}</h2>
-                  <span>{group.pill}</span>
-                  <em>{products.length} Items</em>
+        {/* Results section reference container for auto-scrolling */}
+        <div ref={resultsRef}>
+          {groups.map((group) => {
+            const products = baseFilteredProducts
+              .filter(group.filter)
+              .slice(0, 150);
+            return (
+              <section
+                className="olflex-reference-section"
+                id={`section-${group.key}`}
+                key={group.key}
+              >
+                <div className="olflex-subgroup-info">
+                  <div className="olflex-subgroup-heading">
+                    <h2>{group.title}</h2>
+                    <span>{group.pill}</span>
+                    <em>{products.length} Items</em>
+                  </div>
+                  <p>{group.description}</p>
+                  <div className="olflex-subgroup-specs">{group.specs}</div>
                 </div>
-                <p>{group.description}</p>
-                <div className="olflex-subgroup-specs">{group.specs}</div>
-              </div>
-              <div className="olflex-products-heading">
-                <strong>
-                  {group.title.replace(/^\d\. /, "")} Products:{" "}
-                  {products.length}
-                </strong>
-                <span>Scroll horizontally →</span>
-              </div>
-              <div className="olflex-reference-track">
-                {products.map(renderProductCard)}
-              </div>
-            </section>
-          );
-        })}
+                <div className="olflex-products-heading">
+                  <strong>
+                    {group.title.replace(/^\d\. /, "")} Products:{" "}
+                    {products.length}
+                  </strong>
+                  <span>Scroll horizontally →</span>
+                </div>
+                <div className="olflex-reference-track">
+                  {products.map(renderProductCard)}
+                </div>
+              </section>
+            );
+          })}
+        </div>
 
         <div className="olflex-comparison-card">
           <h2>▧ Technical Comparison · Lapp Control Cable Sub-Groups</h2>
