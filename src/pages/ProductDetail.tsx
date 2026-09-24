@@ -36,6 +36,11 @@ export const ProductDetail: React.FC = () => {
     "4 Sqmm", "6 Sqmm", "10 Sqmm", "16 Sqmm", "25 Sqmm", "35 Sqmm"
   ];
 
+  const conductorOptions = [
+    "With Earth (Yellow/Green - G)",
+    "Without Earth (Numbered - X)",
+  ];
+
   const galleryImages = [
     { src: "/images/cable-olflex-thumb.png", label: "Main Profile" },
     { src: "/images/cable-olflex-angle.png", label: "Angle View" },
@@ -134,6 +139,112 @@ export const ProductDetail: React.FC = () => {
 
   return (
     <div style={{ background: "#f8fafc", minHeight: "100vh", padding: "20px 0 60px" }}>
+      {/*
+        Option-button styles. Self-contained, so nothing else is needed.
+        Class names avoid the word "grid" on purpose: index.css has a mobile rule
+        div[class*="grid"] { display:flex; flex-direction:column !important } that
+        would stack them into one column on phones.
+      */}
+      <style>{`
+        /* Heading row:  "1. Number of core"  ............  "3 Core" */
+        .cfg-head {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 12px;
+          margin: 0 0 10px;
+        }
+        .cfg-label {
+          font-size: 13px;
+          font-weight: 700;
+          line-height: 1.3;
+          color: #0f172a;
+        }
+        .cfg-value {
+          flex: 0 0 auto;
+          font-size: 12.5px;
+          font-weight: 700;
+          line-height: 1.3;
+          color: #f97316;
+          white-space: nowrap;
+        }
+
+        /* Every button gets exactly the same width, in straight columns */
+        .cfg-options {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 10px;
+          margin: 0 0 20px;
+        }
+        .cfg-group:last-child .cfg-options {
+          margin-bottom: 0;
+        }
+
+        .cfg-opt {
+          box-sizing: border-box;
+          width: 100%;
+          min-width: 0;
+          min-height: 40px;
+          margin: 0;
+          padding: 8px 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          font-family: inherit;
+          font-size: 12.5px;
+          font-weight: 600;
+          line-height: 1.2;
+          white-space: nowrap;
+          color: #1e293b;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+        }
+        .cfg-opt:hover {
+          border-color: #94a3b8;
+        }
+        .cfg-opt:focus-visible {
+          outline: 2px solid #c32125;
+          outline-offset: 2px;
+        }
+        /* Selected: red border + red text (box-shadow so nothing shifts by 1px) */
+        .cfg-opt.is-active {
+          color: #c32125;
+          background: #fff5f5;
+          border-color: #c32125;
+          box-shadow: 0 0 0 1px #c32125;
+        }
+
+        /* Full-width stacked buttons: "With Earth (Yellow/Green - G)" */
+        .cfg-options--stack {
+          grid-template-columns: 1fr;
+        }
+        .cfg-options--stack .cfg-opt {
+          white-space: normal;
+          padding: 10px 12px;
+        }
+        .cfg-options--stack .cfg-opt.is-active {
+          color: #ffffff;
+          background: #0f172a;
+          border-color: #0f172a;
+          box-shadow: none;
+        }
+
+        /* Narrow phones: still 4 columns, slightly tighter so "0.75 Sqmm" fits */
+        @media (max-width: 380px) {
+          .cfg-options {
+            gap: 8px;
+          }
+          .cfg-opt {
+            font-size: 11.5px;
+            padding: 8px 2px;
+          }
+        }
+      `}</style>
+
       <div className="container">
         
         {/* Breadcrumb Navigation */}
@@ -283,26 +394,19 @@ export const ProductDetail: React.FC = () => {
             </div>
 
             {/* 1. Number of Core Selector */}
-            <div style={{ marginBottom: "16px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", fontWeight: "700", marginBottom: "6px", color: "#1e293b" }}>
-                <span>1. Number of core</span>
-                <span style={{ color: "#ff6600" }}>{selectedCore}</span>
+            <div className="cfg-group">
+              <div className="cfg-head">
+                <span className="cfg-label">1. Number of core</span>
+                <span className="cfg-value">{selectedCore}</span>
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+              <div className="cfg-options">
                 {coreOptions.map((core) => (
                   <button
                     key={core}
+                    type="button"
+                    className={`cfg-opt${selectedCore === core ? " is-active" : ""}`}
+                    aria-pressed={selectedCore === core}
                     onClick={() => setSelectedCore(core)}
-                    style={{
-                      padding: "5px 10px",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      borderRadius: "4px",
-                      border: selectedCore === core ? "2px solid #c32125" : "1px solid #cbd5e1",
-                      background: selectedCore === core ? "#fff5f5" : "#fff",
-                      color: selectedCore === core ? "#c32125" : "#334155",
-                      cursor: "pointer"
-                    }}
                   >
                     {core}
                   </button>
@@ -311,26 +415,19 @@ export const ProductDetail: React.FC = () => {
             </div>
 
             {/* 2. Size (Sqmm) Selector */}
-            <div style={{ marginBottom: "16px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", fontWeight: "700", marginBottom: "6px", color: "#1e293b" }}>
-                <span>2. Size (Sqmm)</span>
-                <span style={{ color: "#ff6600" }}>{selectedSize}</span>
+            <div className="cfg-group">
+              <div className="cfg-head">
+                <span className="cfg-label">2. Size (Sqmm)</span>
+                <span className="cfg-value">{selectedSize}</span>
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+              <div className="cfg-options">
                 {sizeOptions.map((size) => (
                   <button
                     key={size}
+                    type="button"
+                    className={`cfg-opt${selectedSize === size ? " is-active" : ""}`}
+                    aria-pressed={selectedSize === size}
                     onClick={() => setSelectedSize(size)}
-                    style={{
-                      padding: "5px 10px",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      borderRadius: "4px",
-                      border: selectedSize === size ? "2px solid #c32125" : "1px solid #cbd5e1",
-                      background: selectedSize === size ? "#fff5f5" : "#fff",
-                      color: selectedSize === size ? "#c32125" : "#334155",
-                      cursor: "pointer"
-                    }}
                   >
                     {size}
                   </button>
@@ -339,42 +436,26 @@ export const ProductDetail: React.FC = () => {
             </div>
 
             {/* 3. Protective Conductor Selector */}
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", fontWeight: "700", marginBottom: "6px", color: "#1e293b", width: "100%" }}>
-                <span>3. Protective conductor (with/without Yellow/Green)</span>
-                <span style={{ color: "#ff6600", flexShrink: 0, marginLeft: "8px" }}>{selectedConductor.includes("With") ? "With Earth (G)" : "Without (X)"}</span>
+            <div className="cfg-group">
+              <div className="cfg-head">
+                <span className="cfg-label">3. Protective conductor (with/without Yellow/Green)</span>
+                {/* startsWith, because "Without…" also contains the text "With" */}
+                <span className="cfg-value">
+                  {selectedConductor.startsWith("With Earth") ? "With Earth (G)" : "Without (X)"}
+                </span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-                {[
-                  { label: "With Earth (Yellow/Green - G)", value: "With Earth (Yellow/Green - G)" },
-                  { label: "Without Earth (Numbered - X)", value: "Without Earth (Numbered - X)" }
-                ].map((cond) => {
-                  const isSelected = selectedConductor === cond.value;
-                  return (
-                    <button
-                      key={cond.value}
-                      onClick={() => setSelectedConductor(cond.value)}
-                      title={cond.label}
-                      style={{
-                        padding: "8px 10px",
-                        fontSize: "11px",
-                        fontWeight: 700,
-                        borderRadius: "4px",
-                        border: isSelected ? "2px solid #0f172a" : "1px solid #cbd5e1",
-                        background: isSelected ? "#0f172a" : "#fff",
-                        color: isSelected ? "#fff" : "#334155",
-                        cursor: "pointer",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        textAlign: "center",
-                        width: "100%"
-                      }}
-                    >
-                      {cond.label}
-                    </button>
-                  );
-                })}
+              <div className="cfg-options cfg-options--stack">
+                {conductorOptions.map((cond) => (
+                  <button
+                    key={cond}
+                    type="button"
+                    className={`cfg-opt${selectedConductor === cond ? " is-active" : ""}`}
+                    aria-pressed={selectedConductor === cond}
+                    onClick={() => setSelectedConductor(cond)}
+                  >
+                    {cond}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
