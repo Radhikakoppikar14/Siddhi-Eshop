@@ -28,11 +28,15 @@ export const TopBar: React.FC = () => {
             align-items: flex-start !important;
             text-align: left !important;
             width: 100% !important;
-            gap: 1px !important; /* Tightens the space between the two lines */
+            gap: 4px !important;
           }
           .badge-live {
             display: inline-block !important;
-            margin-bottom: 4px !important;
+            margin-bottom: 2px !important;
+          }
+          .company-title {
+            font-size: 13px !important;
+            line-height: 1.3 !important;
           }
           .top-links {
             display: flex !important;
@@ -58,8 +62,7 @@ export const TopBar: React.FC = () => {
         <div className="top-bar-inner">
           <div className="top-tagline">
             <span className="badge-live">Official</span>
-            <span>Siddhi Kabel Corporation Private Limited</span>
-            <span>Dependable Electrical Solutions</span>
+            <span className="company-title">Siddhi Kabel Corporation Private Limited | Dependable Electrical Solutions</span>
           </div>
           <div className="top-links">
             <a href="tel:09620000947" className="top-contact-item" title="Call Support">
