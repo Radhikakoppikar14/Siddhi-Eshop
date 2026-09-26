@@ -100,7 +100,7 @@ export const Navigation: React.FC = () => {
             <button
               type="button"
               onClick={openAbout}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-slate-950 hover:bg-slate-50 font-semibold"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-slate-950 hover:bg-slate-50 font-semibold cursor-pointer"
               title="About Siddhi Kabel Corporation"
             >
               <Info size={13} className="text-slate-400" />
@@ -193,7 +193,7 @@ export const Navigation: React.FC = () => {
           <div className="hidden lg:flex items-center gap-2.5">
             <button
               onClick={openSupport}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 text-xs font-semibold transition-all hover:scale-102"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 text-xs font-semibold transition-all hover:scale-102 cursor-pointer"
               title="Open Technical Helpdesk"
             >
               <Headphones size={13} className="text-sky-600" />
@@ -201,14 +201,14 @@ export const Navigation: React.FC = () => {
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center justify-between w-full">
+          {/* Mobile Menu Button Bar */}
+          <div className="flex md:hidden items-center justify-between w-full py-2">
             <span className="text-xs font-semibold text-slate-900">
               Navigation Menu
             </span>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
               aria-label="Toggle navigation"
             >
               {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -217,9 +217,9 @@ export const Navigation: React.FC = () => {
 
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Dropdown Menu — Full Width Below Bar */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-slate-100 space-y-1.5 animate-fade-in bg-white">
+          <div className="md:hidden py-4 px-4 border-t border-slate-100 space-y-1.5 animate-fade-in bg-white shadow-xl">
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
@@ -234,7 +234,7 @@ export const Navigation: React.FC = () => {
                 setMobileMenuOpen(false);
                 openAbout();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-900 hover:bg-slate-100 text-left"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-900 hover:bg-slate-100 text-left cursor-pointer"
             >
               <Info size={14} className="text-slate-500" />
               <span>About Us</span>
@@ -290,7 +290,7 @@ export const Navigation: React.FC = () => {
                   setMobileMenuOpen(false);
                   openSupport();
                 }}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-sky-50 text-sky-700 font-bold text-xs cursor-pointer"
               >
                 <Headphones size={14} />
                 <span>Contact & Technical Support</span>
