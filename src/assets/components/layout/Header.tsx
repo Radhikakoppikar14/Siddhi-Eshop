@@ -25,9 +25,17 @@ export const Header: React.FC = () => {
     openAbout,
   } = useAuth();
 
-  const { totalItems, subtotal, isCartOpen, openCartDrawer, closeCartDrawer } = useCart();
+  const { totalItems, isCartOpen, openCartDrawer, closeCartDrawer } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [brandsOpen, setBrandsOpen] = useState(false);
+
+  const handleAuthAction = () => {
+    if (currentUser) {
+      openAccountModal();
+    } else {
+      openAuthModal("login");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-[#faf8f5]/95 backdrop-blur-md border-b border-[#e8dfd3] shadow-xs transition-all select-none">
@@ -49,7 +57,7 @@ export const Header: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links — Hidden on smaller screens (below lg) to prevent overflow */}
+          {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1">
 
             <Link
@@ -154,6 +162,7 @@ export const Header: React.FC = () => {
           {/* Right Action Tools */}
           <div className="flex items-center gap-2">
             
+            {/* Search Trigger */}
             <button
               type="button"
               onClick={openSearch}
@@ -163,6 +172,7 @@ export const Header: React.FC = () => {
               <Search size={16} />
             </button>
 
+            {/* RFQ Cart Trigger */}
             <button
               onClick={() => (isCartOpen ? closeCartDrawer() : openCartDrawer())}
               className="relative flex items-center gap-1.5 px-3 py-2 bg-[#6b1620] hover:bg-[#540f17] text-white rounded-xl text-xs font-black transition-all shadow-md cursor-pointer border border-[#851e2b]/50"
@@ -176,21 +186,20 @@ export const Header: React.FC = () => {
               )}
             </button>
 
+            {/* User Account / Sign In Icon Button (Visible on ALL screen sizes) */}
             <button
-              onClick={() => {
-                if (currentUser) {
-                  openAccountModal();
-                } else {
-                  openAuthModal("login");
-                }
-              }}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-[#f1eae0] rounded-xl border border-[#e2d8cb] transition-colors cursor-pointer"
+              type="button"
+              onClick={handleAuthAction}
+              className="h-9 w-9 rounded-xl bg-[#f4ebe0]/80 hover:bg-[#ede0cf] text-[#6b1620] border border-[#dfd0be] flex items-center justify-center transition-all cursor-pointer relative"
+              title={currentUser ? `Account: ${currentUser.companyName}` : "Sign In / Register"}
             >
-              <User size={15} className="text-[#8c7467]" />
-              <span>{currentUser ? currentUser.companyName.split(" ")[0] : "Account"}</span>
+              <User size={16} />
+              {currentUser && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-600 border-2 border-white" />
+              )}
             </button>
 
-            {/* Mobile Hamburger Menu Button — Visible on screens below lg */}
+            {/* Mobile Hamburger Menu Button */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
