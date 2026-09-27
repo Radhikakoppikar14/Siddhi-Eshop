@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { HeroSlider } from "../assets/components/home/HeroSlider";
+import { BrandsShowcase } from "../assets/components/home/BrandsShowcase";
 import { BrandPortfoliosSection } from "../assets/components/home/BrandPortfoliosSection";
 import { CompanyProfileSection } from "../assets/components/home/CompanyProfileSection";
 import { SalesDeskSection } from "../assets/components/home/SalesDeskSection";
-import { CatalogGrid } from "../assets/components/home/CatalogGrid";
 import { RFQSection } from "../assets/components/home/RFQSection";
 
 export const Home: React.FC = () => {
@@ -26,22 +25,19 @@ export const Home: React.FC = () => {
 
   return (
     <main>
-      {/* 1. Hero Showcase Slider Matching Image 1 */}
-      <HeroSlider />
+      {/* 1. Redesigned Interactive Brands Showcase / Hero Slider */}
+      <BrandsShowcase />
 
-      {/* 2. Authorized Brand Portfolios 4-Card Grid Matching Image 1 */}
+      {/* 2. Authorized Brand Portfolios & Detailed System Offerings */}
       <BrandPortfoliosSection />
 
-      {/* 3. Inventory Catalog Grid */}
-      <CatalogGrid />
-
-      {/* 4. Quick RFQ Quotation Console */}
+      {/* 3. Quick RFQ Quotation Console */}
       <RFQSection />
 
-      {/* 5. Company Profile 3-Pillar Section Matching Image 2 (About at end after RFQ) */}
+      {/* 4. Company Profile 3-Pillar Section */}
       <CompanyProfileSection />
 
-      {/* 6. Direct Sales & Dispatch Desk Matching Image 2 (Contact at end after RFQ) */}
+      {/* 5. Direct Sales & Dispatch Desk */}
       <SalesDeskSection />
     </main>
   );

@@ -85,7 +85,7 @@ export const CartDrawer: React.FC = () => {
       });
 
       // 1. Top Brand Banner
-      doc.setFillColor(59, 14, 28); // #3b0e1c Deep Maroon
+      doc.setFillColor(107, 22, 32); // #6b1620 Deep Maroon
       doc.rect(0, 0, 210, 36, "F");
 
       // Company Title
@@ -291,16 +291,16 @@ export const CartDrawer: React.FC = () => {
   const getBrandBadge = (brand: string) => {
     const b = brand.toLowerCase();
     if (b.includes("lapp")) {
-      return "bg-amber-50 text-amber-900 border-amber-300";
+      return "bg-amber-100 text-amber-900 border-amber-300";
     }
     if (b.includes("eaton")) {
-      return "bg-sky-50 text-sky-900 border-sky-300";
+      return "bg-sky-100 text-sky-900 border-sky-300";
     }
     if (b.includes("partex")) {
-      return "bg-emerald-50 text-emerald-900 border-emerald-300";
+      return "bg-emerald-100 text-emerald-900 border-emerald-300";
     }
     if (b.includes("menn")) {
-      return "bg-purple-50 text-purple-900 border-purple-300";
+      return "bg-purple-100 text-purple-900 border-purple-300";
     }
     return "bg-slate-100 text-slate-800 border-slate-300";
   };
@@ -309,29 +309,31 @@ export const CartDrawer: React.FC = () => {
     <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-6 lg:p-8 flex items-center justify-center animate-fade-in select-none">
       {/* Blurred Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/70 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         onClick={closeCartDrawer}
       />
 
-      {/* POPUP PAGE MODAL WINDOW (Simple, Professional 21st Century) */}
-      <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col max-h-[92vh] z-10 animate-scale-up">
+      {/* POPUP PAGE MODAL WINDOW */}
+      <div className="relative w-full max-w-3xl bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh] z-10 animate-scale-up">
         
-        {/* Header */}
-        <div className="px-5 sm:px-7 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-900 text-white shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-rose-600 text-white rounded-2xl shadow-md">
-              <ShoppingCart size={20} />
+        {/* Header in 5% lighter Wine/Burgundy (#7a3d37) */}
+        <div className="px-6 sm:px-8 py-5 border-b border-[#7a3d37]/20 flex items-center justify-between bg-[#7a3d37] text-white shrink-0 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="flex items-center gap-3.5 relative z-10">
+            <div className="p-3 bg-white/10 border border-white/20 text-white rounded-2xl shadow-inner backdrop-blur-xs">
+              <ShoppingCart size={22} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base sm:text-lg font-black text-white tracking-tight">
+              <div className="flex items-center gap-2.5">
+                <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
                   RFQ Quotation Cart & Bill of Materials
                 </h3>
-                <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono text-xs font-bold border border-slate-700">
+                <span className="px-2.5 py-0.5 rounded-full bg-white/15 text-white font-mono text-xs font-bold border border-white/20">
                   {cart.length} {cart.length === 1 ? "item" : "items"}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-mono mt-0.5">
+              <p className="text-xs text-rose-200/90 font-mono mt-0.5">
                 Siddhi Kabel Corporation · Bangalore Central Logistics Stock
                 {currentUser ? ` · ${currentUser.companyName}` : ""}
               </p>
@@ -340,15 +342,16 @@ export const CartDrawer: React.FC = () => {
 
           <button
             onClick={closeCartDrawer}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer border border-white/20 relative z-10"
             aria-label="Close cart popup"
+            type="button"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        {/* Cart Items List with Interactive Hover Effects */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 divide-y divide-slate-100 space-y-3">
+        {/* Cart Items List */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 divide-y divide-slate-100 space-y-3 bg-stone-50/40">
           {cart.length > 0 ? (
             cart.map((item) => {
               const itemTotal = item.price * item.qty;
@@ -356,7 +359,7 @@ export const CartDrawer: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className="pt-3 first:pt-0 pb-1 rounded-2xl p-3 sm:p-4 border border-transparent hover:border-slate-200 hover:bg-slate-50/80 transition-all duration-200 group"
+                  className="pt-3 first:pt-0 pb-1 rounded-2xl p-4 bg-white border border-slate-200 shadow-2xs hover:shadow-md transition-all duration-200 group"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
@@ -364,7 +367,7 @@ export const CartDrawer: React.FC = () => {
                       {/* Brand & Part No Badges */}
                       <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                         <span
-                          className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border font-mono ${getBrandBadge(
+                          className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border font-mono ${getBrandBadge(
                             item.brand
                           )}`}
                         >
@@ -374,7 +377,7 @@ export const CartDrawer: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleCopySku(item.partNo)}
-                          className="flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-900 font-mono bg-white hover:bg-slate-100 px-2 py-0.5 rounded border border-slate-200 transition-colors"
+                          className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-slate-950 font-mono bg-slate-50 hover:bg-slate-100 px-2 py-0.5 rounded border border-slate-200 transition-colors cursor-pointer"
                           title="Click to copy part number"
                         >
                           {copiedSku === item.partNo ? (
@@ -392,7 +395,7 @@ export const CartDrawer: React.FC = () => {
                       </div>
 
                       {/* Product Name */}
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-950 group-hover:text-sky-600 transition-colors line-clamp-2 leading-snug">
+                      <h4 className="text-xs sm:text-sm font-black text-slate-950 group-hover:text-[#7a3d37] transition-colors line-clamp-2 leading-snug">
                         {item.name}
                       </h4>
 
@@ -405,7 +408,7 @@ export const CartDrawer: React.FC = () => {
                     {/* Stepper & Line Total */}
                     <div className="flex sm:flex-col items-center sm:items-end justify-between gap-3 shrink-0">
                       <div className="flex items-center gap-2">
-                        {/* Interactive Quantity Stepper with Hover */}
+                        {/* Interactive Quantity Stepper */}
                         <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-2xs">
                           <button
                             type="button"
@@ -448,7 +451,7 @@ export const CartDrawer: React.FC = () => {
                           </button>
                         </div>
 
-                        {/* Trash Button with Red Hover */}
+                        {/* Trash Button */}
                         <button
                           type="button"
                           onClick={() => removeFromCart(item.id)}
@@ -464,7 +467,7 @@ export const CartDrawer: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block uppercase font-mono tracking-wider">
                           Line Total
                         </span>
-                        <span className="text-sm font-mono font-bold text-slate-950">
+                        <span className="text-sm font-mono font-black text-slate-950">
                           ₹{itemTotal.toLocaleString("en-IN")}
                         </span>
                       </div>
@@ -474,8 +477,8 @@ export const CartDrawer: React.FC = () => {
               );
             })
           ) : (
-            <div className="py-12 sm:py-16 flex flex-col items-center justify-center text-center p-6">
-              <div className="w-16 h-16 rounded-3xl bg-slate-100 flex items-center justify-center text-slate-400 mb-4 shadow-inner">
+            <div className="py-16 flex flex-col items-center justify-center text-center p-6 bg-white rounded-3xl border border-slate-200 m-2">
+              <div className="w-16 h-16 rounded-3xl bg-rose-50 text-[#7a3d37] flex items-center justify-center mb-4 shadow-inner">
                 <Package size={28} />
               </div>
               <h4 className="text-base font-bold text-slate-950 mb-1">
@@ -486,7 +489,8 @@ export const CartDrawer: React.FC = () => {
               </p>
               <button
                 onClick={closeCartDrawer}
-                className="px-5 py-2.5 bg-slate-950 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:scale-102 cursor-pointer"
+                className="px-6 py-3 bg-[#7a3d37] hover:bg-[#68332e] text-white rounded-xl text-xs font-bold transition-all shadow-md hover:scale-102 cursor-pointer"
+                type="button"
               >
                 Explore Product Catalog
               </button>
@@ -496,10 +500,10 @@ export const CartDrawer: React.FC = () => {
 
         {/* Footer Action Console */}
         {cart.length > 0 && (
-          <div className="p-4 sm:p-6 border-t border-slate-200 bg-slate-50/90 shrink-0 space-y-4">
+          <div className="p-5 sm:p-6 border-t border-slate-200 bg-white shrink-0 space-y-4 rounded-b-[2.5rem]">
             
             {/* Commercial Summary Row */}
-            <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+            <div className="bg-stone-50 rounded-2xl p-4 border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
               <div className="flex items-center gap-4 text-slate-600">
                 <div>
                   <span className="text-slate-400 text-[10px] block uppercase">BOM Subtotal</span>
@@ -511,11 +515,11 @@ export const CartDrawer: React.FC = () => {
                 </div>
               </div>
 
-              <div className="sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
+              <div className="sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-200">
                 <span className="text-slate-400 text-[10px] block uppercase font-sans font-semibold">
                   Estimated Quotation Total
                 </span>
-                <span className="text-lg font-black text-rose-600 font-mono">
+                <span className="text-lg font-black text-rose-700 font-mono">
                   ₹{grandTotal.toLocaleString("en-IN")}
                 </span>
               </div>
@@ -528,10 +532,10 @@ export const CartDrawer: React.FC = () => {
               <button
                 type="button"
                 onClick={handleExportBOMPDF}
-                className="w-full sm:w-auto flex-1 py-3 px-4 bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 shadow-2xs hover:scale-102 hover:shadow-md cursor-pointer group"
+                className="w-full sm:w-auto flex-1 py-3.5 px-4 bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 shadow-2xs hover:scale-102 hover:shadow-md cursor-pointer group"
                 title="Download official Bill of Materials PDF"
               >
-                <Download size={15} className="text-rose-600 group-hover:scale-115 transition-transform" />
+                <Download size={15} className="text-[#7a3d37] group-hover:scale-115 transition-transform" />
                 <span>Export BOM (Download PDF)</span>
               </button>
 
@@ -539,7 +543,7 @@ export const CartDrawer: React.FC = () => {
               <button
                 type="button"
                 onClick={handleExportCSV}
-                className="w-full sm:w-auto py-3 px-3.5 bg-white hover:bg-slate-100 text-slate-600 hover:text-slate-950 border border-slate-300 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full sm:w-auto py-3.5 px-3.5 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-950 border border-slate-300 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                 title="Export BOM table as CSV spreadsheet"
               >
                 <FileSpreadsheet size={14} />
@@ -550,17 +554,17 @@ export const CartDrawer: React.FC = () => {
               <button
                 type="button"
                 onClick={clearCart}
-                className="w-full sm:w-auto py-3 px-3.5 bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-300 hover:border-rose-200 rounded-xl text-xs font-semibold transition-all cursor-pointer"
+                className="w-full sm:w-auto py-3.5 px-3.5 bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-300 hover:border-rose-200 rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-2xs"
                 title="Clear all cart items"
               >
                 Clear
               </button>
 
-              {/* Main RFQ Submission Button — Maroon & Light Beige Theme */}
+              {/* Main RFQ Submission Button */}
               <button
                 type="button"
                 onClick={handleCheckoutRfq}
-                className="w-full sm:w-auto flex-1 py-3 px-5 bg-gradient-to-r from-[#6b1620] via-[#7a1a26] to-[#581018] hover:from-[#7a1a26] hover:to-[#6b1620] text-[#faf6f0] font-black rounded-xl text-xs uppercase tracking-wider transition-all shadow-md shadow-[#6b1620]/30 flex items-center justify-center gap-2 hover:scale-102 cursor-pointer border border-[#851e2b]/50"
+                className="w-full sm:w-auto flex-1 py-3.5 px-5 bg-[#7a3d37] hover:bg-[#68332e] text-white font-black rounded-xl text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 cursor-pointer"
               >
                 <span>Request GST Proforma</span>
                 <ArrowRight size={14} />

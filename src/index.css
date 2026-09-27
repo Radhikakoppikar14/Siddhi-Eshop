@@ -1,24 +1,23 @@
 @import "tailwindcss";
 
 /* ====================================================================
-   SIDDHI ESHOP — MODERN HYBRID LIGHT & DARK ENTERPRISE SYSTEM
-   Combination of crisp minimalist light surfaces with rich dark modules.
-   High-contrast, clean, US professional aesthetic.
+   SIDDHI ESHOP — EXECUTIVE OBSIDIAN & PRECISION CRIMSON SYSTEM
+   High-end B2B industrial engineering portal aesthetic.
    ==================================================================== */
 
 :root {
-  --bg-main: #f8fafc;
-  --bg-surface: #ffffff;
-  --border-subtle: #e2e8f0;
-  --border-strong: #cbd5e1;
+  --bg-main: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --border-subtle: #E2E8F0;
+  --border-strong: #CBD5E1;
 
-  --text-primary: #0f172a;
+  --text-primary: #0B0F17;
   --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-muted: #64748B;
 
   --accent-blue: #0284c7;
   --accent-emerald: #059669;
-  --accent-rose: #e11d48;
+  --accent-rose: #D9262E;
   --accent-amber: #d97706;
   --accent-purple: #7c3aed;
 
@@ -33,6 +32,7 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 
 /* Monospace font for engineering part numbers and tabular numbers */
@@ -46,23 +46,23 @@ code, kbd, samp, pre, .font-mono {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #F8FAFC;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Hybrid background: clean light base with subtle ambient warmth */
+/* Hybrid background: clean light base with subtle executive gradients */
 .hybrid-light-bg {
-  background-color: #fafbfc;
+  background-color: #F8FAFC;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(224, 242, 254, 0.45) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(253, 242, 248, 0.45) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(240, 253, 244, 0.35) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(217, 38, 46, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(11, 15, 23, 0.02) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(5, 150, 105, 0.02) 0px, transparent 50%);
 }
 
 /* Keyframe Animations */
@@ -89,6 +89,7 @@ code, kbd, samp, pre, .font-mono {
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .hover-card-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 30px -10px rgba(15, 23, 42, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -10px rgba(11, 15, 23, 0.08);
+  border-color: #CBD5E1;
 }

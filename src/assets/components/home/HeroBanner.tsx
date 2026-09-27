@@ -4,6 +4,9 @@ import {
   ShoppingCart,
   Sparkles,
   Zap,
+  Gauge,
+  Ruler,
+  Package,
 } from "lucide-react";
 import { useCart } from "../../../context/CartContext";
 import { useToast } from "../../../context/ToastContext";
@@ -13,7 +16,7 @@ export const HeroBanner: React.FC = () => {
   const { showToast } = useToast();
 
   const [activeItem, setActiveItem] = useState<"lapp" | "eaton" | "partex" | "mennekes">("lapp");
-  
+
   // Interactive configurator state for cable inspector
   const [cores, setCores] = useState(4);
   const [size, setSize] = useState(1.5);
@@ -58,464 +61,414 @@ export const HeroBanner: React.FC = () => {
     showToast(`Added ${name} to RFQ Cart!`);
   };
 
-  return (
-    <section className="relative overflow-hidden py-12 lg:py-18 select-none bg-gradient-to-b from-white via-slate-50/60 to-white border-b border-slate-200/80">
-      
-      {/* Light Ambient Glow Accents */}
-      <div className="absolute top-10 left-10 w-96 h-96 rounded-full bg-sky-200/25 blur-3xl pointer-events-none animate-float"></div>
-      <div className="absolute bottom-10 right-16 w-96 h-96 rounded-full bg-rose-200/20 blur-3xl pointer-events-none animate-float" style={{ animationDelay: "1.5s" }}></div>
+  const brandTabs = [
+    { id: "lapp", label: "LAPP", dot: "bg-amber-400", active: "bg-white text-slate-950" },
+    { id: "eaton", label: "EATON", dot: "bg-sky-400", active: "bg-white text-slate-950" },
+    { id: "partex", label: "PARTEX", dot: "bg-emerald-400", active: "bg-white text-slate-950" },
+    { id: "mennekes", label: "MENNEKES", dot: "bg-purple-400", active: "bg-white text-slate-950" },
+  ] as const;
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          
-          {/* Left Column: Clean Light Minimalist Editorial Presentation */}
-          <div className="lg:col-span-6 space-y-6">
-            
-            {/* Top Status Indicators */}
+  return (
+    <section className="relative overflow-hidden bg-[#0a0c11] py-20 lg:py-28 select-none">
+      {/* Ambient engineering-grid backdrop */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 -left-24 h-[30rem] w-[30rem] rounded-full bg-gradient-to-br from-amber-500/20 via-orange-500/5 to-transparent blur-3xl" />
+        <div className="absolute -bottom-32 right-0 h-[34rem] w-[34rem] rounded-full bg-gradient-to-tl from-sky-500/15 via-indigo-500/5 to-transparent blur-3xl" />
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+
+          {/* Left Column: Editorial headline + commercial context */}
+          <div className="lg:col-span-6 space-y-7">
+
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/90 text-xs font-mono font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                BANGALORE CENTRAL SUPPLY HUB
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[11px] font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-reduce:animate-none animate-pulse" />
+                Bangalore central supply hub
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-mono">
-                &lt;24H PAN-INDIA DISPATCH
+              <span className="px-3 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10 text-[11px] font-medium">
+                Under 24h pan-India dispatch
               </span>
             </div>
 
-            {/* Editorial Headline in Sharp Contrast Slate-950 */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">
-              Industrial Electrical Infrastructure.{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-rose-600 block mt-1 font-extrabold">
-                Direct European OEM Sourcing.
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.4rem] font-black tracking-tight leading-[1.06] text-white">
+              Industrial electrical infrastructure,
+              <span className="block mt-1.5 bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-orange-300 to-rose-300">
+                sourced direct from Europe
               </span>
             </h1>
 
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl">
-              Authorised channel partners for <strong className="text-slate-950">Lapp Kabel Germany</strong>, <strong className="text-slate-950">Eaton Moeller</strong>, <strong className="text-slate-950">Partex Sweden</strong>, and <strong className="text-slate-950">Mennekes</strong>. Zero grey imports, ready warehouse drum stock, and fast B2B quotation generation.
+            <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-lg">
+              Authorised channel partners for <span className="text-white font-medium">Lapp Kabel Germany</span>, <span className="text-white font-medium">Eaton Moeller</span>, <span className="text-white font-medium">Partex Sweden</span>, and <span className="text-white font-medium">Mennekes</span> — zero grey imports, ready warehouse drum stock, fast B2B quotations.
             </p>
 
-            {/* Brand Matrix Badges with Light Pastel Tints */}
-            <div className="flex flex-wrap gap-2 pt-1 font-mono text-xs">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span>LAPP Germany</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 text-sky-700 border border-sky-200 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-sky-500"></span>
-                <span>EATON Moeller</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                <span>PARTEX Sweden</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                <span>MENNEKES</span>
-              </div>
-            </div>
-
-            {/* Primary Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-3">
+            {/* Primary Actions */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               <a
                 href="#rfqSection"
-                className="px-6 py-3.5 bg-slate-950 hover:bg-slate-800 text-white rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shadow-md hover:scale-102"
+                className="group px-6 py-3.5 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-lg shadow-amber-500/20 hover:scale-[1.02]"
               >
-                <span>Request Project RFQ</span>
-                <ArrowRight size={14} />
+                <span>Request project RFQ</span>
+                <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
               </a>
 
               <a
                 href="#productsSection"
-                className="px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-900 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 border border-slate-200 shadow-2xs hover:scale-102"
+                className="px-6 py-3.5 bg-white/[0.06] hover:bg-white/[0.1] text-white rounded-xl text-sm font-medium transition-all flex items-center gap-2 border border-white/10 hover:scale-[1.02]"
               >
-                <Zap size={14} className="text-amber-500" />
-                <span>Browse Inventory Catalog</span>
+                <Zap size={15} className="text-amber-300" />
+                <span>Browse inventory catalog</span>
               </a>
             </div>
 
-            {/* Live Metrics Grid with Clean Hybrid Styling */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-slate-200">
-              <div className="p-3.5 bg-white border border-rose-100 rounded-2xl shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-rose-600 font-mono block">4</span>
-                <span className="text-[11px] text-slate-500 font-medium">Direct OEMs</span>
-              </div>
-              <div className="p-3.5 bg-white border border-sky-100 rounded-2xl shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-sky-600 font-mono block">&lt;24h</span>
-                <span className="text-[11px] text-slate-500 font-medium">Dispatch Lead</span>
-              </div>
-              <div className="p-3.5 bg-white border border-emerald-100 rounded-2xl shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-emerald-600 font-mono block">100%</span>
-                <span className="text-[11px] text-slate-500 font-medium">OEM Certified</span>
-              </div>
-              <div className="p-3.5 bg-white border border-purple-100 rounded-2xl shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-purple-600 font-mono block">18%</span>
-                <span className="text-[11px] text-slate-500 font-medium">GST Tax Credit</span>
-              </div>
+            {/* Brand strip - quiet, textual rather than four repeated boxes */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-6 border-t border-white/10 text-xs text-slate-400">
+              <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> Lapp Kabel</span>
+              <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-sky-400" /> Eaton Moeller</span>
+              <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Partex Sweden</span>
+              <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-purple-400" /> Mennekes</span>
+              <span className="ml-auto flex items-center gap-4 font-mono text-[11px] text-slate-500">
+                <span><strong className="text-white font-semibold">4</strong> OEMs</span>
+                <span><strong className="text-emerald-300 font-semibold">100%</strong> certified</span>
+                <span><strong className="text-sky-300 font-semibold">18%</strong> GST ITC</span>
+              </span>
             </div>
 
           </div>
 
-          {/* Right Column: Deep Obsidian Component Terminal (The Perfect Dark Accent) */}
+          {/* Right Column: Live Spec Terminal — the actual centerpiece */}
           <div className="lg:col-span-6">
-            <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-800 relative hover-card-lift">
-              
-              {/* Terminal Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-rose-500"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
-                  <span className="text-[11px] font-mono text-slate-400 ml-2">
-                    SPEC_TERMINAL // v2.6
-                  </span>
-                </div>
+            <div className="relative rounded-3xl border border-white/10 bg-white/[0.035] backdrop-blur-xl shadow-2xl overflow-hidden">
+              <div className="absolute -top-24 -right-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-                <span className="text-[10px] uppercase font-bold text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20 font-mono tracking-wider flex items-center gap-1">
-                  <Sparkles size={11} className="text-sky-400" />
-                  Live Component Inspector
+              {/* Terminal Header */}
+              <div className="flex items-center justify-between px-6 sm:px-7 pt-6 pb-4 border-b border-white/10 relative z-10">
+                <div className="flex items-center gap-2">
+                  <Gauge size={15} className="text-amber-300" />
+                  <span className="text-xs font-medium text-slate-300">Live spec inspector</span>
+                </div>
+                <span className="text-[10px] uppercase font-semibold text-amber-300/90 bg-white/5 px-2.5 py-1 rounded-full border border-white/10 tracking-wide flex items-center gap-1.5">
+                  <Sparkles size={11} />
+                  configure &amp; quote
                 </span>
               </div>
 
-              {/* Segmented Brand Selector */}
-              <div className="grid grid-cols-4 gap-1.5 p-1 bg-slate-900 rounded-2xl mb-5 border border-slate-800">
-                {[
-                  { id: "lapp", label: "LAPP Cable", activeClass: "bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-xs font-bold" },
-                  { id: "eaton", label: "EATON Switch", activeClass: "bg-sky-500/20 text-sky-300 border-sky-500/40 shadow-xs font-bold" },
-                  { id: "partex", label: "PARTEX Mark", activeClass: "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-xs font-bold" },
-                  { id: "mennekes", label: "MENNEKES", activeClass: "bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-xs font-bold" },
-                ].map((tab) => (
+              {/* Brand Selector */}
+              <div className="grid grid-cols-4 gap-1.5 p-1.5 mx-6 sm:mx-7 mt-5 bg-black/30 rounded-2xl border border-white/10 relative z-10">
+                {brandTabs.map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveItem(tab.id as any)}
-                    className={`py-2 px-2 rounded-xl text-[11px] transition-all text-center border ${
+                    onClick={() => setActiveItem(tab.id)}
+                    className={`py-2.5 px-2 rounded-xl text-[11px] font-semibold transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer ${
                       activeItem === tab.id
-                        ? tab.activeClass
-                        : "border-transparent text-slate-400 hover:text-white font-medium"
+                        ? `${tab.active} shadow-md`
+                        : "text-slate-400 hover:text-white"
                     }`}
                   >
+                    <span className={`w-1.5 h-1.5 rounded-full ${tab.dot}`} />
                     {tab.label}
                   </button>
                 ))}
               </div>
 
-              {/* Dynamic Content Panel based on active selection */}
-              {activeItem === "lapp" && (
-                <div className="space-y-4 animate-fade-in">
-                  
-                  {/* Visual and Header */}
-                  <div className="flex items-center gap-4 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
-                    <div className="w-20 h-20 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-700 shadow-sm">
-                      <img
-                        src="/images/cable-olflex-angle.png"
-                        alt="LAPP Cable"
-                        className="max-h-full max-w-full object-contain"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = "/images/card-olflex.jpg";
-                        }}
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-wider block">
-                        LAPP KABEL GERMANY · OIL RESISTANT
-                      </span>
-                      <h3 className="text-sm font-bold text-white truncate">
-                        ÖLFLEX® CLASSIC 110 Control Cable
-                      </h3>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
-                        VDE Reg. 7030 · PVC Sheath · -40°C to +80°C · Flame retardant
-                      </p>
-                    </div>
-                  </div>
+              {/* Dynamic Content Panel */}
+              <div className="p-6 sm:p-7 relative z-10">
+                {activeItem === "lapp" && (
+                  <div className="space-y-4 animate-fade-in">
 
-                  {/* Interactive Controls */}
-                  <div className="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                    
-                    {/* Cores Selector */}
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-slate-400 font-medium">Core Configuration:</span>
-                        <span className="font-mono text-white font-bold">{cores} Cores</span>
+                    <div className="flex items-center gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10">
+                      <div className="w-16 h-16 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+                        <img
+                          src="/images/cable-olflex-angle.png"
+                          alt="LAPP Cable"
+                          className="max-h-full max-w-full object-contain"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/images/card-olflex.jpg";
+                          }}
+                        />
                       </div>
-                      <div className="grid grid-cols-5 gap-1.5 text-xs font-mono">
-                        {[2, 3, 4, 5, 7].map((c) => (
-                          <button
-                            key={c}
-                            onClick={() => setCores(c)}
-                            className={`py-1.5 rounded-xl border text-center transition-all ${
-                              cores === c
-                                ? "bg-rose-600 text-white font-bold border-rose-500 shadow-xs"
-                                : "bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-700"
-                            }`}
-                          >
-                            {c}C
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Size Selector */}
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-slate-400 font-medium">Conductor Cross Section:</span>
-                        <span className="font-mono text-white font-bold">{size} sq mm</span>
-                      </div>
-                      <div className="grid grid-cols-4 gap-1.5 text-xs font-mono">
-                        {[0.5, 0.75, 1.0, 1.5, 2.5].map((s) => (
-                          <button
-                            key={s}
-                            onClick={() => setSize(s)}
-                            className={`py-1.5 rounded-xl border text-center transition-all ${
-                              size === s
-                                ? "bg-rose-600 text-white font-bold border-rose-500 shadow-xs"
-                                : "bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-700"
-                            }`}
-                          >
-                            {s} mm²
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Drum Cut Length Slider */}
-                    <div>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-slate-400 font-medium">Package / Drum Length:</span>
-                        <span className="font-mono text-rose-400 font-bold">{drumLength} Meters</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="50"
-                        max="1000"
-                        step="50"
-                        value={drumLength}
-                        onChange={(e) => setDrumLength(parseInt(e.target.value))}
-                        className="w-full accent-rose-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
-                      />
-                      <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
-                        <span>50m (Ring)</span>
-                        <span>500m (Standard Drum)</span>
-                        <span>1000m (Master Reel)</span>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Calculations & Quick Add Footer */}
-                  <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between gap-4">
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">
-                        Estimated Total ({drumLength}m)
-                      </div>
-                      <div className="text-lg font-black font-mono text-white">
-                        ₹{estimatedLineTotal.toLocaleString("en-IN")}
-                        <span className="text-xs text-slate-400 font-normal ml-1.5">
-                          (₹{estimatedUnitPrice}/m)
+                      <div className="min-w-0">
+                        <span className="text-[10px] text-amber-300 font-semibold block">
+                          LAPP Kabel Germany · Oil resistant
                         </span>
-                      </div>
-                      <div className="text-[10px] text-slate-500 font-mono">
-                        Approx Weight: ~{calculatedWeight} kg
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={handleAddConfiguredCable}
-                      className="py-2.5 px-4 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-rose-600/25 hover:scale-102"
-                    >
-                      <ShoppingCart size={14} />
-                      <span>Add to RFQ</span>
-                    </button>
-                  </div>
-
-                </div>
-              )}
-
-              {activeItem === "eaton" && (
-                <div className="space-y-4 animate-fade-in">
-                  <div className="flex items-center gap-4 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
-                    <div className="w-20 h-20 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-700 shadow-sm">
-                      <img
-                        src="/images/eaton-pkzm0.jpg"
-                        alt="EATON PKZM0"
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-wider block">
-                        EATON MOELLER GERMANY · MOTOR PROTECTION
-                      </span>
-                      <h3 className="text-sm font-bold text-white truncate">
-                        PKZM0-16 Motor-Protective Circuit-Breaker
-                      </h3>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
-                        10 - 16A Setting Range · 150 kA Breaking · Phase failure sensitive
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-900/60 rounded-2xl border border-slate-800 space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b border-slate-800 text-slate-400">
-                      <span>Rated Operational Voltage:</span>
-                      <span className="font-mono text-white font-bold">690V AC</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-800 text-slate-400">
-                      <span>Short-Circuit Breaking Capacity:</span>
-                      <span className="font-mono text-white font-bold">150 kA @ 400V</span>
-                    </div>
-                    <div className="flex justify-between py-1 text-slate-400">
-                      <span>Standards Compliance:</span>
-                      <span className="font-mono text-white font-bold">IEC/EN 60947-4-1, VDE 0660</span>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between gap-4">
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">
-                        Base List Price
-                      </div>
-                      <div className="text-lg font-black font-mono text-white">
-                        ₹3,250.00
-                        <span className="text-xs text-slate-400 font-normal ml-1">/ unit</span>
+                        <h3 className="text-sm font-semibold text-white truncate">
+                          ÖLFLEX® CLASSIC 110 Control Cable
+                        </h3>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          VDE Reg. 7030 · PVC sheath · −40°C to +80°C
+                        </p>
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => handleAddPresetItem("EATON-PKZM0-16", "PKZM0-16 Motor Starter", "EATON - MOELLER", 3250, "unit")}
-                      className="py-2.5 px-4 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-sky-600/25 hover:scale-102"
-                    >
-                      <ShoppingCart size={14} />
-                      <span>Add to RFQ</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeItem === "partex" && (
-                <div className="space-y-4 animate-fade-in">
-                  <div className="flex items-center gap-4 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
-                    <div className="w-20 h-20 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-700 shadow-sm">
-                      <img
-                        src="/images/partex-pa.jpg"
-                        alt="Partex PA"
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider block">
-                        PARTEX SWEDEN · WIRE IDENTIFICATION
-                      </span>
-                      <h3 className="text-sm font-bold text-white truncate">
-                        PA-1 Closed Chevron Cut Wire Markers
-                      </h3>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
-                        Interlocking chevron profile · 0.75 - 4.0 mm² · Cadmium-free PVC
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-900/60 rounded-2xl border border-slate-800 space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b border-slate-800 text-slate-400">
-                      <span>Wire Diameter Compatibility:</span>
-                      <span className="font-mono text-white font-bold">2.5 mm to 5.0 mm</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-800 text-slate-400">
-                      <span>Flammability Rating:</span>
-                      <span className="font-mono text-white font-bold">UL94-V0 Self-Extinguishing</span>
-                    </div>
-                    <div className="flex justify-between py-1 text-slate-400">
-                      <span>Packaging:</span>
-                      <span className="font-mono text-white font-bold">1,000 Markers / Reel</span>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between gap-4">
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">
-                        Base List Price (1000 Pack)
+                    <div className="space-y-3.5 bg-white/[0.03] p-4 rounded-2xl border border-white/10">
+                      <div>
+                        <div className="flex justify-between text-xs mb-1.5 text-slate-400">
+                          <span className="flex items-center gap-1.5"><Package size={12} /> Cores</span>
+                          <span className="font-mono text-white font-semibold">{cores}C</span>
+                        </div>
+                        <div className="grid grid-cols-5 gap-1.5 text-xs">
+                          {[2, 3, 4, 5, 7].map((c) => (
+                            <button
+                              key={c}
+                              onClick={() => setCores(c)}
+                              className={`py-1.5 rounded-lg text-center transition-all cursor-pointer font-mono ${
+                                cores === c
+                                  ? "bg-amber-300 text-slate-950 font-semibold"
+                                  : "bg-white/[0.04] text-slate-400 hover:text-white border border-white/5"
+                              }`}
+                            >
+                              {c}C
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                      <div className="text-lg font-black font-mono text-white">
-                        ₹480.00
-                        <span className="text-xs text-slate-400 font-normal ml-1">/ pack</span>
+
+                      <div>
+                        <div className="flex justify-between text-xs mb-1.5 text-slate-400">
+                          <span className="flex items-center gap-1.5"><Ruler size={12} /> Cross section</span>
+                          <span className="font-mono text-white font-semibold">{size} mm²</span>
+                        </div>
+                        <div className="grid grid-cols-5 gap-1.5 text-xs">
+                          {[0.5, 0.75, 1.0, 1.5, 2.5].map((s) => (
+                            <button
+                              key={s}
+                              onClick={() => setSize(s)}
+                              className={`py-1.5 rounded-lg text-center transition-all cursor-pointer font-mono ${
+                                size === s
+                                  ? "bg-sky-300 text-slate-950 font-semibold"
+                                  : "bg-white/[0.04] text-slate-400 hover:text-white border border-white/5"
+                              }`}
+                            >
+                              {s}
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
 
-                    <button
-                      onClick={() => handleAddPresetItem("PARTEX-PA1-SET", "PA-1 Wire Markers (1000 Pack)", "PARTEX SWEDEN", 480, "pack")}
-                      className="py-2.5 px-4 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-amber-600/25 hover:scale-102"
-                    >
-                      <ShoppingCart size={14} />
-                      <span>Add to RFQ</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeItem === "mennekes" && (
-                <div className="space-y-4 animate-fade-in">
-                  <div className="flex items-center gap-4 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
-                    <div className="w-20 h-20 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-700 shadow-sm">
-                      <img
-                        src="/images/menn-powertop.jpg"
-                        alt="Mennekes PowerTOP"
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-[10px] font-mono text-purple-400 font-bold uppercase tracking-wider block">
-                        MENNEKES GERMANY · CEE PLUGS & SOCKETS
-                      </span>
-                      <h3 className="text-sm font-bold text-white truncate">
-                        PowerTOP® Xtra 32A 5P Heavy Duty Plug
-                      </h3>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
-                        IP67 Watertight · SafeCONTACT insulation displacement · 400V Red
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-900/60 rounded-2xl border border-slate-800 space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b border-slate-800 text-slate-400">
-                      <span>Poles & Voltage:</span>
-                      <span className="font-mono text-white font-bold">5-Pole (3P+N+E) 400V 6h</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-800 text-slate-400">
-                      <span>Ingress Protection:</span>
-                      <span className="font-mono text-white font-bold">IP67 Submersible Watertight</span>
-                    </div>
-                    <div className="flex justify-between py-1 text-slate-400">
-                      <span>Terminal Style:</span>
-                      <span className="font-mono text-white font-bold">Screwless SafeCONTACT</span>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between gap-4">
-                    <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-mono">
-                        Base List Price
-                      </div>
-                      <div className="text-lg font-black font-mono text-white">
-                        ₹2,840.00
-                        <span className="text-xs text-slate-400 font-normal ml-1">/ unit</span>
+                      <div>
+                        <div className="flex justify-between text-xs mb-1 text-slate-400">
+                          <span>Drum length</span>
+                          <span className="font-mono text-amber-300 font-semibold">{drumLength} m</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="50"
+                          max="1000"
+                          step="50"
+                          value={drumLength}
+                          onChange={(e) => setDrumLength(parseInt(e.target.value))}
+                          className="w-full accent-amber-400 cursor-pointer h-1.5 bg-white/10 rounded-lg"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
+                          <span>50m ring</span>
+                          <span>500m standard</span>
+                          <span>1000m master reel</span>
+                        </div>
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => handleAddPresetItem("MENN-PT-32A5P", "PowerTOP Xtra 32A 5P Plug", "MENNEKES", 2840, "unit")}
-                      className="py-2.5 px-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-purple-600/25 hover:scale-102"
-                    >
-                      <ShoppingCart size={14} />
-                      <span>Add to RFQ</span>
-                    </button>
+                    <div className="p-4 bg-white/[0.04] border border-white/10 rounded-2xl flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-[10px] text-slate-400">
+                          Estimated total ({drumLength}m)
+                        </div>
+                        <div className="text-lg font-bold font-mono text-white">
+                          ₹{estimatedLineTotal.toLocaleString("en-IN")}
+                          <span className="text-xs text-slate-400 font-normal ml-1.5">
+                            (₹{estimatedUnitPrice}/m)
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-slate-500 font-mono">
+                          Approx weight: ~{calculatedWeight} kg
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={handleAddConfiguredCable}
+                        className="py-3 px-5 bg-white text-slate-950 hover:bg-slate-100 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shrink-0 shadow-md cursor-pointer hover:scale-[1.02]"
+                      >
+                        <ShoppingCart size={15} />
+                        <span>Add to RFQ</span>
+                      </button>
+                    </div>
+
                   </div>
-                </div>
-              )}
+                )}
+
+                {activeItem === "eaton" && (
+                  <div className="space-y-4 animate-fade-in">
+                    <div className="flex items-center gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10">
+                      <div className="w-16 h-16 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+                        <img src="/images/eaton-pkzm0.jpg" alt="EATON PKZM0" className="max-h-full max-w-full object-contain" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[10px] text-sky-300 font-semibold block">
+                          Eaton Moeller Germany · Motor protection
+                        </span>
+                        <h3 className="text-sm font-semibold text-white truncate">
+                          PKZM0-16 Motor-Protective Circuit-Breaker
+                        </h3>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          10–16A setting range · 150 kA breaking · Phase failure sensitive
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-white/[0.03] rounded-2xl border border-white/10 space-y-2 text-xs">
+                      <div className="flex justify-between py-1 border-b border-white/10 text-slate-400">
+                        <span>Rated operational voltage</span>
+                        <span className="font-mono text-white font-semibold">690V AC</span>
+                      </div>
+                      <div className="flex justify-between py-1 border-b border-white/10 text-slate-400">
+                        <span>Short-circuit breaking capacity</span>
+                        <span className="font-mono text-white font-semibold">150 kA @ 400V</span>
+                      </div>
+                      <div className="flex justify-between py-1 text-slate-400">
+                        <span>Standards compliance</span>
+                        <span className="font-mono text-white font-semibold">IEC/EN 60947-4-1</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-white/[0.04] border border-white/10 rounded-2xl flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-[10px] text-slate-400">Base list price</div>
+                        <div className="text-lg font-bold font-mono text-white">
+                          ₹3,250.00
+                          <span className="text-xs text-slate-400 font-normal ml-1">/ unit</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleAddPresetItem("EATON-PKZM0-16", "PKZM0-16 Motor Starter", "EATON - MOELLER", 3250, "unit")}
+                        className="py-3 px-5 bg-white text-slate-950 hover:bg-slate-100 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shrink-0 shadow-md cursor-pointer hover:scale-[1.02]"
+                      >
+                        <ShoppingCart size={15} />
+                        <span>Add to RFQ</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {activeItem === "partex" && (
+                  <div className="space-y-4 animate-fade-in">
+                    <div className="flex items-center gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10">
+                      <div className="w-16 h-16 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+                        <img src="/images/partex-pa.jpg" alt="Partex PA" className="max-h-full max-w-full object-contain" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[10px] text-emerald-300 font-semibold block">
+                          Partex Sweden · Wire identification
+                        </span>
+                        <h3 className="text-sm font-semibold text-white truncate">
+                          PA-1 Closed Chevron Cut Wire Markers
+                        </h3>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          Interlocking chevron profile · 0.75–4.0 mm² · Cadmium-free PVC
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-white/[0.03] rounded-2xl border border-white/10 space-y-2 text-xs">
+                      <div className="flex justify-between py-1 border-b border-white/10 text-slate-400">
+                        <span>Wire diameter compatibility</span>
+                        <span className="font-mono text-white font-semibold">2.5–5.0 mm</span>
+                      </div>
+                      <div className="flex justify-between py-1 border-b border-white/10 text-slate-400">
+                        <span>Flammability rating</span>
+                        <span className="font-mono text-white font-semibold">UL94-V0</span>
+                      </div>
+                      <div className="flex justify-between py-1 text-slate-400">
+                        <span>Packaging</span>
+                        <span className="font-mono text-white font-semibold">1,000 / reel</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-white/[0.04] border border-white/10 rounded-2xl flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-[10px] text-slate-400">Base list price (1000 pack)</div>
+                        <div className="text-lg font-bold font-mono text-white">
+                          ₹480.00
+                          <span className="text-xs text-slate-400 font-normal ml-1">/ pack</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleAddPresetItem("PARTEX-PA1-SET", "PA-1 Wire Markers (1000 Pack)", "PARTEX SWEDEN", 480, "pack")}
+                        className="py-3 px-5 bg-white text-slate-950 hover:bg-slate-100 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shrink-0 shadow-md cursor-pointer hover:scale-[1.02]"
+                      >
+                        <ShoppingCart size={15} />
+                        <span>Add to RFQ</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {activeItem === "mennekes" && (
+                  <div className="space-y-4 animate-fade-in">
+                    <div className="flex items-center gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10">
+                      <div className="w-16 h-16 rounded-xl bg-white p-2 flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+                        <img src="/images/menn-powertop.jpg" alt="Mennekes PowerTOP" className="max-h-full max-w-full object-contain" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[10px] text-purple-300 font-semibold block">
+                          Mennekes Germany · CEE plugs &amp; sockets
+                        </span>
+                        <h3 className="text-sm font-semibold text-white truncate">
+                          PowerTOP® Xtra 32A 5P Heavy Duty Plug
+                        </h3>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          IP67 watertight · SafeCONTACT · 400V red
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-white/[0.03] rounded-2xl border border-white/10 space-y-2 text-xs">
+                      <div className="flex justify-between py-1 border-b border-white/10 text-slate-400">
+                        <span>Poles &amp; voltage</span>
+                        <span className="font-mono text-white font-semibold">5P (3P+N+E) 400V</span>
+                      </div>
+                      <div className="flex justify-between py-1 border-b border-white/10 text-slate-400">
+                        <span>Ingress protection</span>
+                        <span className="font-mono text-white font-semibold">IP67</span>
+                      </div>
+                      <div className="flex justify-between py-1 text-slate-400">
+                        <span>Terminal style</span>
+                        <span className="font-mono text-white font-semibold">Screwless SafeCONTACT</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-white/[0.04] border border-white/10 rounded-2xl flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-[10px] text-slate-400">Base list price</div>
+                        <div className="text-lg font-bold font-mono text-white">
+                          ₹2,840.00
+                          <span className="text-xs text-slate-400 font-normal ml-1">/ unit</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleAddPresetItem("MENN-PT-32A5P", "PowerTOP Xtra 32A 5P Plug", "MENNEKES", 2840, "unit")}
+                        className="py-3 px-5 bg-white text-slate-950 hover:bg-slate-100 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shrink-0 shadow-md cursor-pointer hover:scale-[1.02]"
+                      >
+                        <ShoppingCart size={15} />
+                        <span>Add to RFQ</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
             </div>
           </div>
 
         </div>
-
       </div>
     </section>
   );

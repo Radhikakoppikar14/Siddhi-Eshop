@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   ShoppingCart,
@@ -12,6 +12,7 @@ import {
   Minus,
   ZoomIn,
   ZoomOut,
+  FileText,
 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
@@ -26,73 +27,60 @@ import {
 
 export const QuickViewModal: React.FC = () => {
   const { quickViewProduct, closeQuickView } = useAuth();
-  const { addToCart, addCustomItem } = useCart();
+  const { addToCart } = useCart();
   const { showToast } = useToast();
   const navigate = useNavigate();
-
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  
+  // Interactive LAPP Customization Options State
+  const [selectedCore, setSelectedCore] = useState<string>("4 Cores (with Earth)");
+  const [selectedSize, setSelectedSize] = useState<string>("2.5 mm²");
+  const [selectedColor, setSelectedColor] = useState<string>("Black Sheath");
 
-  // Interactive Selection State
-  const [selectedCore, setSelectedCore] = useState("3 Core");
-  const [selectedSize, setSelectedSize] = useState("1.5 Sqmm");
-  const [selectedColor, setSelectedColor] = useState("Silver-Grey RAL 7001");
-
-  // Interactive Zoom & Cursor Movement State
+  // Interactive Zoom State
   const [isZoomed, setIsZoomed] = useState(false);
   const [bgPosition, setBgPosition] = useState("center");
 
+  useEffect(() => {
+    if (quickViewProduct) {
+      setSelectedCore(getProductCores(quickViewProduct));
+      setSelectedSize(getProductSize(quickViewProduct));
+      const col = getProductColor(quickViewProduct);
+      setSelectedColor(col.label.split("(")[0].trim());
+      setQty(1);
+      setAdded(false);
+      setIsZoomed(false);
+    }
+  }, [quickViewProduct]);
+
   if (!quickViewProduct) return null;
 
-  const coreOptions = ["2 Core", "3 Core", "4 Core", "5 Core", "7 Core"];
-  const sizeOptions = ["0.75 Sqmm", "1 Sqmm", "1.5 Sqmm", "2.5 Sqmm", "4 Sqmm"];
-  const colorOptions = [
-    { label: "Silver-Grey RAL 7001", dotColor: "#94a3b8" },
-    { label: "Black Sheath (PUR)", dotColor: "#0f172a" },
-    { label: "Orange Flexible", dotColor: "#f97316" },
-  ];
+  const isLapp = quickViewProduct.brand.toLowerCase().includes("lapp");
 
-  // Dynamic Rate Calculation based on selected Cores and Size
-  const calculatedPrice = useMemo(() => {
-    const base = quickViewProduct.price || 52.00;
-    const coreNum = parseInt(selectedCore) || 3;
-    const sizeNum = parseFloat(selectedSize) || 1.5;
-    // Dynamic multiplier formula scaling with cores and size
-    const factor = Math.max(1, Math.round(Math.pow(coreNum, 0.45) * Math.pow(sizeNum, 0.65) * 10) / 10);
-    return Math.round((base * (factor / 1.5)) * 100) / 100;
-  }, [quickViewProduct, selectedCore, selectedSize]);
+  // Options for LAPP interactive selectors
+  const coreOptions = ["3 Cores (with Earth)", "4 Cores (with Earth)", "5 Cores (with Earth)"];
+  const sizeOptions = ["1.5 mm²", "2.5 mm²", "4.0 mm²", "6.0 mm²"];
+  const colorOptions = ["Silver-Grey RAL 7001", "Black Sheath", "Teal Green RAL 6018"];
 
   const handleAddToCart = () => {
-    if (quickViewProduct.category?.includes("cable") || quickViewProduct.name.toLowerCase().includes("cable")) {
-      const configName = `${quickViewProduct.name} - ${selectedCore} · ${selectedSize} · ${selectedColor}`;
-      addCustomItem(
-        {
-          id: `${quickViewProduct.partNo}-${selectedCore}-${selectedSize}`,
-          name: configName,
-          partNo: quickViewProduct.partNo,
-          brand: quickViewProduct.brand,
-          price: calculatedPrice,
-          unit: quickViewProduct.unit,
-        },
-        qty
-      );
-    } else {
-      addToCart(quickViewProduct.id, qty);
-    }
+    addToCart(quickViewProduct.id, qty);
     setAdded(true);
-    showToast(`Added configured product to Quotation Cart!`);
+    const specDetails = isLapp ? ` [${selectedCore}, ${selectedSize}, ${selectedColor}]` : "";
+    showToast(`Added ${qty} ${quickViewProduct.unit} of ${quickViewProduct.name}${specDetails} to RFQ Cart!`);
     setTimeout(() => setAdded(false), 2000);
   };
 
   const handleCustomQuote = () => {
     const part = quickViewProduct.partNo;
     const name = quickViewProduct.name;
+    const specSummary = isLapp ? `\nConfigurations: ${selectedCore} · ${selectedSize} · ${selectedColor}` : "";
     closeQuickView();
 
     const fillNotes = () => {
       const notes = document.getElementById("rfqNotes") as HTMLTextAreaElement;
       if (notes) {
-        notes.value = `Commercial RFQ Inquiry for:\nProduct: ${name} (${selectedCore}, ${selectedSize}, ${selectedColor})\nPart No: ${part}\nCalculated Unit Rate: ₹${calculatedPrice}\n\nPlease share price list for project volume with freight to site and delivery lead times.`;
+        notes.value = `Commercial RFQ Inquiry for:\nProduct: ${name}\nPart No: ${part}${specSummary}\n\nPlease share price list for project volume with freight to site and delivery lead times.`;
         notes.focus();
       }
     };
@@ -117,27 +105,27 @@ export const QuickViewModal: React.FC = () => {
   const productImage = quickViewProduct.image || "/images/card-cables.jpg";
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fade-in select-none">
       <div
-        className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[95vh] flex flex-col overflow-hidden"
+        className="relative bg-white text-stone-900 rounded-3xl shadow-2xl border border-stone-300 w-full max-w-4xl max-h-[95vh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={closeQuickView}
-          className="absolute top-3 right-3 z-20 p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-950 transition-colors border border-stone-300 cursor-pointer"
           aria-label="Close dialog"
         >
           <X size={16} />
         </button>
 
         {/* Modal Body */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 sm:p-5 overflow-y-auto items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 sm:p-8 overflow-y-auto items-center">
           
-          {/* Left Column: Square Image Stage with Zoom */}
-          <div className="md:col-span-5 flex flex-col items-center justify-between bg-slate-50/70 rounded-xl p-3 border border-slate-100 h-full">
+          {/* Left Column: Image Stage with Zoom */}
+          <div className="md:col-span-5 flex flex-col items-center justify-between bg-stone-50 rounded-2xl p-4 border border-stone-200 h-full shadow-inner">
             <div
-              className={`relative w-full aspect-square bg-white rounded-xl border border-slate-200 p-3 flex items-center justify-center overflow-hidden ${
+              className={`relative w-full aspect-square bg-white rounded-2xl border border-stone-300 p-4 flex items-center justify-center overflow-hidden ${
                 isZoomed ? "cursor-crosshair" : "cursor-zoom-in"
               }`}
               onClick={() => setIsZoomed(!isZoomed)}
@@ -148,7 +136,7 @@ export const QuickViewModal: React.FC = () => {
                 <img
                   src={productImage}
                   alt={quickViewProduct.name}
-                  className="max-h-full max-w-full object-contain transition-transform duration-200 hover:scale-105"
+                  className="max-h-full max-w-full object-contain transition-transform duration-300 hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = "/images/card-cables.jpg";
@@ -166,14 +154,14 @@ export const QuickViewModal: React.FC = () => {
               )}
 
               {/* Zoom Action Bar Overlay */}
-              <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-white/90 backdrop-blur-xs border border-slate-200 p-1 rounded-lg shadow-xs z-10">
+              <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/95 backdrop-blur-xs border border-stone-300 p-1 rounded-xl shadow-xs z-10">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsZoomed(!isZoomed);
                   }}
-                  className="p-1 rounded hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors cursor-pointer"
                   title={isZoomed ? "Zoom Out" : "Zoom In"}
                 >
                   {isZoomed ? <ZoomOut size={14} /> : <ZoomIn size={14} />}
@@ -181,176 +169,207 @@ export const QuickViewModal: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-2.5 w-full text-center">
-              <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-500 font-mono">
-                <span className="font-semibold text-slate-700">SKU:</span>
-                <span>{quickViewProduct.partNo}</span>
+            <div className="mt-4 w-full text-center space-y-1">
+              <div className="flex items-center justify-center gap-1.5 text-[11px] text-stone-500 font-mono">
+                <span className="font-bold text-stone-700">SKU:</span>
+                <span className="text-stone-900 font-semibold">{quickViewProduct.partNo}</span>
               </div>
-              <div className="mt-0.5 flex items-center justify-center gap-1 text-[9px] text-emerald-700 font-medium">
-                <ShieldCheck size={11} className="text-emerald-500" />
+              <div className="flex items-center justify-center gap-1 text-[10px] text-emerald-700 font-mono font-semibold">
+                <ShieldCheck size={13} className="text-emerald-600" />
                 <span>100% Genuine Factory Certified</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Multiple Selectors for Cores, Size, Color & Actions */}
-          <div className="md:col-span-7 flex flex-col justify-between space-y-3">
+          {/* Right Column: Details & Engineering Console Blocks */}
+          <div className="md:col-span-7 flex flex-col justify-between space-y-4">
             <div>
               {/* Metadata Header */}
-              <div className="flex items-center justify-between text-[10px] font-semibold mb-0.5">
-                <span className="text-red-600 font-bold uppercase tracking-wider font-mono">
+              <div className="flex items-center justify-between text-xs font-mono mb-1">
+                <span className="text-pink-800 font-bold uppercase tracking-wider bg-pink-50 px-3 py-1 rounded-full border border-pink-200">
                   {quickViewProduct.brand}
                 </span>
-                <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                <span className="text-emerald-800 font-semibold flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[10px]">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  {quickViewProduct.stock}
+                  {quickViewProduct.stock || "Ready Stock"}
                 </span>
               </div>
 
               {/* Title */}
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+              <div className="mt-3">
+                <h3 className="text-base sm:text-lg font-black text-stone-950 leading-snug">
                   {getShortProductName(quickViewProduct.name)}
                 </h3>
               </div>
 
-              {/* Interactive Selectors Block */}
-              <div className="mt-2.5 space-y-2">
-                {/* 1. Cores Options */}
-                <div>
-                  <div className="flex items-center gap-1 text-[9px] text-slate-500 font-mono font-semibold uppercase mb-1">
-                    <Layers size={10} className="text-sky-600" />
-                    <span>Select Cores</span>
+              {/* Conditional Content: LAPP Interactive Selectors vs Standard Description Box */}
+              {isLapp ? (
+                <div className="mt-4 space-y-2.5 font-mono text-xs">
+                  {/* Cores Selector */}
+                  <div className="p-2.5 bg-stone-50 rounded-2xl border border-stone-200 space-y-1.5 shadow-2xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-stone-500 font-bold uppercase flex items-center gap-1">
+                        <Layers size={11} className="text-sky-600" /> Cores Configuration:
+                      </span>
+                      <span className="text-[10px] font-bold text-stone-900">{selectedCore}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {coreOptions.map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => setSelectedCore(c)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border cursor-pointer ${
+                            selectedCore === c
+                              ? "bg-stone-950 text-white border-stone-950 shadow-2xs"
+                              : "bg-white text-stone-700 border-stone-300 hover:bg-stone-100"
+                          }`}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-1">
-                    {coreOptions.map((core) => (
-                      <button
-                        key={core}
-                        type="button"
-                        onClick={() => setSelectedCore(core)}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border transition-all cursor-pointer ${
-                          selectedCore === core
-                            ? "bg-slate-900 text-white border-slate-900 shadow-xs"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                        }`}
-                      >
-                        {core}
-                      </button>
-                    ))}
+
+                  {/* Size Selector */}
+                  <div className="p-2.5 bg-stone-50 rounded-2xl border border-stone-200 space-y-1.5 shadow-2xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-stone-500 font-bold uppercase flex items-center gap-1">
+                        <Ruler size={11} className="text-indigo-600" /> Conductor Cross-Section Size:
+                      </span>
+                      <span className="text-[10px] font-bold text-indigo-700">{selectedSize}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {sizeOptions.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setSelectedSize(s)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border cursor-pointer ${
+                            selectedSize === s
+                              ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
+                              : "bg-white text-stone-700 border-stone-300 hover:bg-stone-100"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Color Selector */}
+                  <div className="p-2.5 bg-stone-50 rounded-2xl border border-stone-200 space-y-1.5 shadow-2xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-stone-500 font-bold uppercase flex items-center gap-1">
+                        <Palette size={11} className="text-amber-600" /> Sheath Color Option:
+                      </span>
+                      <span className="text-[10px] font-bold text-stone-900">{selectedColor}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {colorOptions.map((col) => (
+                        <button
+                          key={col}
+                          type="button"
+                          onClick={() => setSelectedColor(col)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border cursor-pointer flex items-center gap-1.5 ${
+                            selectedColor === col
+                              ? "bg-stone-950 text-white border-stone-950 shadow-2xs"
+                              : "bg-white text-stone-700 border-stone-300 hover:bg-stone-100"
+                          }`}
+                        >
+                          <span
+                            className="w-2 h-2 rounded-full border shrink-0"
+                            style={{
+                              backgroundColor: col.includes("Black") ? "#111" : col.includes("Green") ? "#0f766e" : "#94a3b8",
+                              borderColor: "rgba(0,0,0,0.2)",
+                            }}
+                          />
+                          {col}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-
-                {/* 2. Size Options */}
-                <div>
-                  <div className="flex items-center gap-1 text-[9px] text-slate-500 font-mono font-semibold uppercase mb-1">
-                    <Ruler size={10} className="text-indigo-600" />
-                    <span>Select Cross-Section Size</span>
+              ) : (
+                /* Description and Main Content for Non-Lapp Products */
+                <div className="mt-4 p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2 shadow-2xs">
+                  <div className="flex items-center gap-1.5 text-stone-700 text-xs font-bold font-mono uppercase">
+                    <FileText size={13} className="text-pink-700" />
+                    <span>Product Application & Specification</span>
                   </div>
-                  <div className="flex flex-wrap gap-1">
-                    {sizeOptions.map((size) => (
-                      <button
-                        key={size}
-                        type="button"
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border transition-all cursor-pointer ${
-                          selectedSize === size
-                            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
+                  <p className="text-xs text-stone-600 leading-relaxed font-sans">
+                    {quickViewProduct.application || quickViewProduct.name}
+                  </p>
+                  {quickViewProduct.specs && quickViewProduct.specs.length > 0 && (
+                    <div className="pt-2 border-t border-stone-200 flex flex-wrap gap-1.5">
+                      {quickViewProduct.specs.map((spec, i) => (
+                        <span key={i} className="px-2 py-0.5 rounded-md bg-white text-stone-700 font-mono text-[10px] border border-stone-300">
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
+              )}
 
-                {/* 3. Color Options */}
-                <div>
-                  <div className="flex items-center gap-1 text-[9px] text-slate-500 font-mono font-semibold uppercase mb-1">
-                    <Palette size={10} className="text-amber-600" />
-                    <span>Select Sheath Color</span>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {colorOptions.map((col) => (
-                      <button
-                        key={col.label}
-                        type="button"
-                        onClick={() => setSelectedColor(col.label)}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${
-                          selectedColor === col.label
-                            ? "bg-slate-900 text-white border-slate-900 shadow-xs"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span
-                          className="w-2 h-2 rounded-full border shrink-0"
-                          style={{ backgroundColor: col.dotColor, borderColor: "rgba(0,0,0,0.3)" }}
-                        />
-                        <span>{col.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Dynamic Price Banner */}
-              <div className="mt-2.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
-                    Dynamic Rate:
+              {/* Rate Banner */}
+              <div className="mt-3 px-4 py-3 bg-stone-50 border border-stone-200 rounded-2xl flex items-center justify-between shadow-2xs">
+                <div className="flex items-center gap-3">
+                  <span className="text-[11px] text-stone-500 uppercase tracking-wider font-mono">
+                    Rate:
                   </span>
-                  <div className="text-base font-extrabold text-slate-900 font-mono tabular-nums">
-                    ₹{calculatedPrice.toFixed(2)}
-                    <span className="text-[10px] font-normal text-slate-500 ml-1">
+                  <div className="text-lg font-black text-emerald-700 font-mono tabular-nums">
+                    ₹{quickViewProduct.price.toFixed(2)}
+                    <span className="text-xs font-normal text-stone-500 ml-1">
                       / {quickViewProduct.unit}
                     </span>
                   </div>
                 </div>
-                <span className="text-[9px] text-slate-400 font-mono">
-                  Excl. GST
+                <span className="text-[10px] text-stone-400 font-mono">
+                  Excl. 18% GST
                 </span>
               </div>
             </div>
 
             {/* Actions: Quantity Stepper + Add to Cart + Discount Note */}
-            <div className="pt-2 border-t border-slate-200 space-y-2">
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div className="pt-3 border-t border-stone-200 space-y-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 {/* Stepper Qty */}
-                <div className="flex items-center justify-between sm:justify-start border border-slate-200 rounded-xl bg-slate-50 p-1">
+                <div className="flex items-center justify-between sm:justify-start border border-stone-300 rounded-xl bg-stone-100 p-1.5">
                   <button
                     onClick={() => setQty(Math.max(1, qty - 1))}
-                    className="p-1 hover:bg-white rounded-lg text-slate-600 transition-colors cursor-pointer"
+                    className="p-1.5 hover:bg-white rounded-lg text-stone-700 transition-colors cursor-pointer shadow-2xs"
                   >
-                    <Minus size={12} />
+                    <Minus size={13} />
                   </button>
-                  <span className="w-10 text-center text-xs font-bold font-mono text-slate-900">
+                  <span className="w-12 text-center text-xs font-bold font-mono text-stone-900">
                     {qty}
                   </span>
                   <button
                     onClick={() => setQty(qty + 1)}
-                    className="p-1 hover:bg-white rounded-lg text-slate-600 transition-colors cursor-pointer"
+                    className="p-1.5 hover:bg-white rounded-lg text-stone-700 transition-colors cursor-pointer shadow-2xs"
                   >
-                    <Plus size={12} />
+                    <Plus size={13} />
                   </button>
                 </div>
 
                 <button
                   onClick={handleAddToCart}
                   disabled={added}
-                  className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  className={`flex-1 py-3 px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md hover:scale-102 ${
                     added
                       ? "bg-emerald-600 text-white"
-                      : "bg-slate-900 hover:bg-red-600 text-white shadow-xs"
+                      : "bg-[#FFCC4D] hover:bg-[#F2B935] text-slate-950"
                   }`}
                 >
                   {added ? (
                     <>
-                      <Check size={14} />
+                      <Check size={15} />
                       <span>Added to RFQ Cart</span>
                     </>
                   ) : (
                     <>
-                      <ShoppingCart size={14} />
+                      <ShoppingCart size={15} />
                       <span>Add to Quotation Cart</span>
                     </>
                   )}
@@ -360,10 +379,10 @@ export const QuickViewModal: React.FC = () => {
               <div>
                 <button
                   onClick={handleCustomQuote}
-                  className="w-full py-2.5 px-3 bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                  className="w-full py-3 px-4 bg-pink-50 hover:bg-pink-100 text-pink-900 font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer text-center border border-pink-300 shadow-2xs hover:scale-102"
                 >
                   <span className="truncate">Request Custom Discount Note</span>
-                  <ArrowRight size={13} className="shrink-0" />
+                  <ArrowRight size={14} className="shrink-0 text-pink-700" />
                 </button>
               </div>
             </div>

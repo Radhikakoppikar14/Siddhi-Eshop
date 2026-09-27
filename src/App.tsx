@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { ToastProvider } from "./context/ToastContext";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
 import { Header } from "./assets/components/layout/Header";
@@ -40,6 +40,50 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
+// Internal wrapper to consume AuthContext for modals
+const AppContent: React.FC = () => {
+  const { isAboutOpen, closeAbout, isSupportOpen, closeSupport } = useAuth();
+
+  return (
+    <div
+      className="siddhi-app-wrapper hybrid-light-bg"
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Header />
+
+      <div style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/catalog" element={<Catalog />} />
+          {/* Dynamic route supporting individual product IDs */}
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/about-lapp" element={<AboutLapp />} />
+          <Route path="/about-eaton" element={<AboutEaton />} />
+          <Route path="/about-partex" element={<AboutPartex />} />
+          <Route path="/about-mennekes" element={<AboutMennekes />} />
+          <Route path="/olflex-cables" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+
+      <Footer />
+
+      {/* Global Modals & Slide-overs */}
+      <CartDrawer />
+      <AuthModal />
+      <AccountModal />
+      <QuickViewModal />
+      <SearchModal />
+      <SupportModal isOpen={isSupportOpen} onClose={closeSupport} />
+      <AboutModal isOpen={isAboutOpen} onClose={closeAbout} />
+    </div>
+  );
+};
+
 export const App: React.FC = () => {
   return (
     <ToastProvider>
@@ -47,42 +91,7 @@ export const App: React.FC = () => {
         <CartProvider>
           <Router basename={import.meta.env.BASE_URL}>
             <ScrollToTop />
-            <div
-              className="siddhi-app-wrapper hybrid-light-bg"
-              style={{
-                minHeight: "100vh",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Header />
-
-              <div style={{ flex: 1 }}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/catalog" element={<Catalog />} />
-                  {/* Dynamic route supporting individual product IDs */}
-                  <Route path="/product/:id" element={<ProductDetail />} />
-                  <Route path="/about-lapp" element={<AboutLapp />} />
-                  <Route path="/about-eaton" element={<AboutEaton />} />
-                  <Route path="/about-partex" element={<AboutPartex />} />
-                  <Route path="/about-mennekes" element={<AboutMennekes />} />
-                  <Route path="/olflex-cables" element={<Navigate to="/" replace />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </div>
-
-              <Footer />
-
-              {/* Global Modals & Slide-overs */}
-              <CartDrawer />
-              <AuthModal />
-              <AccountModal />
-              <QuickViewModal />
-              <SearchModal />
-              <SupportModal />
-              <AboutModal />
-            </div>
+            <AppContent />
           </Router>
         </CartProvider>
       </AuthProvider>

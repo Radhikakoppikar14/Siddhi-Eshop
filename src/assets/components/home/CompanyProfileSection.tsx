@@ -1,218 +1,313 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ShieldCheck,
   Award,
-  Warehouse,
-  FileCheck,
+  Truck,
+  FileCheck2,
+  Cpu,
+  Sparkles,
   CheckCircle2,
+  Building2,
+  ArrowRight,
+  Activity,
 } from "lucide-react";
 
-export const CompanyProfileSection: React.FC = () => {
-  const brandLogos = [
-    { name: "LAPP KABEL", logo: "/images/logo-lapp.png", origin: "Germany", role: "Direct Channel Partner" },
-    { name: "EATON", logo: "/images/logo-eaton.png", origin: "Germany / USA", role: "Authorized Switchgear Stockist" },
-    { name: "PARTEX", logo: "/images/logo-partex.png", origin: "Sweden", role: "Authorized Marking Distributor" },
-    { name: "MENNEKES", logo: "/images/logo-mennekes.png", origin: "Germany", role: "Authorized CEE Stockist" },
-  ];
+type CapabilityTab = "engineering" | "logistics" | "commercials";
 
-  const pillars = [
-    {
-      id: "expertise",
+export const CompanyProfileSection: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<CapabilityTab>("engineering");
+  const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
+
+  const capabilities = {
+    engineering: {
+      id: "engineering",
+      code: "MODULE 01 // TECHNICAL CONSULTING",
       title: "Industrial Engineering Expertise",
-      subtitle: "20+ Years Field Experience",
+      subtitle: "20+ Years Field Experience & Application Engineering",
       desc: "Specialized technical assistance helping panel builders, automation engineers, and machine tool manufacturers select exact cable cross-sections, breaking capacities, and IP ratings.",
-      icon: Award,
-      badge: "TECHNICAL CONSULTING",
-      colorTheme: {
-        border: "border-amber-200/90 hover:border-amber-400",
-        bg: "bg-gradient-to-b from-amber-50/40 via-white to-amber-50/15",
-        iconBg: "bg-amber-500 text-slate-950",
-        badgeStyle: "bg-amber-100 text-amber-900 border-amber-300",
-        accent: "text-amber-800",
-      },
-      highlights: ["Cable Sizing & Ampacity", "EMC Screening Guidance", "Breaking Capacity Audits"],
+      badge: "ACTIVE ENGINEERING DESK",
+      themeColor: "text-rose-800 bg-rose-100/70 border-rose-300",
+      accentBorder: "border-l-4 border-l-rose-500",
+      activeBg: "bg-rose-600 text-white border-rose-600 font-black shadow-xl scale-[1.01]",
+      hoverClass: "hover:border-rose-400 hover:bg-rose-50/50",
+      highlights: [
+        "Cable Sizing & Ampacity Engineering",
+        "EMC Screening & Shielding Guidance",
+        "Breaking Capacity & Selectivity Audits",
+      ],
+      icon: <Cpu size={22} className="text-rose-600" />,
+      metric: "100% VDE / IEC Compliant",
     },
-    {
-      id: "warehouse",
+    logistics: {
+      id: "logistics",
+      code: "MODULE 02 // WAREHOUSE DISPATCH",
       title: "Warehouse & Custom Cut Infrastructure",
-      subtitle: "Bangalore Logistics Hub",
+      subtitle: "Bangalore Logistics Hub · Same-Day Dispatch",
       desc: "Equipped with motorized cable decoilers, heavy drum cranes, and laser measuring stations to supply exact required cut lengths without charging for unnecessary scrap.",
-      icon: Warehouse,
-      badge: "READY WAREHOUSE DRUMS",
-      colorTheme: {
-        border: "border-sky-200/90 hover:border-sky-400",
-        bg: "bg-gradient-to-b from-sky-50/40 via-white to-sky-50/15",
-        iconBg: "bg-[#1864f7] text-white",
-        badgeStyle: "bg-sky-100 text-sky-900 border-sky-300",
-        accent: "text-sky-800",
-      },
-      highlights: ["Exact Meter Cut Delivery", "Heavy Drum Unspooling", "Same-Day Dispatch Pickups"],
+      badge: "READY DRUM INVENTORY",
+      themeColor: "text-amber-900 bg-amber-100/70 border-amber-300",
+      accentBorder: "border-l-4 border-l-amber-500",
+      activeBg: "bg-amber-500 text-slate-950 border-amber-500 font-black shadow-xl scale-[1.01]",
+      hoverClass: "hover:border-amber-400 hover:bg-amber-50/50",
+      highlights: [
+        "Exact Meter Cut Delivery on Demand",
+        "Heavy Drum Unspooling & Stacking",
+        "Same-Day Dispatch & Plant Pickups",
+      ],
+      icon: <Truck size={22} className="text-amber-600" />,
+      metric: "Peenya Central Hub",
+    },
+    commercials: {
+      id: "commercials",
+      code: "MODULE 03 // COMMERCIAL COMPLIANCE",
+      title: "Transparent & Structured Commercials",
+      subtitle: "100% Tax Compliant · ITC Pass-Through",
+      desc: "Full 18% GST Input Tax Credit (ITC) invoicing, price-firm corporate annual contracting, and certified EN 10204 3.1 manufacturer test reports with every industrial consignment.",
+      badge: "ITC PASS-THROUGH",
+      themeColor: "text-emerald-900 bg-emerald-100/70 border-emerald-300",
+      accentBorder: "border-l-4 border-l-emerald-600",
+      activeBg: "bg-emerald-600 text-white border-emerald-600 font-black shadow-xl scale-[1.01]",
+      hoverClass: "hover:border-emerald-400 hover:bg-emerald-50/50",
+      highlights: [
+        "EN 10204 3.1 Mill Test Certifications",
+        "Direct Factory Batch Pricing Tiers",
+        "Corporate Credit & Ledger Facilities",
+      ],
+      icon: <FileCheck2 size={22} className="text-emerald-600" />,
+      metric: "Certified 3.1 MTC",
+    },
+  };
+
+  const current = capabilities[activeTab];
+
+  const brandChannels = [
+    {
+      name: "LAPP KABEL",
+      origin: "Germany",
+      logo: "/images/logo-lapp.png",
+      desc: "Global pioneer in integrated cable technology & ÖLFLEX® inventor.",
+      hoverStyle: "hover:bg-amber-500 hover:text-slate-950 hover:border-amber-500 hover:shadow-lg hover:scale-[1.02]",
+      badgeStyle: "bg-amber-100 text-amber-900 border-amber-300",
     },
     {
-      id: "commercials",
-      title: "Transparent & Structured Commercials",
-      subtitle: "100% Tax Compliant",
-      desc: "Full 18% GST Input Tax Credit (ITC) invoicing, price-firm corporate annual contracting, and certified EN 10204 3.1 manufacturer test reports with every industrial consignment.",
-      icon: FileCheck,
-      badge: "GST ITC COMPLIANT",
-      colorTheme: {
-        border: "border-emerald-200/90 hover:border-emerald-400",
-        bg: "bg-gradient-to-b from-emerald-50/40 via-white to-emerald-50/15",
-        iconBg: "bg-emerald-600 text-white",
-        badgeStyle: "bg-emerald-100 text-emerald-900 border-emerald-300",
-        accent: "text-emerald-800",
-      },
-      highlights: ["EN 10204 3.1 MTC Test Certs", "Direct Factory Batch Pricing", "Corporate Credit Facilities"],
+      name: "EATON - MOELLER",
+      origin: "Germany / USA",
+      logo: "/images/logo-eaton.png",
+      desc: "Leader in industrial switchgear, motor protection & automation.",
+      hoverStyle: "hover:bg-[#0284c7] hover:text-white hover:border-[#0284c7] hover:shadow-lg hover:scale-[1.02]",
+      badgeStyle: "bg-sky-100 text-sky-900 border-sky-300",
+    },
+    {
+      name: "PARTEX",
+      origin: "Sweden",
+      logo: "/images/logo-partex.png",
+      desc: "Precision wire, cable and component marking systems since 1948.",
+      hoverStyle: "hover:bg-rose-600 hover:text-white hover:border-rose-600 hover:shadow-lg hover:scale-[1.02]",
+      badgeStyle: "bg-rose-100 text-rose-900 border-rose-300",
+    },
+    {
+      name: "MENNEKES",
+      origin: "Germany",
+      logo: "/images/logo-mennekes.png",
+      desc: "Industry standard in CEE industrial plugs & AMAXX distribution units.",
+      hoverStyle: "hover:bg-purple-700 hover:text-white hover:border-purple-700 hover:shadow-lg hover:scale-[1.02]",
+      badgeStyle: "bg-purple-100 text-purple-900 border-purple-300",
     },
   ];
 
   return (
-    <section className="py-10 sm:py-14 select-none bg-slate-50/70" id="aboutSection">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-14 lg:py-20 bg-transparent border-b border-[#E2E8F0] select-none" id="companyProfile">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
-        {/* Main Executive Card Container with 2-Color Shadow (Dark Cast + Light Highlight Shading) */}
-        <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-10 shadow-[12px_18px_36px_-6px_rgba(15,23,42,0.13),-8px_-8px_24px_0px_rgba(255,255,255,0.95)] relative overflow-hidden">
+        {/* Top Header & Corporate Assurance */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/90 backdrop-blur-md rounded-[2.5rem] p-8 sm:p-10 border border-[#CBD5E1] shadow-xl">
           
-          {/* Subtle Accent Glow */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
-
-          {/* Header Row: Profile Info & Key Metrics */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10 pb-8 border-b border-slate-200/80">
-            
-            {/* Left Col: Brand Mission & Heritage */}
-            <div className="lg:col-span-8 space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-                <span className="text-[11px] font-mono uppercase tracking-wider text-amber-700 font-bold">
-                  COMPANY PROFILE & AUTHORIZED DISTRIBUTORSHIP
-                </span>
-              </div>
-
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight">
-                Siddhi Kabel Corporation
-              </h2>
-
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
-                Established as South India&apos;s premier authorized industrial distributor for high-reliability electrical automation components, flexible power cables, and motor control switchgear. Headquartered in Bangalore&apos;s trade corridor, we bridge European engineering excellence with immediate on-the-ground warehouse inventory.
-              </p>
+          <div className="lg:col-span-8 space-y-4">
+            <div className="flex items-center gap-2.5 font-mono text-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#D9262E] animate-pulse" />
+              <span className="text-[#D9262E] font-extrabold uppercase tracking-widest">COMPANY PROFILE & AUTHORIZED DISTRIBUTORSHIP</span>
             </div>
-
-            {/* Right Col: Quick Trust Badge Card with 2-Color Shadow Shading */}
-            <div className="lg:col-span-4 bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 shadow-[8px_14px_24px_-4px_rgba(0,0,0,0.45),-4px_-4px_14px_0px_rgba(255,255,255,0.12)]">
-              <span className="text-[10px] font-mono uppercase font-bold text-amber-400 tracking-wider block mb-1">
-                CORPORATE ASSURANCE
-              </span>
-              <h3 className="text-sm font-bold text-white mb-3">
-                100% Factory Direct Channel
-              </h3>
-              <div className="space-y-2 text-xs text-slate-300">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                  <span>Direct Factory Batch Test Reports</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                  <span>GST Invoicing with Input Tax Credit</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                  <span>Bangalore Central Stocking Depots</span>
-                </div>
-              </div>
-            </div>
-
+            <h2 className="text-3xl sm:text-4xl font-black text-[#0B0F17] tracking-tight">
+              Siddhi Kabel Corporation
+            </h2>
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed font-sans max-w-3xl">
+              Established as South India’s premier authorized industrial distributor for high-reliability electrical automation components, flexible power cables, and motor control switchgear. Headquartered in Bangalore's trade corridor, we bridge European engineering excellence with immediate on-the-ground warehouse inventory.
+            </p>
           </div>
 
-          {/* OFFICIAL AUTHORIZED PARTNER LOGOS STRIP */}
-          <div className="mb-10 p-4 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 shadow-[inset_0px_2px_4px_rgba(0,0,0,0.03)]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
-              <div className="flex items-center gap-2 text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
-                <ShieldCheck size={14} className="text-amber-600" />
-                <span>Direct Authorized OEM Brand Channels:</span>
+          <div className="lg:col-span-4">
+            <div className="bg-[#0B0F17] text-white rounded-3xl p-6 border border-slate-800 shadow-xl space-y-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D9262E]/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="flex items-center justify-between font-mono text-xs">
+                <span className="text-[#D9262E] font-extrabold uppercase tracking-wider">CORPORATE ASSURANCE</span>
+                <ShieldCheck size={18} className="text-[#D9262E]" />
               </div>
-              <span className="text-[11px] font-mono text-slate-500">
-                100% Genuine Warranty & Factory Traceability
-              </span>
+              <h4 className="text-base font-black tracking-tight text-white">
+                100% Factory Direct Channel
+              </h4>
+              <ul className="space-y-2 text-xs text-slate-300 font-mono">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                  <span>Direct Factory Batch Test Reports</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                  <span>GST Invoicing with Input Tax Credit</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                  <span>Bangalore Central Stocking Depots</span>
+                </li>
+              </ul>
             </div>
+          </div>
 
-            {/* 4 Brand Partner Logos Grid with 2-Color Shadow Shading */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-              {brandLogos.map((brand, idx) => (
+        </div>
+
+        {/* INTERACTIVE BRAND CHANNELS BAR WITH CURSOR-ONLY HOVER */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-[#CBD5E1] shadow-md space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-3 border-b border-[#E2E8F0]">
+            <div className="flex items-center gap-2 font-mono text-xs font-bold text-[#64748B]">
+              <Sparkles size={14} className="text-rose-600" />
+              <span>DIRECT AUTHORIZED OEM BRAND CHANNELS (Hover to Preview):</span>
+            </div>
+            <span className="text-[11px] font-mono text-[#059669] font-semibold">
+              100% Genuine Warranty & Factory Traceability
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-center pt-2">
+            {brandChannels.map((brand, idx) => {
+              const isHovered = hoveredBrand === brand.name;
+              return (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl p-3 border border-slate-200/90 shadow-[4px_8px_16px_-2px_rgba(15,23,42,0.07),-4px_-4px_12px_0px_rgba(255,255,255,0.95)] hover:shadow-[6px_12px_20px_-2px_rgba(15,23,42,0.12),-5px_-5px_15px_0px_rgba(255,255,255,1)] hover:border-slate-300 transition-all flex items-center justify-between gap-2.5 group"
+                  onMouseEnter={() => setHoveredBrand(brand.name)}
+                  onMouseLeave={() => setHoveredBrand(null)}
+                  className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 border shadow-2xs flex flex-col justify-between space-y-3 bg-slate-50 text-[#0B0F17] border-[#CBD5E1] ${brand.hoverStyle}`}
                 >
-                  <div className="h-7 sm:h-8 max-w-[85px] sm:max-w-[100px] flex items-center justify-center">
-                    <img
-                      src={brand.logo}
-                      alt={brand.name}
-                      className="max-h-full max-w-full object-contain filter group-hover:scale-105 transition-transform"
-                    />
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                  <div className="flex items-center justify-between">
+                    <img src={brand.logo} alt={brand.name} className={`h-5 object-contain max-w-[90px] ${isHovered && brand.name !== 'EATON - MOELLER' ? "brightness-200" : ""}`} />
+                    <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full border transition-colors ${isHovered ? "bg-white/20 text-white border-white/40" : brand.badgeStyle}`}>
                       {brand.origin}
                     </span>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 3 PILLARS: Sculpted with 2-Color Shadow Shading (Dark Cast + Light Highlight) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-            {pillars.map((pillar) => {
-              const IconComponent = pillar.icon;
-              return (
-                <div
-                  key={pillar.id}
-                  className={`p-6 rounded-2xl border-2 ${pillar.colorTheme.border} ${pillar.colorTheme.bg} shadow-[8px_14px_24px_-4px_rgba(15,23,42,0.12),-6px_-6px_18px_0px_rgba(255,255,255,0.95)] hover:shadow-[12px_20px_32px_-4px_rgba(15,23,42,0.18),-8px_-8px_24px_0px_rgba(255,255,255,1)] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1`}
-                >
-                  <div>
-                    {/* Header with Icon Badge & Tag */}
-                    <div className="flex items-center justify-between gap-3 mb-4">
-                      <div
-                        className={`w-11 h-11 rounded-2xl ${pillar.colorTheme.iconBg} flex items-center justify-center shadow-md group-hover:scale-105 transition-transform`}
-                      >
-                        <IconComponent size={20} />
-                      </div>
-                      <span
-                        className={`text-[9.5px] font-mono font-bold px-2.5 py-1 rounded-full border ${pillar.colorTheme.badgeStyle}`}
-                      >
-                        {pillar.badge}
-                      </span>
-                    </div>
-
-                    {/* Title & Subtitle */}
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 block mb-0.5">
-                      {pillar.subtitle}
-                    </span>
-                    <h3 className="text-base sm:text-lg font-black text-slate-950 mb-2.5 leading-snug">
-                      {pillar.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                      {pillar.desc}
-                    </p>
-                  </div>
-
-                  {/* Highlights Bullets */}
-                  <div className="pt-3 border-t border-slate-200/70 space-y-1.5">
-                    {pillar.highlights.map((item, hIdx) => (
-                      <div
-                        key={hIdx}
-                        className="flex items-center gap-1.5 text-[11px] font-medium text-slate-700"
-                      >
-                        <CheckCircle2 size={12} className={`${pillar.colorTheme.accent} shrink-0`} />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-
+                  <p className={`text-[11px] font-sans leading-tight transition-colors ${isHovered ? "text-white" : "text-slate-600"}`}>
+                    {brand.desc}
+                  </p>
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* INTERACTIVE CAPABILITY COMMAND CENTER */}
+        <div className="rounded-[2.5rem] p-6 sm:p-10 border relative overflow-hidden transition-all duration-700 bg-gradient-to-br from-[#fdf2f4] via-[#fbf8f5] to-[#f5e6d3] text-[#0B0F17] border-[#e6d5cc] shadow-xl space-y-8">
+          
+          <div className="absolute top-0 right-0 w-96 h-96 bg-rose-200/50 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-10 w-80 h-80 bg-amber-200/50 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#e6d5cc] relative z-10">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#8c6d62] font-bold block">
+                OPERATIONAL CAPABILITY MATRIX
+              </span>
+              <h3 className="text-xl font-black text-[#0B0F17] tracking-tight mt-0.5">
+                Select Operational Pillar to Inspect
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-emerald-800 font-semibold flex items-center gap-1.5 bg-emerald-100/80 px-3 py-1 rounded-full border border-emerald-300 backdrop-blur-md">
+              <Activity size={13} /> Bangalore Hub Operational
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2 relative z-10">
+            {(
+              [
+                { id: "engineering", label: "Engineering Expertise", icon: <Cpu size={16} /> },
+                { id: "logistics", label: "Warehouse & Custom Cut", icon: <Truck size={16} /> },
+                { id: "commercials", label: "Transparent Commercials", icon: <Award size={16} /> },
+              ] as const
+            ).map((tab) => {
+              const isActive = activeTab === tab.id;
+              const tabCfg = capabilities[tab.id];
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`p-4 rounded-2xl text-left font-mono font-bold text-xs transition-all duration-300 flex items-center justify-between cursor-pointer border ${
+                    isActive
+                      ? tabCfg.activeBg
+                      : `bg-white/90 text-slate-800 border-[#e6d5cc] ${tabCfg.hoverClass} shadow-xs backdrop-blur-sm`
+                  }`}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`p-2 rounded-xl shrink-0 ${isActive ? "bg-white/20 text-white" : tab.id === 'engineering' ? "bg-rose-100 text-rose-700" : tab.id === 'logistics' ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>
+                      {tab.icon}
+                    </div>
+                    <span className="truncate">{tab.label}</span>
+                  </div>
+                  <ArrowRight size={14} className={isActive ? "text-white shrink-0" : "text-slate-400 shrink-0"} />
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="rounded-3xl p-6 sm:p-8 bg-white/95 backdrop-blur-md text-slate-900 border border-[#e6d5cc] shadow-2xl transition-all duration-500 animate-fade-in relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              <div className="lg:col-span-8 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className={`p-3 rounded-2xl shadow-xs ${current.themeColor} border`}>
+                    {current.icon}
+                  </div>
+                  <div>
+                    <span className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border ${current.themeColor} mb-1`}>
+                      {current.badge}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-500 block">
+                      {current.code}
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-black text-slate-950 tracking-tight">
+                    {current.title}
+                  </h3>
+                  <span className={`text-xs font-mono font-bold inline-block mt-0.5 px-3 py-1 rounded-md border ${current.themeColor}`}>
+                    {current.subtitle}
+                  </span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
+                  {current.desc}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                  {current.highlights.map((item, idx) => (
+                    <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-[#e6d5cc] text-xs font-mono text-slate-900 flex items-center gap-2 shadow-2xs">
+                      <CheckCircle2 size={14} className={activeTab === 'engineering' ? 'text-rose-600 shrink-0' : activeTab === 'logistics' ? 'text-amber-600 shrink-0' : 'text-emerald-600 shrink-0'} />
+                      <span className="truncate">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:col-span-4 bg-slate-50 rounded-2xl p-6 border border-[#e6d5cc] shadow-sm space-y-4 text-center">
+                <Building2 size={32} className="text-slate-950 mx-auto" />
+                <div>
+                  <h4 className="text-sm font-black text-slate-950">Bangalore Operations</h4>
+                  <span className={`text-xs font-mono font-bold inline-block px-3 py-1.5 rounded-full mt-2 border ${current.themeColor}`}>
+                    {current.metric}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 font-mono leading-relaxed">
+                  Direct factory stock dispatch ready for all major industrial corridors across South India.
+                </p>
+              </div>
+
+            </div>
           </div>
 
         </div>

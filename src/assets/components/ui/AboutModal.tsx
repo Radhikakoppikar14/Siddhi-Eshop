@@ -1,244 +1,239 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import {
-  X,
   ShieldCheck,
-  Award,
+  Truck,
   CheckCircle2,
   Building2,
-  MapPin,
-  Clock,
-  Phone,
   ArrowRight,
+  X,
+  HelpCircle,
   FileText,
-  Package,
+  Send,
+  Sparkles,
 } from "lucide-react";
-import { useAuth } from "../../../context/AuthContext";
 
-export const AboutModal: React.FC = () => {
-  const { isAboutOpen, closeAbout, openSupport } = useAuth();
+interface AboutModalProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
 
-  if (!isAboutOpen) return null;
+export const AboutModal: React.FC<AboutModalProps> = ({
+  isOpen = false,
+  onClose,
+}) => {
+  // Close on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && onClose) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
-  const brands = [
+  if (!isOpen) return null;
+
+  const brandPartnerships = [
     {
       name: "LAPP Kabel",
-      logo: "/images/logo-lapp.png",
-      country: "Stuttgart, Germany",
+      location: "Stuttgart, Germany",
       desc: "ÖLFLEX® control cables, UNITRONIC® data lines, SKINTOP® glands",
-      color: "border-rose-200 bg-rose-50/60 text-rose-700",
-      dot: "bg-rose-500",
-      link: "/about-lapp",
+      hoverStyle: "hover:bg-amber-500 hover:text-slate-950 hover:border-amber-500 hover:shadow-lg",
+      badgeStyle: "bg-amber-100 text-amber-900 border-amber-300",
+      dotColor: "bg-amber-500",
     },
     {
       name: "EATON Moeller",
-      logo: "/images/logo-eaton.png",
-      country: "Bonn, Germany",
+      location: "Bonn, Germany",
       desc: "PKZM0 motor protectors, DILM contactors, NZM circuit breakers",
-      color: "border-sky-200 bg-sky-50/60 text-sky-700",
-      dot: "bg-sky-500",
-      link: "/about-eaton",
+      hoverStyle: "hover:bg-[#0284c7] hover:text-white hover:border-[#0284c7] hover:shadow-lg",
+      badgeStyle: "bg-sky-100 text-sky-900 border-sky-300",
+      dotColor: "bg-sky-500",
     },
     {
       name: "PARTEX Sweden",
-      logo: "/images/logo-partex.png",
-      country: "Gullspång, Sweden",
+      location: "Gullspång, Sweden",
       desc: "PA chevron markers, ProMark T-1000 printers, PKS stainless tags",
-      color: "border-amber-200 bg-amber-50/60 text-amber-700",
-      dot: "bg-amber-500",
-      link: "/about-partex",
+      hoverStyle: "hover:bg-rose-600 hover:text-white hover:border-rose-600 hover:shadow-lg",
+      badgeStyle: "bg-rose-100 text-rose-900 border-rose-300",
+      dotColor: "bg-rose-500",
     },
     {
       name: "MENNEKES",
-      logo: "/images/logo-mennekes.png",
-      country: "Kirchhundem, Germany",
+      location: "Kirchhundem, Germany",
       desc: "PowerTOP® Xtra industrial plugs, AMAXX® modular distribution",
-      color: "border-purple-200 bg-purple-50/60 text-purple-700",
-      dot: "bg-purple-500",
-      link: "/about-mennekes",
+      hoverStyle: "hover:bg-purple-700 hover:text-white hover:border-purple-700 hover:shadow-lg",
+      badgeStyle: "bg-purple-100 text-purple-900 border-purple-300",
+      dotColor: "bg-purple-500",
     },
   ];
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/60 backdrop-blur-md animate-fade-in select-none overflow-y-auto"
-      onClick={closeAbout}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm animate-fade-in select-none"
+      onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden text-slate-900 transition-all max-h-[calc(100dvh-2rem)] sm:max-h-[88vh] flex flex-col my-auto"
+        className="bg-gradient-to-br from-[#fdf2f4] via-[#fbf8f5] to-[#f5e6d3] rounded-[2.5rem] w-full max-w-4xl max-h-[88vh] flex flex-col border border-[#e6d5cc] shadow-2xl relative overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="shrink-0 p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+        
+        {/* Ambient Lighting Orbs */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-rose-200/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-80 h-80 bg-amber-200/40 rounded-full blur-3xl pointer-events-none" />
+
+        {/* STICKY MODAL HEADER */}
+        <div className="flex items-center justify-between px-6 sm:px-10 py-5 border-b border-[#e6d5cc] bg-[#fbf8f5]/95 backdrop-blur-md z-20 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-slate-950 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <Building2 size={18} className="text-sky-400" />
+            <div className="p-2.5 rounded-2xl bg-rose-600 text-white shadow-md">
+              <Building2 size={20} />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase font-bold text-sky-600 font-mono tracking-wider">
-                  Corporate Profile
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono font-semibold">
-                  EST. 1998
-                </span>
-              </div>
-              <h3 className="text-base sm:text-lg font-black text-slate-950">
-                About Siddhi Kabel Corporation
-              </h3>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8c6d62]">CORPORATE PROFILE</span>
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold border border-emerald-300">
+                EST. 1998
+              </span>
             </div>
           </div>
           <button
-            onClick={closeAbout}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
-            aria-label="Close dialog"
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-slate-200/60 text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+            type="button"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Scrollable Content */}
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs text-slate-600">
-          {/* Company Brief */}
-          <div className="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-mono text-sky-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <ShieldCheck size={14} className="text-emerald-400" />
-                Authorised Direct Channel Partner
+        {/* SCROLLABLE BODY CONTAINER */}
+        <div className="p-6 sm:p-10 space-y-8 overflow-y-auto flex-1 z-10">
+          
+          <h2 className="text-2xl sm:text-3xl font-black text-[#0B0F17] tracking-tight">
+            About Siddhi Kabel Corporation
+          </h2>
+
+          {/* INTRO BOX */}
+          <div className="p-5 sm:p-6 rounded-3xl bg-[#0B0F17] text-white shadow-xl relative overflow-hidden space-y-2.5">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="flex items-center justify-between text-xs font-mono text-cyan-400 font-semibold">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 size={13} className="text-emerald-400" /> AUTHORISED DIRECT CHANNEL PARTNER
               </span>
-              <span className="text-[10px] font-mono text-slate-400">
-                Bangalore Hub
-              </span>
+              <span className="text-slate-400">Bangalore Hub</span>
             </div>
-            <p className="text-slate-300 leading-relaxed text-xs sm:text-[13px]">
+            <p className="text-xs sm:text-sm text-slate-200 font-sans leading-relaxed">
               Siddhi Kabel Corporation Private Limited is a premier Indian B2B industrial infrastructure distributor headquartered in Bangalore. We specialize in genuine OEM supply chains, delivering heavy-duty cables, motor switchgear, wire marking, and industrial plugs directly to manufacturing plants, OEMs, switchboard builders, and EPC contractors.
             </p>
           </div>
 
-          {/* Key Metrics */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
-              <span className="block text-lg font-black font-mono text-slate-950">40K+</span>
-              <span className="text-[10px] text-slate-500 font-medium">Sq.ft Warehouse</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
-              <span className="block text-lg font-black font-mono text-emerald-600">&lt;24h</span>
-              <span className="text-[10px] text-slate-500 font-medium">Ready Dispatch</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
-              <span className="block text-lg font-black font-mono text-sky-600">100%</span>
-              <span className="text-[10px] text-slate-500 font-medium">Original OEM</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
-              <span className="block text-lg font-black font-mono text-indigo-600">10,000+</span>
-              <span className="text-[10px] text-slate-500 font-medium">Active SKUs</span>
-            </div>
+          {/* TELEMETRY METRICS GRID */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { val: "40K+", label: "Sq.ft Warehouse" },
+              { val: "<24h", label: "Ready Dispatch" },
+              { val: "100%", label: "Original OEM" },
+              { val: "10,000+", label: "Active SKUs" },
+            ].map((stat, i) => (
+              <div key={i} className="p-4 rounded-2xl bg-white/90 border border-[#e6d5cc] text-center space-y-0.5 shadow-sm">
+                <div className="text-lg sm:text-xl font-black font-mono text-slate-950">{stat.val}</div>
+                <div className="text-[11px] font-mono text-slate-500">{stat.label}</div>
+              </div>
+            ))}
           </div>
 
-          {/* Authorised Brand Matrix */}
-          <div>
-            <h4 className="text-xs font-bold text-slate-900 uppercase font-mono tracking-wider mb-2.5 flex items-center gap-1.5">
-              <Award size={13} className="text-amber-500" />
-              Direct Authorised Brand Partnerships
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {brands.map((b) => (
-                <Link
-                  key={b.name}
-                  to={b.link}
-                  onClick={closeAbout}
-                  className={`p-3.5 rounded-2xl border transition-all hover:scale-101 hover:shadow-sm ${b.color} group block`}
+          {/* BRAND PARTNERSHIPS SECTION */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 font-mono text-xs font-bold text-[#8c6d62]">
+              <Sparkles size={14} className="text-rose-600" />
+              <span>DIRECT AUTHORISED BRAND PARTNERSHIPS</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {brandPartnerships.map((brand, idx) => (
+                <div
+                  key={idx}
+                  className={`p-4 rounded-2xl border transition-all duration-300 flex items-center justify-between group cursor-pointer bg-white/90 border-[#e6d5cc] shadow-xs ${brand.hoverStyle}`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2.5">
-                      {/* Brand Logo Badge */}
-                      <div className="h-8 px-2 bg-white rounded-xl border border-slate-200/90 shadow-2xs flex items-center justify-center shrink-0">
-                        <img
-                          src={b.logo}
-                          alt={b.name}
-                          className="h-5 w-auto max-w-[80px] object-contain"
-                        />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className={`w-2 h-2 rounded-full ${b.dot}`}></span>
-                          <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-sky-600 transition-colors">
-                            {b.name}
-                          </span>
-                        </div>
-                        <span className="text-[10px] block opacity-75 font-mono">
-                          {b.country}
-                        </span>
-                      </div>
+                  <div className="space-y-1 min-w-0 pr-3">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full ${brand.dotColor}`} />
+                      <h4 className="text-sm font-black group-hover:text-inherit">{brand.name}</h4>
+                      <span className={`text-[10px] font-mono font-medium px-2 py-0.5 rounded-full border ${brand.badgeStyle}`}>
+                        {brand.location}
+                      </span>
                     </div>
-                    <ArrowRight size={13} className="text-slate-400 opacity-60 group-hover:opacity-100 group-hover:text-slate-900 group-hover:translate-x-0.5 transition-all" />
+                    <p className="text-[11px] text-slate-600 group-hover:text-white/90 font-sans truncate">
+                      {brand.desc}
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-snug">
-                    {b.desc}
-                  </p>
-                </Link>
+                  <div className="p-2 rounded-xl bg-white text-slate-900 shadow-2xs shrink-0 border border-slate-200 group-hover:scale-105 transition-transform">
+                    <ArrowRight size={14} />
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Infrastructure & Quality Assurance */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <h4 className="font-bold text-slate-900 flex items-center gap-1.5 text-xs">
-              <CheckCircle2 size={13} className="text-emerald-500" />
-              Warehouse & Quality Guarantees
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-600">
-              <div className="flex items-center gap-2">
-                <Package size={12} className="text-slate-400 shrink-0" />
+          {/* WAREHOUSE & QUALITY GUARANTEES */}
+          <div className="p-5 rounded-2xl bg-white/90 border border-[#e6d5cc] space-y-3 shadow-sm">
+            <div className="flex items-center gap-2 font-mono text-xs font-bold text-slate-900">
+              <ShieldCheck size={16} className="text-rose-600" />
+              <span>Warehouse & Quality Guarantees</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono text-slate-700">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 size={13} className="text-emerald-600 shrink-0 mt-0.5" />
                 <span>Ready drum stock with custom cut-to-length meters</span>
               </div>
-              <div className="flex items-center gap-2">
-                <FileText size={12} className="text-slate-400 shrink-0" />
+              <div className="flex items-start gap-2">
+                <FileText size={13} className="text-purple-600 shrink-0 mt-0.5" />
                 <span>EN 10204 3.1 Mill Test Certificates with every shipment</span>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin size={12} className="text-slate-400 shrink-0" />
+              <div className="flex items-start gap-2">
+                <Building2 size={13} className="text-amber-600 shrink-0 mt-0.5" />
                 <span>Central Depot: Peenya Industrial Area, Bangalore 560058</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock size={12} className="text-slate-400 shrink-0" />
+              <div className="flex items-start gap-2">
+                <Truck size={13} className="text-rose-600 shrink-0 mt-0.5" />
                 <span>Same-day dispatch for all ex-stock orders received by 2 PM</span>
               </div>
             </div>
           </div>
+
         </div>
 
-        {/* Footer Actions */}
-        <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/80 flex flex-wrap items-center justify-between gap-3">
+        {/* STICKY MODAL FOOTER */}
+        <div className="px-6 sm:px-10 py-4 border-t border-[#e6d5cc] flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#fbf8f5]/95 backdrop-blur-md z-20 shrink-0">
           <button
-            onClick={() => {
-              closeAbout();
-              openSupport();
-            }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-200 transition-colors"
+            type="button"
+            onClick={onClose}
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white hover:bg-sky-50 text-sky-800 border border-sky-200 text-xs font-mono font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-xs"
           >
-            <Phone size={13} />
+            <HelpCircle size={14} />
             <span>Open Helpdesk & Support</span>
           </button>
 
-          <div className="flex items-center gap-2">
-            <a
-              href="/#productsSection"
-              onClick={closeAbout}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-200/60 border border-slate-200 transition-colors"
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 sm:flex-initial px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 text-xs font-mono font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-2xs"
             >
-              Browse Catalog
-            </a>
-            <a
-              href="/#rfqSection"
-              onClick={closeAbout}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-slate-950 hover:bg-slate-800 transition-colors flex items-center gap-1.5 shadow-xs"
+              <FileText size={14} />
+              <span>Browse Catalog</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-[#0B0F17] hover:bg-slate-900 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-md"
             >
               <span>Request Quote</span>
-              <ArrowRight size={12} />
-            </a>
+              <Send size={14} />
+            </button>
           </div>
         </div>
+
       </div>
     </div>
   );

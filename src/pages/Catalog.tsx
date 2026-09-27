@@ -21,21 +21,21 @@ export const Catalog: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50/70 py-6 sm:py-10">
+    <main className="min-h-screen bg-[#faf8f5] py-6 sm:py-10">
       {/* Top Breadcrumb & Hero Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         
-        {/* Navigation Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-4">
+        {/* Refined Navigation Breadcrumb */}
+        <div className="flex items-center gap-2 text-xs font-mono text-stone-500 mb-4">
           <Link
             to="/"
-            className="hover:text-slate-900 transition-colors flex items-center gap-1 font-semibold"
+            className="hover:text-stone-950 transition-colors flex items-center gap-1 font-semibold text-stone-700"
           >
             <ArrowLeft size={13} />
             <span>Home</span>
           </Link>
-          <span>/</span>
-          <span className="text-slate-900 font-bold">Complete Industrial Catalog</span>
+          <span className="text-stone-400">/</span>
+          <span className="text-stone-900 font-bold">Complete Industrial Catalog</span>
         </div>
 
         {/* Catalog Page Hero Banner — Luminous Light Gold & Champagne Pearl Theme */}
@@ -67,7 +67,7 @@ export const Catalog: React.FC = () => {
               Browse our complete catalog of certified industrial cables, flexible control wires, motor switchgear, wire marking systems, and CEE industrial plugs. Direct authorized distribution from Bangalore Central Warehouse.
             </p>
 
-            {/* Quick Metrics Bar — Clean Floating Badges on Light Gold */}
+            {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-6 pt-6 border-t border-[#e2d0ab] text-xs font-mono">
               <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 text-emerald-900 border border-emerald-300/80 font-medium shadow-2xs">
                 <ShieldCheck size={14} className="text-emerald-600" />

@@ -91,28 +91,32 @@ export const SearchModal: React.FC = () => {
 
   const getBrandBadge = (brand: string) => {
     const b = brand.toLowerCase();
-    if (b.includes("lapp")) return "bg-rose-50 text-rose-700 border-rose-200";
-    if (b.includes("eaton")) return "bg-sky-50 text-sky-700 border-sky-200";
-    if (b.includes("partex")) return "bg-amber-50 text-amber-700 border-amber-200";
-    if (b.includes("menn")) return "bg-purple-50 text-purple-700 border-purple-200";
-    return "bg-emerald-50 text-emerald-700 border-emerald-200";
+    if (b.includes("lapp")) return "bg-amber-100 text-amber-900 border-amber-300";
+    if (b.includes("eaton")) return "bg-sky-100 text-sky-900 border-sky-300";
+    if (b.includes("partex")) return "bg-rose-100 text-rose-900 border-rose-300";
+    if (b.includes("menn")) return "bg-purple-100 text-purple-900 border-purple-300";
+    return "bg-emerald-100 text-emerald-900 border-emerald-300";
   };
 
   if (!isSearchOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/60 backdrop-blur-md animate-fade-in select-none"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/50 backdrop-blur-sm animate-fade-in select-none"
       onClick={closeSearch}
     >
       <div
-        className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden text-slate-900 transition-all flex flex-col max-h-[78vh] sm:max-h-[80vh] my-auto"
+        className="w-full max-w-2xl bg-gradient-to-br from-[#fdf2f4] via-[#fbf8f5] to-[#f5e6d3] rounded-[2.5rem] shadow-2xl border border-[#e6d5cc] overflow-hidden text-slate-900 transition-all flex flex-col max-h-[82vh] sm:max-h-[85vh] my-auto relative"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Ambient Lighting Orbs */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-rose-200/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-72 h-72 bg-amber-200/40 rounded-full blur-3xl pointer-events-none" />
+
         {/* Search Header Bar with Input */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center gap-3 bg-slate-50/50">
-          <div className="w-10 h-10 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 shrink-0 shadow-2xs">
-            <Search size={18} className="text-sky-600" />
+        <div className="p-4 sm:p-5 border-b border-[#e6d5cc] flex items-center gap-3 bg-[#fbf8f5]/90 backdrop-blur-md relative z-10 shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-white border border-[#e6d5cc] flex items-center justify-center text-rose-600 shrink-0 shadow-2xs">
+            <Search size={18} />
           </div>
 
           <input
@@ -127,21 +131,21 @@ export const SearchModal: React.FC = () => {
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100"
+              className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200/60"
               title="Clear search"
             >
               <X size={16} />
             </button>
           )}
 
-          <div className="hidden sm:flex items-center gap-1 px-2 py-1 bg-slate-200/80 rounded-lg text-[10px] font-mono text-slate-600 select-none">
+          <div className="hidden sm:flex items-center gap-1 px-2 py-1 bg-white/80 border border-[#e6d5cc] rounded-lg text-[10px] font-mono text-slate-600 select-none">
             <Command size={10} />
             <span>ESC</span>
           </div>
 
           <button
             onClick={closeSearch}
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100"
+            className="p-2 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-slate-200/60 transition-colors cursor-pointer"
             aria-label="Close search"
           >
             <X size={18} />
@@ -149,18 +153,18 @@ export const SearchModal: React.FC = () => {
         </div>
 
         {/* Quick Filter Brand Chips */}
-        <div className="px-4 py-2.5 bg-white border-b border-slate-100 flex items-center gap-1.5 overflow-x-auto scrollbar-none text-xs">
-          <span className="text-[11px] font-mono text-slate-400 mr-1 shrink-0">
+        <div className="px-4 py-3 bg-white/70 border-b border-[#e6d5cc] flex items-center gap-1.5 overflow-x-auto scrollbar-none text-xs relative z-10 shrink-0">
+          <span className="text-[11px] font-mono text-[#8c6d62] font-bold mr-1 shrink-0">
             Brand:
           </span>
           {brandOptions.map((brand) => (
             <button
               key={brand.id}
               onClick={() => setActiveBrand(brand.id)}
-              className={`px-3 py-1 rounded-xl transition-all whitespace-nowrap text-xs ${
+              className={`px-3 py-1.5 rounded-xl transition-all whitespace-nowrap text-xs cursor-pointer ${
                 activeBrand === brand.id
-                  ? "bg-slate-900 text-white font-semibold shadow-xs"
-                  : "bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium"
+                  ? "bg-[#0B0F17] text-white font-bold shadow-xs"
+                  : "bg-white/90 hover:bg-white text-slate-700 border border-[#e6d5cc] font-medium"
               }`}
             >
               {brand.label}
@@ -169,11 +173,11 @@ export const SearchModal: React.FC = () => {
         </div>
 
         {/* Results / Suggestions Container */}
-        <div className="overflow-y-auto flex-1 p-3 sm:p-4 divide-y divide-slate-100">
+        <div className="overflow-y-auto flex-1 p-4 space-y-4 relative z-10">
           {!query.trim() && (
-            <div className="mb-3 px-2">
-              <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1 mb-2">
-                <Sparkles size={11} className="text-amber-500" />
+            <div className="space-y-2">
+              <span className="text-[10px] font-mono uppercase font-bold text-[#8c6d62] tracking-wider flex items-center gap-1">
+                <Sparkles size={11} className="text-amber-600" />
                 Popular Quick Searches
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -181,7 +185,7 @@ export const SearchModal: React.FC = () => {
                   <button
                     key={term}
                     onClick={() => setQuery(term)}
-                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 text-xs font-mono transition-colors"
+                    className="px-3 py-1.5 rounded-xl bg-white/90 hover:bg-rose-50 hover:text-rose-700 text-slate-700 text-xs font-mono border border-[#e6d5cc] transition-colors shadow-2xs cursor-pointer"
                   >
                     {term}
                   </button>
@@ -191,89 +195,91 @@ export const SearchModal: React.FC = () => {
           )}
 
           {searchResults.length > 0 ? (
-            <div className="space-y-1.5 pt-1">
-              <div className="px-2 py-1 text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider flex justify-between">
+            <div className="space-y-2">
+              <div className="px-1 text-[10px] font-mono uppercase font-bold text-[#8c6d62] tracking-wider flex justify-between">
                 <span>Matching Inventory Items</span>
                 <span>{searchResults.length} results</span>
               </div>
 
-              {searchResults.map((product) => (
-                <div
-                  key={product.id}
-                  onClick={() => handleSelectProduct(product)}
-                  className="p-3 hover:bg-slate-50 rounded-2xl cursor-pointer flex items-center justify-between gap-3 group transition-colors border border-transparent hover:border-slate-200"
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-white p-1.5 flex items-center justify-center shrink-0 border border-slate-200 shadow-2xs">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="max-h-full max-w-full object-contain"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = "/images/card-cables.jpg";
-                        }}
-                      />
+              <div className="space-y-2">
+                {searchResults.map((product) => (
+                  <div
+                    key={product.id}
+                    onClick={() => handleSelectProduct(product)}
+                    className="p-3.5 bg-white/90 hover:bg-white rounded-2xl cursor-pointer flex items-center justify-between gap-3 group transition-all border border-[#e6d5cc] shadow-2xs hover:shadow-md"
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="w-12 h-12 rounded-xl bg-white p-1.5 flex items-center justify-center shrink-0 border border-slate-200 shadow-2xs">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="max-h-full max-w-full object-contain"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/images/card-cables.jpg";
+                          }}
+                        />
+                      </div>
+
+                      <div className="min-w-0 space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border font-mono ${getBrandBadge(
+                              product.brand
+                            )}`}
+                          >
+                            {product.brand}
+                          </span>
+                          <span className="text-[10px] text-slate-500 font-mono">
+                            {product.partNo}
+                          </span>
+                        </div>
+
+                        <h4 className="text-xs sm:text-sm font-black text-slate-950 truncate group-hover:text-rose-600 transition-colors">
+                          {product.name}
+                        </h4>
+
+                        <p className="text-[11px] text-slate-600 font-mono truncate">
+                          {product.specs.slice(0, 2).join(" · ")}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border font-mono ${getBrandBadge(
-                            product.brand
-                          )}`}
-                        >
-                          {product.brand}
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="text-right">
+                        <span className="text-xs sm:text-sm font-black font-mono text-slate-950 block">
+                          ₹{product.price.toFixed(2)}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono">
-                          {product.partNo}
+                        <span className="text-[10px] text-slate-500">
+                          /{product.unit}
                         </span>
                       </div>
 
-                      <h4 className="text-xs sm:text-sm font-semibold text-slate-900 truncate group-hover:text-sky-600 transition-colors mt-0.5">
-                        {product.name}
-                      </h4>
-
-                      <p className="text-[11px] text-slate-500 font-mono truncate">
-                        {product.specs.slice(0, 2).join(" · ")}
-                      </p>
+                      <button
+                        onClick={(e) => handleAddToCart(e, product)}
+                        className={`p-2.5 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer ${
+                          addedIds[product.id]
+                            ? "bg-emerald-600 text-white"
+                            : "bg-[#0B0F17] hover:bg-slate-900 text-white hover:scale-105"
+                        }`}
+                        title="Add to RFQ Cart"
+                      >
+                        {addedIds[product.id] ? (
+                          <Check size={15} />
+                        ) : (
+                          <ShoppingCart size={15} />
+                        )}
+                      </button>
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-3 shrink-0">
-                    <div className="text-right">
-                      <span className="text-xs sm:text-sm font-bold font-mono text-slate-950 block">
-                        ₹{product.price.toFixed(2)}
-                      </span>
-                      <span className="text-[10px] text-slate-400">
-                        /{product.unit}
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={(e) => handleAddToCart(e, product)}
-                      className={`p-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
-                        addedIds[product.id]
-                          ? "bg-emerald-600 text-white"
-                          : "bg-slate-900 hover:bg-slate-800 text-white hover:scale-105"
-                      }`}
-                      title="Add to RFQ Cart"
-                    >
-                      {addedIds[product.id] ? (
-                        <Check size={14} />
-                      ) : (
-                        <ShoppingCart size={14} />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           ) : (
-            <div className="py-12 text-center text-slate-400 text-xs">
-              <Search size={24} className="mx-auto mb-2 text-slate-300" />
-              <p className="font-semibold text-slate-700">No products matching "{query}"</p>
-              <p className="text-[11px] text-slate-400 mt-1">
+            <div className="py-12 text-center text-slate-500 text-xs space-y-1">
+              <Search size={28} className="mx-auto mb-2 text-slate-400" />
+              <p className="font-bold text-slate-800">No products matching "{query}"</p>
+              <p className="text-[11px] text-slate-500">
                 Try searching by brand or submit a custom bill of materials in RFQ below.
               </p>
             </div>
@@ -281,15 +287,15 @@ export const SearchModal: React.FC = () => {
         </div>
 
         {/* Footer info bar */}
-        <div className="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <div className="p-4 bg-[#fbf8f5]/90 border-t border-[#e6d5cc] flex items-center justify-between text-xs text-slate-600 relative z-10 shrink-0">
           <span className="font-mono text-[11px]">
-            Press <strong className="text-slate-800">ESC</strong> to exit
+            Press <strong className="text-slate-950">ESC</strong> to exit
           </span>
 
           <a
             href="#rfqSection"
             onClick={closeSearch}
-            className="text-xs font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1"
+            className="text-xs font-bold text-rose-700 hover:text-rose-800 flex items-center gap-1"
           >
             <span>Can't find a part? Submit custom RFQ</span>
             <ArrowRight size={12} />
