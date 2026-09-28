@@ -47,7 +47,7 @@ export const RfqSection: React.FC = () => {
                 onClick={handleLaunchRfq}
                 className="px-6 py-4 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-mono font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-3 transition-transform hover:scale-102 cursor-pointer border border-red-400/40"
               >
-                <span>Launch RFQ Application</span>
+                <span>RFQ Application</span>
                 <ArrowRight size={16} />
               </button>
             </div>
