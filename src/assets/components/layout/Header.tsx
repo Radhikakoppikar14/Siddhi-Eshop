@@ -153,7 +153,7 @@ export const Header: React.FC = () => {
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <Info size={14} className="text-amber-400" />
-              <span>About</span>
+              <span>Company</span>
             </button>
 
             <button
@@ -258,7 +258,7 @@ export const Header: React.FC = () => {
               className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10 text-left cursor-pointer"
             >
               <Info size={14} className="text-amber-400" />
-              <span>About</span>
+              <span>Company</span>
             </button>
 
             <button

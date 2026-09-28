@@ -7,8 +7,8 @@ import {
   Cpu,
   Sparkles,
   CheckCircle2,
-  ArrowRight,
   Building2,
+  FileText,
 } from "lucide-react";
 
 type CapabilityTab = "engineering" | "logistics" | "commercials";
@@ -74,7 +74,7 @@ export const AboutSection: React.FC = () => {
           <div className="lg:col-span-8 space-y-3">
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="w-2.5 h-2.5 rounded-full bg-[#D9262E] animate-pulse" />
-              <span className="text-[#D9262E] font-bold uppercase tracking-wider">COMPANY PROFILE & AUTHORIZED DISTRIBUTORSHIP</span>
+              <span className="text-[#D9262E] font-bold uppercase tracking-wider">COMPANY PROFILE </span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-[#0B0F17] tracking-tight">
               Siddhi Kabel Corporation
@@ -93,7 +93,7 @@ export const AboutSection: React.FC = () => {
                 <ShieldCheck size={18} className="text-[#D9262E]" />
               </div>
               <h4 className="text-base font-black tracking-tight text-white">
-                100% Factory Direct Channel
+                100% Genuine Products
               </h4>
               <ul className="space-y-1.5 text-xs text-slate-300 font-mono">
                 <li className="flex items-center gap-2">
@@ -177,7 +177,7 @@ export const AboutSection: React.FC = () => {
           <div className={`rounded-3xl p-6 sm:p-8 bg-slate-50 border border-[#CBD5E1] shadow-inner transition-all duration-500 animate-fade-in ${current.accentBorder}`}>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
-              <div className="lg:col-span-8 space-y-4">
+              <div className="lg:col-span-7 space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="p-3 rounded-2xl bg-white border border-[#CBD5E1] shadow-xs">
                     {current.icon}
@@ -206,12 +206,30 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="lg:col-span-4 bg-white rounded-2xl p-6 border border-[#CBD5E1] shadow-sm space-y-4 text-center">
-                <Building2 size={36} className="text-[#0B0F17] mx-auto" />
-                <h4 className="text-sm font-black text-[#0B0F17]">Bangalore Operations</h4>
-                <p className="text-xs text-[#64748B] font-mono leading-relaxed">
-                  Direct factory stock dispatch ready for all major industrial corridors across South India.
-                </p>
+              {/* Professional Warehouse & Quality Guarantees Card */}
+              <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-[#CBD5E1] shadow-sm space-y-3.5">
+                <div className="flex items-center gap-2 font-mono text-xs font-bold text-[#0B0F17] pb-2.5 border-b border-slate-100">
+                  <ShieldCheck size={16} className="text-[#D9262E]" />
+                  <span>Warehouse & Quality Guarantees</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-[11px] text-slate-700">
+                  <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                    <CheckCircle2 size={14} className="text-emerald-600 shrink-0 mt-0.5" />
+                    <span>Ready drum stock with custom cut-to-length meters</span>
+                  </div>
+                  <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                    <FileText size={14} className="text-purple-600 shrink-0 mt-0.5" />
+                    <span>EN 10204 3.1 Mill Test Certificates with every shipment</span>
+                  </div>
+                  <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                    <Building2 size={14} className="text-amber-600 shrink-0 mt-0.5" />
+                    <span>Central Depot: Peenya Industrial Area, Bangalore 560058</span>
+                  </div>
+                  <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                    <Truck size={14} className="text-rose-600 shrink-0 mt-0.5" />
+                    <span>Same-day dispatch for all ex-stock orders received by 2 PM</span>
+                  </div>
+                </div>
               </div>
 
             </div>

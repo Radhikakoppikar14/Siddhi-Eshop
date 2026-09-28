@@ -1,81 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ShieldCheck, Clock, FileText, Headphones, MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#070b14] text-slate-400 text-xs border-t border-slate-800 select-none">
       
-      {/* 4 Feature Highlights Strip Matching Image 2 */}
-      <div className="border-b border-slate-800/80 bg-[#090e1a]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* Feature 1 */}
-            <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
-                <ShieldCheck size={18} />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-white mb-1">
-                  100% Genuine OEM Sourced
-                </h4>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Direct factory supply with manufacturer warranty, batch test reports, and compliance certificates.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
-                <Clock size={18} />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-white mb-1">
-                  Same-Day Bangalore Dispatch
-                </h4>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  25,000+ meters in stock across classic control cables, servo systems, and CEE power plugs.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
-                <FileText size={18} />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-white mb-1">
-                  Formal GST Commercial Quotations
-                </h4>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Instant project BOM pricing with tiered enterprise volume discounts and freight schedules.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
-                <Headphones size={18} />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-white mb-1">
-                  Dedicated Engineering Desk
-                </h4>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Cable sizing assistance, cross-reference part lookups, and technical CAD drawing support.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Main 4-Column Footer Matching Image 2 */}
+      {/* Main 4-Column Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
           

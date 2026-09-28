@@ -125,7 +125,7 @@ export const CompanyProfileSection: React.FC = () => {
           <div className="lg:col-span-8 space-y-4">
             <div className="flex items-center gap-2.5 font-mono text-xs">
               <span className="w-2.5 h-2.5 rounded-full bg-[#D9262E] animate-pulse" />
-              <span className="text-[#D9262E] font-extrabold uppercase tracking-widest">COMPANY PROFILE & AUTHORIZED DISTRIBUTORSHIP</span>
+              <span className="text-[#D9262E] font-extrabold uppercase tracking-widest">COMPANY PROFILE </span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-[#0B0F17] tracking-tight">
               Siddhi Kabel Corporation
@@ -143,7 +143,7 @@ export const CompanyProfileSection: React.FC = () => {
                 <ShieldCheck size={18} className="text-[#D9262E]" />
               </div>
               <h4 className="text-base font-black tracking-tight text-white">
-                100% Factory Direct Channel
+                100% Genuine Products
               </h4>
               <ul className="space-y-2 text-xs text-slate-300 font-mono">
                 <li className="flex items-center gap-2">
@@ -169,7 +169,7 @@ export const CompanyProfileSection: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-3 border-b border-[#E2E8F0]">
             <div className="flex items-center gap-2 font-mono text-xs font-bold text-[#64748B]">
               <Sparkles size={14} className="text-rose-600" />
-              <span>DIRECT AUTHORIZED OEM BRAND CHANNELS (Hover to Preview):</span>
+              <span>DIRECT AUTHORIZED OEM BRAND CHANNELS:</span>
             </div>
             <span className="text-[11px] font-mono text-[#059669] font-semibold">
               100% Genuine Warranty & Factory Traceability

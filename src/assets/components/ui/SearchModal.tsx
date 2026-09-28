@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Search,
   X,
-  ArrowRight,
   ShoppingCart,
   Check,
   Sparkles,
   Command,
+  ArrowRight,
 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
@@ -60,18 +60,20 @@ export const SearchModal: React.FC = () => {
     }
 
     if (!query.trim()) {
-      return list.slice(0, 6);
+      return list.slice(0, 4);
     }
 
     const q = query.toLowerCase().trim();
-    return list.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.partNo.toLowerCase().includes(q) ||
-        p.brand.toLowerCase().includes(q) ||
-        p.specs.some((s) => s.toLowerCase().includes(q)) ||
-        p.application.toLowerCase().includes(q)
-    );
+    return list
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.partNo.toLowerCase().includes(q) ||
+          p.brand.toLowerCase().includes(q) ||
+          p.specs.some((s) => s.toLowerCase().includes(q)) ||
+          p.application.toLowerCase().includes(q)
+      )
+      .slice(0, 4);
   }, [query, activeBrand]);
 
   const handleSelectProduct = (product: Product) => {
@@ -131,7 +133,7 @@ export const SearchModal: React.FC = () => {
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200/60"
+              className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200/60 cursor-pointer"
               title="Clear search"
             >
               <X size={16} />
@@ -196,11 +198,6 @@ export const SearchModal: React.FC = () => {
 
           {searchResults.length > 0 ? (
             <div className="space-y-2">
-              <div className="px-1 text-[10px] font-mono uppercase font-bold text-[#8c6d62] tracking-wider flex justify-between">
-                <span>Matching Inventory Items</span>
-                <span>{searchResults.length} results</span>
-              </div>
-
               <div className="space-y-2">
                 {searchResults.map((product) => (
                   <div
@@ -208,41 +205,27 @@ export const SearchModal: React.FC = () => {
                     onClick={() => handleSelectProduct(product)}
                     className="p-3.5 bg-white/90 hover:bg-white rounded-2xl cursor-pointer flex items-center justify-between gap-3 group transition-all border border-[#e6d5cc] shadow-2xs hover:shadow-md"
                   >
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="w-12 h-12 rounded-xl bg-white p-1.5 flex items-center justify-center shrink-0 border border-slate-200 shadow-2xs">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="max-h-full max-w-full object-contain"
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = "/images/card-cables.jpg";
-                          }}
-                        />
+                    <div className="min-w-0 space-y-0.5 pl-1">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border font-mono ${getBrandBadge(
+                            product.brand
+                          )}`}
+                        >
+                          {product.brand}
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          {product.partNo}
+                        </span>
                       </div>
 
-                      <div className="min-w-0 space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border font-mono ${getBrandBadge(
-                              product.brand
-                            )}`}
-                          >
-                            {product.brand}
-                          </span>
-                          <span className="text-[10px] text-slate-500 font-mono">
-                            {product.partNo}
-                          </span>
-                        </div>
+                      <h4 className="text-xs sm:text-sm font-black text-slate-950 truncate group-hover:text-rose-600 transition-colors">
+                        {product.name}
+                      </h4>
 
-                        <h4 className="text-xs sm:text-sm font-black text-slate-950 truncate group-hover:text-rose-600 transition-colors">
-                          {product.name}
-                        </h4>
-
-                        <p className="text-[11px] text-slate-600 font-mono truncate">
-                          {product.specs.slice(0, 2).join(" · ")}
-                        </p>
-                      </div>
+                      <p className="text-[11px] text-slate-600 font-mono truncate">
+                        {product.specs.slice(0, 2).join(" · ")}
+                      </p>
                     </div>
 
                     <div className="flex items-center gap-3 shrink-0">

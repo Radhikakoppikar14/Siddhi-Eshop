@@ -4,7 +4,7 @@ import { BrandsShowcase } from "../assets/components/home/BrandsShowcase";
 import { BrandPortfoliosSection } from "../assets/components/home/BrandPortfoliosSection";
 import { CompanyProfileSection } from "../assets/components/home/CompanyProfileSection";
 import { SalesDeskSection } from "../assets/components/home/SalesDeskSection";
-import { RFQSection } from "../assets/components/home/RFQSection";
+import { RfqSection } from "../assets/components/home/RFQSection";
 
 export const Home: React.FC = () => {
   const location = useLocation();
@@ -32,7 +32,7 @@ export const Home: React.FC = () => {
       <BrandPortfoliosSection />
 
       {/* 3. Quick RFQ Quotation Console */}
-      <RFQSection />
+      <RfqSection />
 
       {/* 4. Company Profile 3-Pillar Section */}
       <CompanyProfileSection />

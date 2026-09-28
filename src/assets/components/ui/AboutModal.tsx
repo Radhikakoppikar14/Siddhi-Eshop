@@ -174,27 +174,27 @@ export const AboutModal: React.FC<AboutModalProps> = ({
             </div>
           </div>
 
-          {/* WAREHOUSE & QUALITY GUARANTEES */}
-          <div className="p-5 rounded-2xl bg-white/90 border border-[#e6d5cc] space-y-3 shadow-sm">
-            <div className="flex items-center gap-2 font-mono text-xs font-bold text-slate-900">
+          {/* WAREHOUSE & QUALITY GUARANTEES (PROFESSIONAL ONE-BY-ONE LAYOUT) */}
+          <div className="p-5 rounded-2xl bg-white/90 border border-[#e6d5cc] space-y-3.5 shadow-sm">
+            <div className="flex items-center gap-2 font-mono text-xs font-bold text-slate-900 pb-2.5 border-b border-slate-100">
               <ShieldCheck size={16} className="text-rose-600" />
               <span>Warehouse & Quality Guarantees</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono text-slate-700">
-              <div className="flex items-start gap-2">
-                <CheckCircle2 size={13} className="text-emerald-600 shrink-0 mt-0.5" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-[11px] text-slate-700">
+              <div className="flex items-start gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <CheckCircle2 size={14} className="text-emerald-600 shrink-0 mt-0.5" />
                 <span>Ready drum stock with custom cut-to-length meters</span>
               </div>
-              <div className="flex items-start gap-2">
-                <FileText size={13} className="text-purple-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <FileText size={14} className="text-purple-600 shrink-0 mt-0.5" />
                 <span>EN 10204 3.1 Mill Test Certificates with every shipment</span>
               </div>
-              <div className="flex items-start gap-2">
-                <Building2 size={13} className="text-amber-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <Building2 size={14} className="text-amber-600 shrink-0 mt-0.5" />
                 <span>Central Depot: Peenya Industrial Area, Bangalore 560058</span>
               </div>
-              <div className="flex items-start gap-2">
-                <Truck size={13} className="text-rose-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <Truck size={14} className="text-rose-600 shrink-0 mt-0.5" />
                 <span>Same-day dispatch for all ex-stock orders received by 2 PM</span>
               </div>
             </div>

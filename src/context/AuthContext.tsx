@@ -77,6 +77,10 @@ interface AuthContextType {
   isAboutOpen: boolean;
   openAbout: () => void;
   closeAbout: () => void;
+  isRfqOpen: boolean;
+  openRfq: (product?: string) => void;
+  closeRfq: () => void;
+  rfqProduct: string | null;
   userOffers: CommercialOffer[];
   addOffer: (offer: Omit<CommercialOffer, "date">) => void;
   deleteOffer: (refNo: string) => void;
@@ -132,6 +136,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isRfqOpen, setIsRfqOpen] = useState(false);
+  const [rfqProduct, setRfqProduct] = useState<string | null>(null);
 
   const openSearch = useCallback(() => setIsSearchOpen(true), []);
   const closeSearch = useCallback(() => setIsSearchOpen(false), []);
@@ -139,6 +145,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const closeSupport = useCallback(() => setIsSupportOpen(false), []);
   const openAbout = useCallback(() => setIsAboutOpen(true), []);
   const closeAbout = useCallback(() => setIsAboutOpen(false), []);
+
+  const openRfq = useCallback((product = "Industrial Project Bulk Requirement") => {
+    setRfqProduct(product);
+    setIsRfqOpen(true);
+  }, []);
+
+  const closeRfq = useCallback(() => {
+    setIsRfqOpen(false);
+    setRfqProduct(null);
+  }, []);
 
   // Global keyboard shortcut for search (⌘K or Ctrl+K or /)
   useEffect(() => {
@@ -150,11 +166,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsSearchOpen(false);
         setIsSupportOpen(false);
         setIsAboutOpen(false);
+        setIsRfqOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
   const [offers, setOffers] = useState<CommercialOffer[]>(() => {
     try {
       return JSON.parse(localStorage.getItem("siddhi_offers") || "[]");
@@ -437,6 +455,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         isAboutOpen,
         openAbout,
         closeAbout,
+        isRfqOpen,
+        openRfq,
+        closeRfq,
+        rfqProduct,
         userOffers,
         addOffer,
         deleteOffer,

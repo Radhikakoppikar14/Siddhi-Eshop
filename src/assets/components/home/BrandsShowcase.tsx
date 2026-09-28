@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ShieldCheck, Sparkles, ChevronLeft, ChevronRight, PackageCheck, ShoppingCart, Cpu, Radio, Zap } from "lucide-react";
-import { useCart } from "../../../context/CartContext";
+import { ArrowRight, ShieldCheck, Sparkles, ChevronLeft, ChevronRight, PackageCheck, Cpu, Radio, Zap } from "lucide-react";
 
 export const BrandsShowcase: React.FC = () => {
   const [activeBrandIndex, setActiveBrandIndex] = useState(0);
-  const { addToCart } = useCart();
 
   const brands = [
     {
       id: "lapp",
       name: "LAPP KABEL GERMANY",
       shortName: "LAPP KABEL",
-      tag: "FEATURED_ALLIANCE_PARTNER // DIRECT OEM",
       country: "Germany · Stuttgart",
       products: "ÖLFLEX® Power & Control Cables",
       desc: "European benchmark oil-resistant flexible control cables, screened UNITRONIC® data lines, and IP68 SKINTOP® nickel-plated brass cable glands.",
       link: "/catalog?brand=LAPP+KABEL",
       logo: "/images/logo-lapp.png",
-      image: "/images/card-olflex.jpg",
-      defaultProductId: "lapp-1119203",
+      image: "/images/lappproducts-groupimg.jpg",
       accentBg: "bg-[#FFCC4D] hover:bg-[#F2B935] text-slate-950",
       cardTheme: "from-[#2e1210] via-[#521c16] to-[#1a0806]",
       glowColor: "bg-amber-500/25",
@@ -31,14 +27,12 @@ export const BrandsShowcase: React.FC = () => {
       id: "eaton",
       name: "EATON MOELLER",
       shortName: "EATON - MOELLER",
-      tag: "AUTHORIZED_SWITCHGEAR // 24/7 RELIABILITY",
       country: "Germany · Bonn",
       products: "PKZM0 Breakers & DILM Contactors",
       desc: "Switching capacity up to 150 kA, differential phase-failure sensitivity, and electronic wide-range coil technology for modern automated industrial panels.",
       link: "/catalog?brand=EATON+-+MOELLER",
       logo: "/images/logo-eaton.png",
-      image: "/images/eaton-pkzm0.jpg",
-      defaultProductId: "eaton-pkzm0-0.16",
+      image: "/images/eatonproducts-groupimg.jpg",
       accentBg: "bg-sky-400 hover:bg-sky-300 text-slate-950",
       cardTheme: "from-[#061424] via-[#0b223d] to-[#030912]",
       glowColor: "bg-sky-500/25",
@@ -50,14 +44,12 @@ export const BrandsShowcase: React.FC = () => {
       id: "partex",
       name: "PARTEX SWEDEN",
       shortName: "PARTEX",
-      tag: "IDENTIFICATION_PIONEER // SINCE 1948",
       country: "Sweden · Gullspång",
       products: "Wire & Cable Marking Systems",
       desc: "Precision PA closed chevron sleeves, ProMark T-1000 300dpi thermal transfer marker printers, and AISI 316 acid-proof stainless steel tags.",
       link: "/catalog?brand=PARTEX+SWEDEN",
       logo: "/images/logo-partex.png",
-      image: "/images/partex-pa.jpg",
-      defaultProductId: "partex-pa-02",
+      image: "/images/partexproducts-groupimg.jpg",
       accentBg: "bg-emerald-400 hover:bg-emerald-300 text-slate-950",
       cardTheme: "from-[#051c11] via-[#0b3320] to-[#020f09]",
       glowColor: "bg-emerald-500/25",
@@ -69,14 +61,12 @@ export const BrandsShowcase: React.FC = () => {
       id: "mennekes",
       name: "MENNEKES GERMANY",
       shortName: "MENNEKES",
-      tag: "CEE_INDUSTRIAL_PLUG_STANDARD",
       country: "Germany · Kirchhundem",
       products: "CEE Plugs IP67 & AMAXX® Units",
       desc: "World leader in heavy-duty CEE industrial plugs, PowerTOP® Xtra rubberized connectors, and modular AMAPLAST power distribution enclosures.",
       link: "/catalog?brand=MENNEKES",
       logo: "/images/logo-mennekes.png",
-      image: "/images/menn-powertop.jpg",
-      defaultProductId: "menn-powertop-16a",
+      image: "/images/mennekesproducts-groupimg.jpg",
       accentBg: "bg-purple-400 hover:bg-purple-300 text-slate-950",
       cardTheme: "from-[#160a1d] via-[#281133] to-[#0c0410]",
       glowColor: "bg-purple-500/25",
@@ -96,10 +86,6 @@ export const BrandsShowcase: React.FC = () => {
     return () => clearInterval(timer);
   }, [brands.length]);
 
-  const handleQuickAdd = () => {
-    addToCart(current.defaultProductId, 1);
-  };
-
   return (
     <section className="py-8 bg-[#faf8f5] border-b border-stone-300 select-none" id="brandsSection">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -111,45 +97,43 @@ export const BrandsShowcase: React.FC = () => {
           <div className={`absolute top-0 right-0 w-96 h-96 ${current.glowColor} rounded-full blur-3xl pointer-events-none transition-all duration-700`} />
 
           {/* TOP INTEGRATED BRAND COMMAND DOCK */}
-          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pb-6 mb-6 border-b border-white/10 relative z-10">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-              <span className="font-mono text-xs uppercase tracking-widest text-slate-300 font-bold">
-                OEM CONSOLE // ACTIVE CHANNEL:
-              </span>
-            </div>
+          <div className="flex items-center gap-2 w-fit">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span className="font-mono text-xs uppercase tracking-widest text-slate-300 font-bold">
+              CHECK PRODUCTS ON SALES
+            </span>
+          </div>
 
-            {/* Brand Switcher Pills */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {brands.map((b, idx) => {
-                const isActive = activeBrandIndex === idx;
-                return (
-                  <button
-                    key={b.id}
-                    onClick={() => setActiveBrandIndex(idx)}
-                    className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border ${
-                      isActive
-                        ? b.activeTabStyle
-                        : "bg-black/30 text-slate-300 border-white/10 hover:bg-black/50 hover:text-white"
-                    }`}
-                  >
-                    <img src={b.logo} alt={b.shortName} className="h-3.5 object-contain max-w-[55px] brightness-200" />
-                    <span className="truncate">{b.shortName.split(" ")[0]}</span>
-                  </button>
-                );
-              })}
-            </div>
+          {/* Brand Switcher Pills */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
+            {brands.map((b, idx) => {
+              const isActive = activeBrandIndex === idx;
+              return (
+                <button
+                  key={b.id}
+                  onClick={() => setActiveBrandIndex(idx)}
+                  className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border ${
+                    isActive
+                      ? b.activeTabStyle
+                      : "bg-black/30 text-slate-300 border-white/10 hover:bg-black/50 hover:text-white"
+                  }`}
+                >
+                  <img src={b.logo} alt={b.shortName} className="h-3.5 object-contain max-w-[55px] brightness-200" />
+                  <span className="truncate">{b.shortName.split(" ")[0]}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* TOP META STATUS BAR */}
-          <div className="flex items-center justify-between gap-3 flex-wrap relative z-10 mb-4">
-            <span className="px-3 py-1 rounded-full bg-black/30 text-amber-300 font-mono text-[10px] font-bold uppercase tracking-wider border border-white/10 flex items-center gap-1.5 backdrop-blur-xs">
-              <Sparkles size={12} className="text-amber-400 animate-spin" />
-              {current.tag}
+          <div className="flex items-center justify-between gap-3 flex-wrap relative z-10 my-4">
+            <span className="px-3.5 py-1.5 rounded-full bg-black/30 text-amber-300 font-mono text-[11px] font-bold uppercase tracking-wider border border-white/10 flex items-center gap-2 backdrop-blur-xs">
+              <Sparkles size={13} className="text-amber-400 animate-spin" />
+              BRAND SPECIFIC MESSAGE
             </span>
-            <span className="px-3 py-1 rounded-full bg-black/30 text-slate-200 font-mono text-[10px] font-semibold border border-white/10 flex items-center gap-1 backdrop-blur-xs">
-              <PackageCheck size={12} className="text-emerald-400" />
-              PAN-INDIA WAREHOUSE DISPATCH
+            <span className="px-3.5 py-1.5 rounded-full bg-black/30 text-slate-200 font-mono text-[11px] font-semibold border border-white/10 flex items-center gap-1.5 backdrop-blur-xs">
+              <PackageCheck size={13} className="text-emerald-400" />
+              PAN-INDIA DISPATCH
             </span>
           </div>
 
@@ -173,24 +157,15 @@ export const BrandsShowcase: React.FC = () => {
                 {current.desc}
               </p>
 
-              {/* Action Buttons */}
+              {/* Action Button */}
               <div className="pt-2 flex flex-row items-center gap-3 flex-wrap">
                 <Link
                   to={current.link}
-                  className={`px-5 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-lg flex flex-row items-center gap-2 transition-transform hover:scale-102 cursor-pointer whitespace-nowrap shrink-0 ${current.accentBg}`}
+                  className={`px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-lg flex flex-row items-center gap-2 transition-transform hover:scale-102 cursor-pointer whitespace-nowrap shrink-0 ${current.accentBg}`}
                 >
                   <span>EXPLORE {current.shortName}</span>
                   <ArrowRight size={14} className="shrink-0" />
                 </Link>
-
-                <button
-                  type="button"
-                  onClick={handleQuickAdd}
-                  className="px-5 py-3.5 rounded-2xl bg-black/70 hover:bg-black/90 text-white font-bold text-xs uppercase tracking-wider shadow-md flex flex-row items-center gap-2 transition-transform hover:scale-102 cursor-pointer border border-white/20 backdrop-blur-xs whitespace-nowrap shrink-0"
-                >
-                  <ShoppingCart size={14} className="text-amber-400 shrink-0" />
-                  <span>Quick Add to RFQ</span>
-                </button>
               </div>
 
               <div className="flex items-center gap-3 pt-1 text-[11px] font-mono text-slate-300">
@@ -198,7 +173,7 @@ export const BrandsShowcase: React.FC = () => {
                   <ShieldCheck size={13} /> DIRECT FACTORY RATES
                 </span>
                 <span>·</span>
-                <span>Bangalore Ready Stock</span>
+                <span> ReadyStock XMX-Bangalore</span>
               </div>
             </div>
 
@@ -225,17 +200,15 @@ export const BrandsShowcase: React.FC = () => {
 
           </div>
 
-          {/* BOTTOM TELEMETRY & SLIDER CONTROLS */}
+          {/* BOTTOM TELEMETRY & SLIDER CONTROLS (NON-CLICKABLE INDICATORS) */}
           <div className="pt-5 mt-4 border-t border-white/10 flex items-center justify-between relative z-10">
             <div className="flex items-center gap-2">
               {brands.map((_, i) => (
-                <button
+                <div
                   key={i}
-                  onClick={() => setActiveBrandIndex(i)}
-                  className={`h-2 rounded-full transition-all cursor-pointer ${
-                    activeBrandIndex === i ? "w-8 bg-white" : "w-2 bg-white/30 hover:bg-white/60"
+                  className={`h-2 rounded-full transition-all ${
+                    activeBrandIndex === i ? "w-8 bg-white" : "w-2 bg-white/30"
                   }`}
-                  aria-label={`Go to slide ${i + 1}`}
                 />
               ))}
             </div>

@@ -12,6 +12,7 @@ import { CartProvider } from "./context/CartContext";
 
 import { Header } from "./assets/components/layout/Header";
 import { Footer } from "./assets/components/layout/Footer";
+import { TopBar } from "./assets/components/layout/TopBar";
 
 import { CartDrawer } from "./assets/components/ui/CartDrawer";
 import { AuthModal } from "./assets/components/ui/AuthModal";
@@ -20,6 +21,7 @@ import { QuickViewModal } from "./assets/components/ui/QuickViewModal";
 import { SearchModal } from "./assets/components/ui/SearchModal";
 import { SupportModal } from "./assets/components/ui/SupportModal";
 import { AboutModal } from "./assets/components/ui/AboutModal";
+import { RFQModal } from "./assets/components/ui/RFQModal";
 
 import { Home } from "./pages/Home";
 import { Catalog } from "./pages/Catalog";
@@ -29,37 +31,29 @@ import { AboutEaton } from "./pages/AboutEaton";
 import { AboutPartex } from "./pages/AboutPartex";
 import { AboutMennekes } from "./pages/AboutMennekes";
 
-// Helper component to reset scroll position on route change
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [pathname]);
-
   return null;
 };
 
-// Internal wrapper to consume AuthContext for modals
 const AppContent: React.FC = () => {
-  const { isAboutOpen, closeAbout, isSupportOpen, closeSupport } = useAuth();
+  const { isAboutOpen, closeAbout, isSupportOpen, closeSupport, isRfqOpen, closeRfq, rfqProduct } = useAuth();
 
   return (
     <div
       className="siddhi-app-wrapper hybrid-light-bg dark:bg-[#0a0305] dark:text-slate-100 transition-colors"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
+      style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
     >
+      <TopBar />
       <Header />
 
       <div style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalog" element={<Catalog />} />
-          {/* Dynamic route supporting individual product IDs */}
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/about-lapp" element={<AboutLapp />} />
           <Route path="/about-eaton" element={<AboutEaton />} />
@@ -72,7 +66,6 @@ const AppContent: React.FC = () => {
 
       <Footer />
 
-      {/* Global Modals & Slide-overs */}
       <CartDrawer />
       <AuthModal />
       <AccountModal />
@@ -80,6 +73,7 @@ const AppContent: React.FC = () => {
       <SearchModal />
       <SupportModal isOpen={isSupportOpen} onClose={closeSupport} />
       <AboutModal isOpen={isAboutOpen} onClose={closeAbout} />
+      {isRfqOpen && <RFQModal product={rfqProduct || "Industrial Project Bulk Requirement"} onClose={closeRfq} />}
     </div>
   );
 };
