@@ -13,8 +13,6 @@ import {
   Layers,
   SlidersHorizontal,
   Package,
-  Zap,
-  Building2,
 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../context/ToastContext";
@@ -217,16 +215,11 @@ export const RFQSection: React.FC<RFQSectionProps> = ({
         {/* MASTER EXECUTIVE PROCUREMENT CONTAINER */}
         <div className="rounded-[2.5rem] shadow-2xl border border-[#CBD5E1] overflow-hidden bg-white text-[#0B0F17] relative">
           
-          {/* ========================================================
-              PART 1: TOP EXECUTIVE CHAMBER (VIBRANT RED & BLUE GLOW)
-              ======================================================== */}
+          {/* TOP EXECUTIVE CHAMBER */}
           <div className="bg-gradient-to-r from-[#2c0c1b] via-[#0d1633] to-[#070b14] p-6 sm:p-10 lg:p-12 relative overflow-hidden border-b border-white/10 text-white">
-            
-            {/* Ambient Red & Blue Lighting Orbs */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-80 h-80 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Header Content */}
             <div className="relative z-10 space-y-3">
               <div className="flex items-center gap-2 text-xs font-mono text-red-400 font-bold uppercase tracking-wider">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
@@ -242,7 +235,7 @@ export const RFQSection: React.FC<RFQSectionProps> = ({
                 Configure your procurement parameters or upload a Bill of Materials (BOM). Our Bangalore engineering desk generates official GST quotations with guaranteed compliance certificates.
               </p>
 
-              {/* INTERACTIVE PROCUREMENT MODE SELECTOR */}
+              {/* PROCUREMENT MODE SELECTOR */}
               <div className="pt-4 flex flex-wrap items-center gap-2.5">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold block w-full mb-1">
                   Select Procurement Category:
@@ -331,7 +324,6 @@ export const RFQSection: React.FC<RFQSectionProps> = ({
                   })}
                 </div>
 
-                {/* Financial Summary */}
                 <div className="pt-4 border-t border-slate-800 space-y-1.5 text-xs font-mono">
                   <div className="flex justify-between text-slate-400">
                     <span>Catalog Subtotal:</span>
@@ -364,80 +356,63 @@ export const RFQSection: React.FC<RFQSectionProps> = ({
                 </div>
               </div>
             )}
-
-            {/* Quick Assurance Badges when cart is empty */}
-            {cart.length === 0 && (
-              <div className="relative z-10 mt-6 pt-6 border-t border-white/10 flex flex-wrap items-center gap-3 text-xs font-mono">
-                <span className="px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 text-slate-200 flex items-center gap-1.5 font-semibold">
-                  <ShieldCheck size={13} className="text-blue-400" />
-                  Official OEM Factory Authorization
-                </span>
-                <span className="px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 text-slate-200 flex items-center gap-1.5 font-semibold">
-                  <CheckCircle2 size={13} className="text-emerald-400" />
-                  18% GST Input Tax Credit Pass-Through
-                </span>
-                <span className="px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 text-slate-200 flex items-center gap-1.5 font-semibold">
-                  <Sparkles size={13} className="text-red-400" />
-                  Bangalore Warehouse Direct Dispatch
-                </span>
-              </div>
-            )}
-
           </div>
 
-          {/* ========================================================
-              PART 2: APPLICATION FORM STUDIO (CLEAN PORCELAIN CANVAS)
-              ======================================================== */}
+          {/* APPLICATION FORM / SUCCESS STUDIO */}
           <div className="bg-slate-50 text-[#0B0F17] p-6 sm:p-10 lg:p-12 relative border-t border-[#CBD5E1]">
             
             {submittedOffer ? (
-              <div className="bg-white rounded-3xl border border-[#CBD5E1] p-8 sm:p-10 text-center space-y-5 animate-scale-up max-w-xl mx-auto shadow-xl">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-[#059669] border border-emerald-200 flex items-center justify-center mx-auto shadow-2xs">
+              /* LUXURY BLUE GRADIENT & FLOATING SUCCESS CARD */
+              <div className="bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-900 rounded-[2.5rem] border border-blue-400/40 p-8 sm:p-10 text-center space-y-6 animate-scale-up max-w-xl mx-auto shadow-2xl text-white relative overflow-hidden">
+                
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 border border-blue-400/30">
                   <CheckCircle2 size={32} />
                 </div>
 
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-[#0B0F17]">
+                <div className="relative z-10 space-y-2">
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
                     Quotation Request Registered
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#475569] mt-1 max-w-md mx-auto">
+                  <p className="text-xs sm:text-sm text-slate-200 mt-1 max-w-md mx-auto leading-relaxed">
                     Your RFQ has been logged into our technical quotation queue. An executive sales engineer will contact you shortly with an official proforma.
                   </p>
                 </div>
 
-                <div className="p-4 bg-slate-50 rounded-2xl border border-[#CBD5E1] text-xs font-mono text-left space-y-1.5 max-w-sm mx-auto shadow-2xs">
+                <div className="relative z-10 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 text-xs font-mono text-left space-y-2 max-w-sm mx-auto shadow-inner">
                   <div className="flex justify-between">
-                    <span className="text-[#64748B]">Reference No:</span>
-                    <strong className="text-red-600 font-bold">{submittedOffer.refNo}</strong>
+                    <span className="text-slate-300">Reference No:</span>
+                    <strong className="text-amber-400 font-bold">{submittedOffer.refNo}</strong>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#64748B]">Date:</span>
-                    <span className="text-[#0B0F17] font-medium">{submittedOffer.date}</span>
+                    <span className="text-slate-300">Date:</span>
+                    <span className="text-white font-medium">{submittedOffer.date}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#64748B]">Company:</span>
-                    <span className="text-[#0B0F17] font-medium">{submittedOffer.company}</span>
+                    <span className="text-slate-300">Company:</span>
+                    <span className="text-white font-medium">{submittedOffer.company}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#64748B]">Estimated Total:</span>
-                    <span className="text-[#059669] font-bold">₹{submittedOffer.totalEst.toLocaleString("en-IN")}</span>
+                  <div className="flex justify-between pt-1 border-t border-white/10">
+                    <span className="text-slate-300">Estimated Total:</span>
+                    <span className="text-emerald-400 font-bold">₹{submittedOffer.totalEst.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 pt-2">
                   <button
                     type="button"
                     onClick={handleExportSummary}
-                    className="px-5 py-3 bg-[#0B0F17] hover:bg-slate-800 text-white rounded-xl text-xs font-black transition-all flex items-center gap-2 shadow-md cursor-pointer"
+                    className="px-5 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer border border-blue-400/30"
                   >
-                    <Download size={14} className="text-red-500" />
+                    <Download size={14} className="text-amber-300" />
                     <span>Download Official RFQ (PDF)</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setSubmittedOffer(null)}
-                    className="px-5 py-3 bg-white hover:bg-slate-100 text-[#0B0F17] rounded-xl text-xs font-bold transition-colors border border-[#CBD5E1] cursor-pointer shadow-2xs"
+                    className="px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white rounded-2xl text-xs font-bold transition-colors border border-white/20 cursor-pointer backdrop-blur-xs"
                   >
                     Submit Another Inquiry
                   </button>

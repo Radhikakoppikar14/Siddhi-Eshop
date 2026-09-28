@@ -46,7 +46,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div
-      className="siddhi-app-wrapper hybrid-light-bg"
+      className="siddhi-app-wrapper hybrid-light-bg dark:bg-[#0a0305] dark:text-slate-100 transition-colors"
       style={{
         minHeight: "100vh",
         display: "flex",

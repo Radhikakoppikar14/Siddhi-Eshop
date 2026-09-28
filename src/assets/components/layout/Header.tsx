@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  Home,
   Search,
   User,
   FileText,
@@ -38,16 +39,16 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#faf8f5]/95 backdrop-blur-md border-b border-[#e8dfd3] shadow-xs transition-all select-none">
+    <header className="sticky top-0 z-40 bg-gradient-to-r from-[#6b1620] to-[#450a11] backdrop-blur-md border-b border-[#851e2b]/50 shadow-xl transition-all select-none text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
           
-          {/* Authentic Brand Identity / Logo */}
+          {/* Logo */}
           <Link to="/" className="flex items-center shrink-0 group" aria-label="Siddhi Kabel Home">
-            <div className="h-11 px-2.5 py-1 bg-white rounded-2xl border border-[#e2d8cb] shadow-2xs group-hover:shadow-md flex items-center transition-all duration-300">
+            <div className="h-11 px-2.5 py-1 bg-white rounded-2xl border border-white/20 shadow-md group-hover:shadow-lg flex items-center transition-all duration-300">
               <img
                 src="/images/siddhi-kabel-lockup.png"
-                alt="Siddhi Kabel Corporation Private Limited"
+                alt="Siddhi Kabel Corporation"
                 className="h-7 sm:h-8 w-auto max-w-[150px] sm:max-w-[200px] object-contain"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
@@ -59,12 +60,19 @@ export const Header: React.FC = () => {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1">
+            <Link
+              to="/"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors"
+            >
+              <Home size={14} className="text-amber-400" />
+              <span>Home</span>
+            </Link>
 
             <Link
               to="/catalog"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-800 hover:text-[#6b1620] hover:bg-[#f1eae0] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors"
             >
-              <Grid size={14} className="text-[#8c7467]" />
+              <Grid size={14} className="text-amber-400" />
               <span>Catalog</span>
             </Link>
 
@@ -75,63 +83,63 @@ export const Header: React.FC = () => {
             >
               <a
                 href="/#brandPortfolios"
-                className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold text-slate-800 hover:text-[#6b1620] hover:bg-[#f1eae0] transition-colors"
+                className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <span>Brands</span>
                 <ChevronDown
                   size={12}
-                  className={`text-[#8c7467] transition-transform ${brandsOpen ? "rotate-180 text-[#6b1620]" : ""}`}
+                  className={`text-amber-400 transition-transform ${brandsOpen ? "rotate-180 text-white" : ""}`}
                 />
               </a>
 
               {brandsOpen && (
                 <div className="absolute top-full left-0 w-64 pt-1.5 z-50 animate-fade-in shadow-2xl">
-                  <div className="bg-[#fcfaf7] rounded-2xl border border-[#e2d8cb] p-2 shadow-2xl space-y-1">
+                  <div className="bg-[#2a0a0f] rounded-2xl border border-white/20 p-2 shadow-2xl space-y-1 text-slate-900">
                     <Link
                       to="/about-lapp"
                       onClick={() => setBrandsOpen(false)}
-                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-amber-50 text-slate-800 transition-colors"
+                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/10 text-white transition-colors"
                     >
                       <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
                       <div>
-                        <span className="font-bold text-xs block text-slate-950">LAPP Kabel</span>
-                        <span className="text-[10px] text-slate-500 font-mono">ÖLFLEX® Cables & Glands</span>
+                        <span className="font-bold text-xs block text-white">LAPP Kabel</span>
+                        <span className="text-[10px] text-rose-200/80 font-mono">ÖLFLEX® Cables & Glands</span>
                       </div>
                     </Link>
 
                     <Link
                       to="/about-eaton"
                       onClick={() => setBrandsOpen(false)}
-                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-sky-50 text-slate-800 transition-colors"
+                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/10 text-white transition-colors"
                     >
-                      <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-sky-400 shrink-0"></span>
                       <div>
-                        <span className="font-bold text-xs block text-slate-950">EATON Moeller</span>
-                        <span className="text-[10px] text-slate-500 font-mono">Motor Starters & Switchgear</span>
+                        <span className="font-bold text-xs block text-white">EATON Moeller</span>
+                        <span className="text-[10px] text-rose-200/80 font-mono">Motor Starters & Switchgear</span>
                       </div>
                     </Link>
 
                     <Link
                       to="/about-partex"
                       onClick={() => setBrandsOpen(false)}
-                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-emerald-50 text-slate-800 transition-colors"
+                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/10 text-white transition-colors"
                     >
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
                       <div>
-                        <span className="font-bold text-xs block text-slate-950">PARTEX Sweden</span>
-                        <span className="text-[10px] text-slate-500 font-mono">Wire Marking & Printers</span>
+                        <span className="font-bold text-xs block text-white">PARTEX Sweden</span>
+                        <span className="text-[10px] text-rose-200/80 font-mono">Wire Marking & Printers</span>
                       </div>
                     </Link>
 
                     <Link
                       to="/about-mennekes"
                       onClick={() => setBrandsOpen(false)}
-                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-purple-50 text-slate-800 transition-colors"
+                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/10 text-white transition-colors"
                     >
-                      <span className="w-2.5 h-2.5 rounded-full bg-purple-500 shrink-0"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shrink-0"></span>
                       <div>
-                        <span className="font-bold text-xs block text-slate-950">MENNEKES</span>
-                        <span className="text-[10px] text-slate-500 font-mono">CEE Plugs & AMAXX</span>
+                        <span className="font-bold text-xs block text-white">MENNEKES</span>
+                        <span className="text-[10px] text-rose-200/80 font-mono">CEE Plugs & AMAXX</span>
                       </div>
                     </Link>
                   </div>
@@ -142,21 +150,20 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={openAbout}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-800 hover:text-[#6b1620] hover:bg-[#f1eae0] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
-              <Info size={14} className="text-[#8c7467]" />
+              <Info size={14} className="text-amber-400" />
               <span>About</span>
             </button>
 
             <button
               type="button"
               onClick={openSupport}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#6b1620] bg-[#f4ebe0] hover:bg-[#ede0cf] border border-[#dfd0be] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-colors cursor-pointer"
             >
-              <Headphones size={14} className="text-[#7a1a26]" />
+              <Headphones size={14} className="text-amber-400" />
               <span>Contact</span>
             </button>
-
           </nav>
 
           {/* Right Action Tools */}
@@ -166,7 +173,7 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={openSearch}
-              className="h-9 w-9 rounded-xl bg-[#f4ebe0]/80 hover:bg-[#ede0cf] text-[#6b1620] border border-[#dfd0be] flex items-center justify-center transition-all cursor-pointer"
+              className="h-9 w-9 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer shadow-2xs"
               title="Search Products (⌘K)"
             >
               <Search size={16} />
@@ -175,27 +182,27 @@ export const Header: React.FC = () => {
             {/* RFQ Cart Trigger */}
             <button
               onClick={() => (isCartOpen ? closeCartDrawer() : openCartDrawer())}
-              className="relative flex items-center gap-1.5 px-3 py-2 bg-[#6b1620] hover:bg-[#540f17] text-white rounded-xl text-xs font-black transition-all shadow-md cursor-pointer border border-[#851e2b]/50"
+              className="relative flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs transition-all shadow-md cursor-pointer border border-amber-400"
             >
               <ShoppingCart size={15} />
               <span className="hidden sm:inline">RFQ Cart</span>
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-[#faf5ec] text-[#6b1620] border border-[#dfd2be] text-[10px] font-mono font-bold flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-slate-950 text-white border border-amber-400 text-[10px] font-mono font-bold flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
             </button>
 
-            {/* User Account / Sign In Icon Button (Visible on ALL screen sizes) */}
+            {/* User Account Button */}
             <button
               type="button"
               onClick={handleAuthAction}
-              className="h-9 w-9 rounded-xl bg-[#f4ebe0]/80 hover:bg-[#ede0cf] text-[#6b1620] border border-[#dfd0be] flex items-center justify-center transition-all cursor-pointer relative"
+              className="h-9 w-9 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer relative shadow-2xs"
               title={currentUser ? `Account: ${currentUser.companyName}` : "Sign In / Register"}
             >
               <User size={16} />
               {currentUser && (
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-600 border-2 border-white" />
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#501c18]" />
               )}
             </button>
 
@@ -203,7 +210,7 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-[#6b1620] hover:bg-[#f1eae0] border border-[#e2d8cb] transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-white hover:bg-white/20 border border-white/20 transition-colors cursor-pointer"
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -215,20 +222,29 @@ export const Header: React.FC = () => {
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-3 border-t border-[#e8dfd3] space-y-1.5 animate-fade-in bg-[#faf8f5]">
+          <div className="lg:hidden py-3 border-t border-white/15 space-y-1.5 animate-fade-in bg-[#450a11] rounded-b-2xl px-2">
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10"
+            >
+              <Home size={14} className="text-amber-400" />
+              <span>Home</span>
+            </Link>
+
             <Link
               to="/catalog"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-900 hover:bg-[#efe7dc]"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10"
             >
-              <Grid size={14} className="text-[#8c7467]" />
+              <Grid size={14} className="text-amber-400" />
               <span>Catalog</span>
             </Link>
 
             <a
               href="/#brandPortfolios"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-900 hover:bg-[#efe7dc]"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10"
             >
               <span>Brands</span>
             </a>
@@ -239,9 +255,9 @@ export const Header: React.FC = () => {
                 setMobileMenuOpen(false);
                 openAbout();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-900 hover:bg-[#efe7dc] text-left cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10 text-left cursor-pointer"
             >
-              <Info size={14} className="text-[#8c7467]" />
+              <Info size={14} className="text-amber-400" />
               <span>About</span>
             </button>
 
@@ -251,18 +267,18 @@ export const Header: React.FC = () => {
                 setMobileMenuOpen(false);
                 openSupport();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#efe7dc] text-[#6b1620] font-bold text-xs text-left border border-[#d8c9b6] cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/10 text-white font-bold text-xs text-left border border-white/20 cursor-pointer"
             >
-              <Headphones size={14} />
+              <Headphones size={14} className="text-amber-400" />
               <span>Contact</span>
             </button>
 
             <a
               href="/#rfqSection"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#faf6f0] bg-[#6b1620] hover:bg-[#581018]"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300"
             >
-              <FileText size={14} className="text-[#faf6f0]" />
+              <FileText size={14} />
               <span>Submit RFQ</span>
             </a>
           </div>
