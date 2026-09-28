@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Home,
   Search,
   User,
   FileText,
   ShoppingCart,
   Headphones,
-  Info,
+  Building2,
   Grid,
   Menu,
   X,
@@ -24,6 +23,7 @@ export const Header: React.FC = () => {
     openSearch,
     openSupport,
     openAbout,
+    openRfq,
   } = useAuth();
 
   const { totalItems, isCartOpen, openCartDrawer, closeCartDrawer } = useCart();
@@ -60,14 +60,6 @@ export const Header: React.FC = () => {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1">
-            <Link
-              to="/"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors"
-            >
-              <Home size={14} className="text-amber-400" />
-              <span>Home</span>
-            </Link>
-
             <Link
               to="/catalog"
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors"
@@ -152,7 +144,7 @@ export const Header: React.FC = () => {
               onClick={openAbout}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
-              <Info size={14} className="text-amber-400" />
+              <Building2 size={14} className="text-amber-400" />
               <span>Company</span>
             </button>
 
@@ -177,6 +169,16 @@ export const Header: React.FC = () => {
               title="Search Products (⌘K)"
             >
               <Search size={16} />
+            </button>
+
+            {/* Bulk Enquiry Button */}
+            <button
+              type="button"
+              onClick={() => openRfq("Website Bulk Enquiry Requirement")}
+              className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold rounded-xl text-xs transition-all cursor-pointer shadow-2xs"
+            >
+              <FileText size={14} className="text-amber-400" />
+              <span>Bulk Enquiry</span>
             </button>
 
             {/* RFQ Cart Trigger */}
@@ -224,15 +226,6 @@ export const Header: React.FC = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden py-3 border-t border-white/15 space-y-1.5 animate-fade-in bg-[#450a11] rounded-b-2xl px-2">
             <Link
-              to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10"
-            >
-              <Home size={14} className="text-amber-400" />
-              <span>Home</span>
-            </Link>
-
-            <Link
               to="/catalog"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10"
@@ -257,7 +250,7 @@ export const Header: React.FC = () => {
               }}
               className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-white/10 text-left cursor-pointer"
             >
-              <Info size={14} className="text-amber-400" />
+              <Building2 size={14} className="text-amber-400" />
               <span>Company</span>
             </button>
 
@@ -273,14 +266,17 @@ export const Header: React.FC = () => {
               <span>Contact</span>
             </button>
 
-            <a
-              href="/#rfqSection"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300"
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openRfq("Website Bulk Enquiry Requirement");
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 cursor-pointer"
             >
               <FileText size={14} />
-              <span>Submit RFQ</span>
-            </a>
+              <span>Bulk Enquiry (RFQ Form)</span>
+            </button>
           </div>
         )}
 

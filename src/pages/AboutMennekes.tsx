@@ -2,90 +2,180 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ShieldCheck,
-  Zap,
   ArrowRight,
   ChevronRight,
   CheckCircle2,
   FileText,
-  Sparkles,
-  Layers,
   Award,
   Cpu,
   Terminal,
   Activity,
+  Layers,
 } from "lucide-react";
 import { RFQModal } from "../assets/components/ui/RFQModal";
 
 export const AboutMennekes: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-  const [activeSeriesId, setActiveSeriesId] = useState<string>("powertop");
+  const [activeSeriesId, setActiveSeriesId] = useState<string>("plugs");
 
   const mennekesCategories = [
     {
-      id: "powertop",
+      id: "plugs",
       index: "01",
-      code: "SERIES 01 // HEAVY DUTY CEE",
+      code: "SERIES 01 // CEE INDUSTRIAL PLUGS",
       title: "PowerTOP® Xtra CEE Plugs & Connectors",
-      shortTitle: "PowerTOP® Plugs",
-      desc: "Ergonomic industrial plugs with rubberized slip-proof grips and SafeCONTACT screwless insulation-displacement technology for fast, vibration-proof field wiring.",
-      specs: "16A, 32A, 63A, 125A · IP44 / IP67 watertight · Highly heat-resistant contact carriers · Nickel-plated pins",
+      shortTitle: "CEE Plugs",
+      desc: "Heavy-duty industrial plugs and connector sockets featuring ergonomic rubberized grip, screwless connection technology, and IP67 waterproof ratings.",
+      specs: "16A to 125A ratings · 3P+N+E voltages · IP67 watertight · IEC 60309 compliant",
       products: [
-        "PowerTOP® Xtra 16A 5P (400V 3P+N+E Red)",
-        "PowerTOP® Xtra 32A 5P (400V 3P+N+E Red)",
-        "PowerTOP® Xtra 63A / 125A Heavy Industrial",
-        "SafeCONTACT Screwless Quick-Wire Plugs",
-        "Appliance Inlets & Angled Couplers for machinery",
+        "PowerTOP Xtra 16A 3P+E+N 415V IP67 Plug",
+        "PowerTOP Xtra 32A 3P+E Industrial Watertight Connector",
+        "PowerTOP Xtra 63A Heavy Duty Straight Plug",
+        "AM-TOP Standard Panel Mounted Straight Socket 16A",
+        "DUO-IS Switchable Interlocked Socket Outlet 32A",
+        "AMAXX Combination Distribution Enclosure Unit",
+        "Rubber Wall Socket Outlet Box IP44 / IP67",
+        "CEE Phase Inverter Plug 32A 4-Pin",
       ],
-      image: "/images/menn-powertop.jpg",
+      image: "/images/menn-duo.jpg",
     },
     {
       id: "amaxx",
       index: "02",
-      code: "SERIES 02 // RECEPTACLE COMBOS",
-      title: "AMAXX® Receptacle Combination Enclosures",
-      shortTitle: "AMAXX® Combos",
-      desc: "Modular, pre-wired power distribution units fabricated from high-impact AMAPLAST polymer. Configurable with MCBs, RCCBs, and CEE receptacles for manufacturing lines.",
-      specs: "AMAPLAST impact polymer · IP44 / IP67 · Custom DIN rail windows · Pre-wired & factory tested",
+      code: "SERIES 02 // COMBINATION DISTRIBUTION",
+      title: "AMAXX® Modular Wall-Mounted Combination Units",
+      shortTitle: "AMAXX Enclosures",
+      desc: "Pre-wired modular power distribution units combining CEE sockets, SCHUKO domestic outlets, and miniature circuit breakers in a robust impact-resistant enclosure.",
+      specs: "IP44 & IP67 protection · Pre-wired with DIN rail MCBs and RCDs · Robust Amaplast housing",
       products: [
-        "AMAXX® 2-Gang Compact Wall Units",
-        "AMAXX® 4-Gang Floor / Wall Enclosures",
-        "AMAXX® 5-Gang Heavy Industrial Combos",
-        "Integrated Transparent MCB & RCD Windows",
-        "Pivoted Enclosure Covers for Rapid Maintenance",
+        "AMAXX Basic Wall Distribution Unit (2x 16A CEE + 2x Schuko)",
+        "AMAXX Industrial Unit with RCD Protection & MCB Window",
+        "AMAXX Construction Site Power Distribution Box",
+        "AMAXX Data Center Rack Power Feed Enclosure",
+        "Amaplast Empty Modular Enclosure Housing Size 1",
+        "Amaplast Empty Modular Enclosure Housing Size 2",
+        "Hinged Transparent Inspection Window Kit",
+        "DIN Rail Terminal Block Assembly Module for AMAXX",
       ],
-      image: "/images/menn-amaxx.jpg",
+      image: "/images/menn-panel.jpg",
     },
     {
-      id: "evergum",
+      id: "ev",
       index: "03",
-      code: "SERIES 03 // VULCANIZED RUBBER",
-      title: "EverGUM® Solid Rubber Field Distributors",
-      shortTitle: "EverGUM® Distributors",
-      desc: "Virtually indestructible portable and wall-mount distribution boxes manufactured from solid vulcanized rubber, resistant to harsh acids, oils, and severe drop impacts.",
-      specs: "Solid vulcanized synthetic rubber · Crush & drop proof · IP44 / IP67 · Safety yellow & black casing",
+      code: "SERIES 03 // EV CHARGING INFRASTRUCTURE",
+      title: "AMTRON® Electric Vehicle Charging Stations",
+      shortTitle: "EV Charging",
+      desc: "Smart AC charging stations engineered for residential, commercial, and public EV fleets with backend billing integration, RFID authorization, and Type 2 sockets.",
+      specs: "3.7 kW to 22 kW charging capacity · Type 2 cable / socket · OCPP 1.6j network ready",
       products: [
-        "EverGUM® Compact Portable Drop Boxes",
-        "EverGUM® Heavy Floor Distribution Stand",
-        "EverGUM® Wall Mount Receptacle Boxes",
-        "Total Oil & Chemical Washdown Resistance",
-        "Heavy-Duty Solid Rubber Carrying Handles",
+        "AMTRON Compact 3.7kW/11kW Home EV Wallbox Charger",
+        "AMTRON Professional 22kW Commercial Charging Station",
+        "AMTRON Premium with RFID Reader & Energy Meter",
+        "Type 2 to Type 2 EV Charging Cable 32A 5-Meter",
+        "Mode 3 EV Charging Controller Board Assembly",
+        "Pedestal Mounting Post for AMTRON Stations",
+        "DC Residual Current Fault Detector Module (RCD Type B)",
+        "Ethernet / 4G Communication Modem Upgrade Kit",
       ],
-      image: "/images/menn-evergum.jpg",
+      image: "/images/menn-phase.jpg",
     },
     {
-      id: "panel",
+      id: "interlocked",
       index: "04",
-      code: "SERIES 04 // PANEL RECEPTACLES",
-      title: "CEE Panel Sockets & DUO Interlocked Switches",
-      shortTitle: "DUO & Panel Sockets",
-      desc: "Panel mount sockets with straight and angled flanges, plus DUO switched interlocked receptacles that mechanically prevent insertion or removal while electrically energized.",
-      specs: "16A to 125A · Nickel-plated contacts · IP67 watertight · Padlockable rotary safety handle",
+      code: "SERIES 04 // INTERLOCKED SWITCHED SOCKETS",
+      title: "Switchable & Mechanically Interlocked Sockets",
+      shortTitle: "Interlocked Sockets",
+      desc: "Safety interlocked socket outlets preventing insertion or removal of plugs under load, ensuring absolute operator safety in heavy manufacturing plants.",
+      specs: "AC-3 load breaking capacity · Padlockable rotary switch handle · Enclosure IP67",
       products: [
-        "Straight Flange Panel Sockets (16A / 32A)",
-        "Angled Flange Receptacles for Machine Panels",
-        "DUO Switched Interlocked Receptacles (Mechanical interlock)",
-        "Phase Inverter Plugs (16A / 32A for 3-phase motors)",
-        "CEE Surface Mounting High Current Wall Sockets",
+        "MENNEKES Switchable Interlocked Socket 16A 3P+E",
+        "MENNEKES Switchable Interlocked Socket 32A 3P+N+E",
+        "Heavy Duty Wall Mounted Interlocked Outlet 63A",
+        "Compact Switch-Socket Combination Box 16A",
+        "Auxiliary Switch Contact Module for Interlock Status",
+        "Padlock Locking Hasp Accessory for Switch Handle",
+        "Weatherproof Protective Spring Lid Assembly Kit",
+        "Stainless Steel Mounting Bracket for Interlocked Sockets",
+      ],
+      image: "/images/menn-powertop.jpg",
+    },
+    {
+      id: "reels",
+      index: "05",
+      code: "SERIES 05 // CABLE REELS & EXTENSIONS",
+      title: "AIRPORT & Industrial Heavy Duty Cable Reels",
+      shortTitle: "Cable Reels",
+      desc: "Rugged spring-driven and manual cable reels designed for workshops, aircraft hangars, and assembly workstations.",
+      specs: "H07RN-F rubber cables · Thermal overload protection · Swivel mounting bracket",
+      products: [
+        "AIRPORT Mobile Heavy Duty Cable Reel 25m",
+        "Spring-Driven Retractable Workshop Cable Reel 15m",
+        "Hand-Operated Tubular Steel Extension Reel 50m",
+        "Thermal Overload Circuit Breaker Reset Switch Button",
+        "Swivel Wall Mounting Bracket for Spring Reels",
+        "Rubberized CEE Extension Cord with Watertight Coupler",
+        "Replacement H07RN-F Heavy Duty Flexible Cable Drum Roll",
+        "Industrial Slip Ring Assembly Kit for Rotary Reels",
+      ],
+      image: "/images/menn-duo.jpg",
+    },
+    {
+      id: "camping",
+      index: "06",
+      code: "SERIES 06 // MARINA & CAMPING OUTLETS",
+      title: "CAMPING & MARINA Power Pillar Distribution",
+      shortTitle: "Marina Pillars",
+      desc: "Weatherproof aluminum and stainless steel power distribution bollards designed for marinas, caravan parks, and outdoor events.",
+      specs: "IP44 / IP67 waterproof bollards · Energy meter integration · LED illumination",
+      products: [
+        "Marina Power Bollard Pillar with 4x CEE Sockets & Water Tap",
+        "Caravan Site Distribution Pillar with kWh Energy Meters",
+        "Stainless Steel Compact Marina Outlet Enclosure",
+        "LED Night Illumination Cap for Power Pillar",
+        "Coin / Token Operated Power Dispenser Module",
+        "Lockable Protective Access Door Panel for Bollard",
+        "Internal Circuit Breaker Mounting DIN Rail Assembly",
+        "Heavy Duty Floor Anchor Base Plate Kit for Pillars",
+      ],
+      image: "/images/menn-phase-raw.png",
+    },
+    {
+      id: "containers",
+      index: "07",
+      code: "SERIES 07 // REFRIGERATED CONTAINER SOCKETS",
+      title: "Reefer Container Sockets & Plugs (Reeferline)",
+      shortTitle: "Reefer Sockets",
+      desc: "Specialized 32A and 63A 3-phase high-integrity plugs and sockets engineered specifically for refrigerated transport containers (Reefer units) at ports and logistics terminals.",
+      specs: "3P+E 32A 440V 3-hour earth contact · Nickel-plated contacts · High salt-mist resistance",
+      products: [
+        "Reeferline Panel Mounted Interlocked Socket 32A 3P+E",
+        "Reefer Container Heavy Duty Watertight Plug 32A",
+        "Reeferline Angled Adapter Socket Housing 63A",
+        "Corrosion-Resistant Stainless Steel Mounting Box",
+        "Pilot Contact Auxiliary Pin Set for Reefer Plugs",
+        "Heavy Duty Rubber Strain Relief Cable Sleeve Gland",
+        "Replacement Insulating Interior Block for 32A Reefer Socket",
+        "Weatherproof Spring-Loaded Protective Cover Lid Assembly",
+      ],
+      image: "/images/menn-duo.jpg",
+    },
+    {
+      id: "adapters",
+      index: "08",
+      code: "SERIES 08 // ADAPTERS & ACCESSORIES",
+      title: "CEE Industrial Adapters & Enclosure Spares",
+      shortTitle: "Adapters & Spares",
+      desc: "Essential accessories, phase changers, wall brackets, and portable adapter blocks for universal CEE site connectivity.",
+      specs: "High impact Amaplast housing · VDE approved · Factory tested components",
+      products: [
+        "Portable CEE Phase Inverter Adapter Block 16A",
+        "CEE to Schuko Domestic Converter Adapter Plug",
+        "Replacement Rubber Sealing Gasket Ring for IP67 Plugs",
+        "Hinged Inspection Window Kit for Distribution Boxes",
+        "Wall Mounting Foot Bracket Set for AMAXX Enclosures",
+        "Replacement Pilot Lamp LED Indicator Module 230V",
+        "Padlock Security Hasp Lockout Accessory for CEE Sockets",
+        "High-Grade Cable Gland M25 x 1.5 Watertight Nut",
       ],
       image: "/images/menn-panel.jpg",
     },
@@ -112,8 +202,7 @@ export const AboutMennekes: React.FC = () => {
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
-          
-          <div className="lg:col-span-8 rounded-3xl p-8 sm:p-10 border border-purple-900/40 bg-gradient-to-br from-[#1d0d24] via-[#120817] to-[#09040c] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between">
+          <div className="lg:col-span-8 rounded-3xl p-8 sm:p-10 border border-purple-900/40 bg-gradient-to-br from-[#1b0b2b] via-[#0d0516] to-[#040108] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between">
             <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="space-y-6 relative z-10">
@@ -121,33 +210,33 @@ export const AboutMennekes: React.FC = () => {
                 <div className="h-12 px-4 bg-white rounded-2xl border border-stone-200 shadow-md flex items-center justify-center">
                   <img
                     src="/images/logo-mennekes.png"
-                    alt="Mennekes Germany Logo"
+                    alt="Mennekes Logo"
                     className="h-6 w-auto max-w-[120px] object-contain"
                   />
                 </div>
-                <span className="px-3.5 py-1.5 rounded-full bg-purple-500/20 text-[#E8B4DC] font-mono font-bold text-xs uppercase tracking-wider border border-purple-400/40 flex items-center gap-1.5">
-                  <ShieldCheck size={14} className="text-[#E8B4DC]" />
-                  Official Authorized Distributor
+                <span className="px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-300 font-mono font-bold text-xs uppercase tracking-wider border border-purple-400/40 flex items-center gap-1.5">
+                  <ShieldCheck size={14} className="text-purple-400" />
+                  Official Authorized Stockist
                 </span>
                 <span className="px-3.5 py-1.5 rounded-full bg-black/40 text-purple-200 font-mono text-xs font-semibold border border-purple-900/50">
-                  🇩🇪 Kirchhundem, Germany · Est. 1935
+                  🇩🇪 Kirchhundem Germany
                 </span>
               </div>
 
               <div className="space-y-3">
                 <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-snug">
-                  MENNEKES — Industrial CEE Plugs, Sockets & AMAXX® Enclosures
+                  MENNEKES Germany — World Standard for CEE Plugs & EV Charging
                 </h1>
                 <p className="text-purple-100/80 text-xs sm:text-sm leading-relaxed font-sans">
-                  Founded in 1935 in Germany, Mennekes is the originator of standard industrial CEE circular power connections worldwide. Siddhi Kabel Corporation supplies heavy-duty 16A to 125A PowerTOP® Xtra industrial plugs, Switched Interlocked DUO receptacles, and AMAPLAST AMAXX combinations.
+                  MENNEKES is the inventor of the worldwide standard Type 2 EV connector and industrial CEE plugs. Siddhi Kabel Corporation stocks PowerTOP plugs, AMAXX enclosures, and AMTRON chargers in Bangalore.
                 </p>
               </div>
             </div>
 
             <div className="pt-6 mt-6 border-t border-purple-900/40 flex flex-wrap items-center justify-between gap-4 relative z-10 text-xs font-mono text-purple-200/80">
-              <div className="flex items-center gap-2 text-[#E8B4DC] font-bold">
+              <div className="flex items-center gap-2 text-purple-400 font-bold">
                 <Award size={15} />
-                <span>VDE & CE Certified to IEC 60309-1 / -2</span>
+                <span>IEC 60309 & VDE Certified Safety</span>
               </div>
               <div className="flex items-center gap-2 text-emerald-400 font-bold">
                 <Activity size={15} className="animate-pulse" />
@@ -156,48 +245,38 @@ export const AboutMennekes: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-4 rounded-3xl p-8 border border-purple-900/40 bg-gradient-to-br from-[#1d0d24] via-[#120817] to-[#09040c] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between space-y-6">
+          <div className="lg:col-span-4 rounded-3xl p-8 border border-purple-900/40 bg-gradient-to-br from-[#1b0b2b] via-[#0d0516] to-[#040108] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between space-y-6">
             <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="space-y-3 relative z-10">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#E8B4DC] block">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-purple-400 block">
                 EXECUTIVE PROCUREMENT
               </span>
               <h3 className="text-lg font-bold text-white">
-                Configuring plant power outlets or washdown plugs?
+                Ready to dispatch CEE plugs & EV boxes?
               </h3>
               <p className="text-xs text-purple-100/80 leading-relaxed">
-                Configure pre-wired AMAXX assemblies with VDE test certification and fast dispatch.
+                Access direct commercial pricing schedules or submit your industrial distribution panel requirements.
               </p>
             </div>
 
             <div className="space-y-3 relative z-10">
-              <Link
-                to="/#productsSection"
-                className="w-full py-3.5 bg-[#8B2272] hover:bg-[#721B5D] text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 hover:scale-102"
-              >
-                <Zap size={14} />
-                <span>Browse MENNEKES In Catalog</span>
-                <ArrowRight size={14} />
-              </Link>
-
               <button
                 type="button"
-                onClick={() => setSelectedProduct("MENNEKES Germany Price List & Schedule")}
-                className="w-full py-3.5 bg-black/40 hover:bg-black/60 text-purple-200 hover:text-white border border-purple-500/30 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 cursor-pointer"
+                onClick={() => setSelectedProduct("MENNEKES CEE Plugs & EV Price List")}
+                className="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 cursor-pointer"
               >
-                <FileText size={14} className="text-[#E8B4DC]" />
+                <FileText size={14} className="text-purple-200" />
                 <span>Request Project Quotation</span>
               </button>
             </div>
           </div>
-
         </div>
 
         <div className="space-y-6 mb-16">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-3 border-b border-stone-300 gap-2">
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-widest text-purple-800 font-bold block mb-1 flex items-center gap-1.5">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-purple-700 font-bold block mb-1 flex items-center gap-1.5">
                 <Terminal size={13} /> MENNEKES ENGINEERING CONSOLE
               </span>
               <h2 className="text-2xl font-black text-stone-950 tracking-tight">
@@ -218,16 +297,16 @@ export const AboutMennekes: React.FC = () => {
                   onClick={() => setActiveSeriesId(cat.id)}
                   className={`p-5 rounded-2xl transition-all duration-300 text-left flex flex-col justify-between group cursor-pointer border relative overflow-hidden shadow-sm ${
                     isSelected
-                      ? "bg-[#120817] text-white border-purple-700/60 shadow-xl ring-2 ring-purple-400/40 translate-y-[-2px]"
+                      ? "bg-[#0d0516] text-white border-purple-700/60 shadow-xl ring-2 ring-purple-400/40 translate-y-[-2px]"
                       : "bg-white border-stone-200 text-stone-700 hover:border-stone-400 hover:bg-stone-50"
                   }`}
                 >
                   <div className="space-y-2 relative z-10">
                     <div className="flex items-center justify-between">
-                      <span className={`text-[10px] font-mono font-bold tracking-wider uppercase ${isSelected ? "text-[#E8B4DC]" : "text-stone-500"}`}>
+                      <span className={`text-[10px] font-mono font-bold tracking-wider uppercase ${isSelected ? "text-purple-400" : "text-stone-500"}`}>
                         SERIES {cat.index}
                       </span>
-                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-transform ${isSelected ? "bg-[#8B2272] text-white font-bold rotate-90" : "bg-stone-100 text-stone-500"}`}>
+                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-transform ${isSelected ? "bg-purple-600 text-white font-bold rotate-90" : "bg-stone-100 text-stone-500"}`}>
                         <ChevronRight size={12} />
                       </div>
                     </div>
@@ -236,7 +315,7 @@ export const AboutMennekes: React.FC = () => {
                     </h4>
                   </div>
                   <div className={`pt-4 relative z-10 flex items-center gap-2 text-[10px] font-mono ${isSelected ? "text-purple-200/80 font-bold" : "text-stone-500"}`}>
-                    <Cpu size={12} className={isSelected ? "text-[#E8B4DC] animate-pulse" : ""} />
+                    <Cpu size={12} className={isSelected ? "text-purple-400 animate-pulse" : ""} />
                     <span>{isSelected ? "Active Console Node" : "Click to Inspect"}</span>
                   </div>
                 </button>
@@ -244,14 +323,13 @@ export const AboutMennekes: React.FC = () => {
             })}
           </div>
 
-          <div className="bg-[#120817] text-white rounded-3xl border border-purple-900/50 p-6 sm:p-10 relative overflow-hidden shadow-2xl animate-fade-in transition-all duration-500" key={activeCategory.id}>
+          <div className="bg-[#0d0516] text-white rounded-3xl border border-purple-900/50 p-6 sm:p-10 relative overflow-hidden shadow-2xl animate-fade-in transition-all duration-500" key={activeCategory.id}>
             <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-              
               <div className="lg:col-span-5 space-y-6">
                 <div className="space-y-2">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#E8B4DC] bg-purple-500/20 px-3 py-1 rounded-full border border-purple-400/30 inline-block shadow-2xs">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-500/20 px-3 py-1 rounded-full border border-purple-400/30 inline-block shadow-2xs">
                     {activeCategory.code}
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-black text-white leading-snug">
@@ -263,14 +341,14 @@ export const AboutMennekes: React.FC = () => {
                   {activeCategory.desc}
                 </p>
 
-                <div className="w-full h-48 rounded-2xl bg-[#09040c] border border-purple-900/40 p-4 flex items-center justify-center shadow-inner overflow-hidden group">
+                <div className="w-full h-48 rounded-2xl bg-[#040108] border border-purple-900/40 p-4 flex items-center justify-center shadow-inner overflow-hidden group">
                   <img
                     src={activeCategory.image}
                     alt={activeCategory.title}
                     className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       e.currentTarget.onerror = null;
-                      e.currentTarget.src = "/images/menn-powertop.jpg";
+                      e.currentTarget.src = "/images/mennekes-plugs.jpg";
                     }}
                   />
                 </div>
@@ -278,16 +356,15 @@ export const AboutMennekes: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedProduct(`MENNEKES ${activeCategory.title}`)}
-                  className="w-full py-4 bg-[#8B2272] hover:bg-[#721B5D] text-white font-black text-xs rounded-xl transition-all shadow-lg hover:scale-102 cursor-pointer uppercase tracking-wider text-center"
+                  className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white font-black text-xs rounded-xl transition-all shadow-lg hover:scale-102 cursor-pointer uppercase tracking-wider text-center"
                 >
                   Request Official Series Quotation
                 </button>
               </div>
 
-              <div className="lg:col-span-7 space-y-6 bg-[#1d0d24]/90 p-6 sm:p-8 rounded-2xl border border-purple-900/40 shadow-inner">
-                
+              <div className="lg:col-span-7 space-y-6 bg-[#1b0b2b]/90 p-6 sm:p-8 rounded-2xl border border-purple-900/40 shadow-inner">
                 <div className="space-y-2 font-mono">
-                  <div className="flex items-center gap-2 text-[#E8B4DC] text-xs font-bold uppercase tracking-wider">
+                  <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
                     <Layers size={16} />
                     <span>Hardware Telemetry & Parameters</span>
                   </div>
@@ -298,12 +375,12 @@ export const AboutMennekes: React.FC = () => {
 
                 <div className="space-y-3">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-purple-200/70 font-bold block">
-                    Available Stock Configurations & Part Numbers:
+                    Available Stock Configurations & Part Numbers (8 Standard Items):
                   </span>
-                  <div className="grid grid-cols-1 gap-2.5">
+                  <div className="grid grid-cols-1 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
                     {activeCategory.products.map((p, idx) => (
-                      <div key={idx} className="flex items-center gap-3 p-3.5 rounded-xl bg-[#09040c] border border-purple-900/50 text-xs text-purple-50 font-medium shadow-sm hover:border-purple-400 hover:bg-[#120817] hover:-translate-y-0.5 transition-all duration-300">
-                        <CheckCircle2 size={16} className="text-[#E8B4DC] shrink-0" />
+                      <div key={idx} className="flex items-center gap-3 p-3.5 rounded-xl bg-[#040108] border border-purple-900/50 text-xs text-purple-50 font-medium shadow-sm hover:border-purple-400 hover:bg-[#0d0516] hover:-translate-y-0.5 transition-all duration-300">
+                        <CheckCircle2 size={16} className="text-purple-400 shrink-0" />
                         <span>{p}</span>
                       </div>
                     ))}
@@ -311,49 +388,12 @@ export const AboutMennekes: React.FC = () => {
                 </div>
 
                 <div className="pt-4 border-t border-purple-900/40 flex items-center justify-between text-xs">
-                  <Link
-                    to="/#productsSection"
-                    className="font-bold text-purple-200 hover:text-[#E8B4DC] inline-flex items-center gap-1.5 transition-colors group"
-                  >
-                    <span>Explore Full Catalog Inventory</span>
-                    <ArrowRight size={14} className="text-[#E8B4DC] transition-transform group-hover:translate-x-1" />
-                  </Link>
-                  <span className="font-mono text-purple-200/60 text-[11px]">Bangalore Hub Stock</span>
+                  <span className="font-mono text-purple-200/60 text-[11px]">Bangalore Central Hub Ready Stock</span>
                 </div>
-
               </div>
-
             </div>
-
-          </div>
-
-        </div>
-
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#120817] text-white shadow-2xl border border-purple-900/50 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div className="relative z-10 space-y-2 max-w-xl">
-            <span className="text-[#E8B4DC] font-mono text-xs font-bold uppercase tracking-wider">
-              READY INVENTORY · BANGALORE CENTRAL LOGISTICS HUB
-            </span>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
-              Configuring industrial plant power outlets or washdown plugs?
-            </h3>
-            <p className="text-xs sm:text-sm text-purple-100/80 leading-relaxed">
-              Send your pin requirements or project socket combinations. We configure pre-wired AMAXX assemblies with VDE test certification.
-            </p>
-          </div>
-
-          <div className="relative z-10 flex flex-col sm:flex-row gap-3 shrink-0">
-            <Link
-              to="/#rfqSection"
-              className="px-6 py-3.5 bg-[#8B2272] hover:bg-[#721B5D] text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 text-center"
-            >
-              Submit Project RFQ
-            </Link>
           </div>
         </div>
-
       </div>
 
       {selectedProduct && (

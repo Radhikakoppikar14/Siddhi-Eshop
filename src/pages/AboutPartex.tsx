@@ -2,92 +2,182 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ShieldCheck,
-  Zap,
   ArrowRight,
   ChevronRight,
   CheckCircle2,
   FileText,
-  Sparkles,
-  Layers,
   Award,
   Cpu,
   Terminal,
   Activity,
+  Layers,
 } from "lucide-react";
 import { RFQModal } from "../assets/components/ui/RFQModal";
 
 export const AboutPartex: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-  const [activeSeriesId, setActiveSeriesId] = useState<string>("pa");
+  const [activeSeriesId, setActiveSeriesId] = useState<string>("sleeves");
 
   const partexCategories = [
     {
-      id: "pa",
+      id: "sleeves",
       index: "01",
-      code: "SERIES 01 // CLOSED CHEVRON",
-      title: "PA Closed Wire Markers (Chevron Cut)",
-      shortTitle: "PA Chevron Cut",
-      desc: "Single-digit closed chevron cut sleeves for wires from 0.2 to 70 sq mm. The interlocking chevron profile ensures individual characters stay permanently aligned on wire bundles.",
-      specs: "PA-02, PA-1, PA-2, PA-3 · Cadmium & Silicon-free PVC · UL94-V0 Flame Retardant · -30°C to +60°C",
+      code: "SERIES 01 // WIRE & CABLE MARKING",
+      title: "PA / PK Cable & Wire Marking Sleeves",
+      shortTitle: "Marking Sleeves",
+      desc: "Chevron-cut interlocking closed sleeves and expandable profile markers designed for rapid wire identification in high-vibration control cabinets.",
+      specs: "Halogen-free material · Operating temp -30°C to +100°C · Resistant to oils, fuels and UV",
       products: [
-        "PA-02 (0.2 - 1.5 mm² wires / cables)",
-        "PA-1 (0.75 - 4.0 mm² wires / cables)",
-        "PA-2 (2.5 - 16 mm² wires / cables)",
-        "PA-3 (16 - 70 mm² heavy cables)",
-        "Numbers 0-9, Letters A-Z, Standard Electrical Symbols (+, -, Earth)",
-      ],
-      image: "/images/partex-pa.jpg",
-    },
-    {
-      id: "t1000",
-      index: "02",
-      code: "SERIES 02 // THERMAL PRINTER",
-      title: "ProMark T-1000 Thermal Transfer Marker Printer",
-      shortTitle: "ProMark T-1000",
-      desc: "High-speed portable on-site industrial marker printer with 300 dpi resolution. Prints directly on continuous PO profile tubing, heat-shrinkable sleeves, and self-adhesive panel labels.",
-      specs: "40 mm/sec print speed · USB PC connection + internal memory · 300 dpi high clarity · Portable battery pack",
-      products: [
-        "ProMark T-1000 Master Printer Kit",
-        "Heavy-Duty Aluminium Transport & Site Case",
-        "Black / White / Red Industrial Resin Ribbons",
-        "USB Cable & Windows Software Suite included",
-        "Rechargeable Lithium-Ion Field Battery",
-      ],
-      image: "/images/partex-promark.jpg",
-    },
-    {
-      id: "pc",
-      index: "03",
-      code: "SERIES 03 // RETROFIT SNAP-ON",
-      title: "PC Clip-On Open Wire Markers",
-      shortTitle: "PC Clip-On",
-      desc: "Open snap-on markers designed for direct installation on pre-connected wiring, terminal blocks, and retrofit maintenance without removing wire terminations.",
-      specs: "PC-10, PC-20, PC-30, PC-40 · High retention spring clamp · Vibration-proof grip · Fast wand applicator",
-      products: [
-        "PC-10 (2.4 - 3.0 mm Outer Diameter)",
-        "PC-20 (3.0 - 4.0 mm Outer Diameter)",
-        "PC-30 (4.0 - 5.0 mm Outer Diameter)",
-        "PC-40 (5.0 - 6.2 mm Outer Diameter)",
-        "Applicator Wand Tools for Rapid Mounting",
+        "PA-02 (Closed chevron sleeve for 0.5 - 1.5mm² wire)",
+        "PA-10 (Standard electrical control wire marker sleeve)",
+        "PK-20 (Expandable profile marker for thick cables)",
+        "PO-06 (Oval grip wire marker for loose wires)",
+        "PZ-20 (Snap-on pre-terminated cable marker)",
+        "PP+ (Heavy duty yellow cable marker ring)",
+        "PT+ (Transparent pocket carrier strip marker)",
+        "PHA (Self-laminating cable marker tag label)",
       ],
       image: "/images/partex-pc.jpg",
     },
     {
-      id: "pks",
-      index: "04",
-      code: "SERIES 04 // ACID-PROOF SS316",
-      title: "PKS Stainless Steel 316 Acid-Proof Markers",
-      shortTitle: "PKS Stainless Steel",
-      desc: "High-grade AISI 316 stainless steel identification tags engineered for extreme marine, chemical plants, offshore oil rigs, and high-temperature fire hazard zones.",
-      specs: "AISI 316 Stainless Steel · -80°C to +500°C · Extreme fire, salt spray, and acid resistance",
+      id: "printers",
+      index: "02",
+      code: "SERIES 02 // THERMAL TRANSFER SYSTEMS",
+      title: "ProMark T-1000 & MK10 Thermal Printers",
+      shortTitle: "ProMark Printers",
+      desc: "High-speed thermal transfer marker printers engineered to print indelible legends directly onto heat shrink tubing, plastic tags, and self-adhesive labels.",
+      specs: "300 dpi resolution · Automatic cutting and half-cutting · Windows software integration",
       products: [
-        "PKS Individual Embossed Characters",
-        "PKB Steel Marker Carrier Strips",
-        "Ball-Lock Stainless Steel Cable Ties",
-        "Custom Multi-Line Embossed Asset Tags",
-        "Heavy-Duty Tensioning & Cutting Tools",
+        "ProMark T-1000 (300dpi high speed thermal marker printer)",
+        "MK10 Portable Desktop Cable Marking Machine",
+        "T-Marker Pro Software Suite for automated legend generation",
+        "Thermal Transfer Black Ribbon Cartridge (100m)",
+        "Replacement Cutter Blade Assembly for T-1000",
+        "Cleaning Roller Kit for Thermal Printheads",
+        "External Reel Holder for Bulk Marker Rolls",
+        "USB Interface & Ethernet Network Print Server Module",
+      ],
+      image: "/images/partex-pa.jpg",
+    },
+    {
+      id: "stainless",
+      index: "03",
+      code: "SERIES 03 // STAINLESS STEEL TAGS",
+      title: "AISI 316 Acid-Proof Stainless Steel Markers",
+      shortTitle: "Stainless Steel Tags",
+      desc: "Extreme-duty acid-proof stainless steel plates and embossing systems designed for offshore oil rigs, marine vessels, and heavy chemical processing plants.",
+      specs: "AISI 316L marine grade steel · Extreme corrosion & fire resistance · Secured with stainless ties",
+      products: [
+        "ST-10 (Embossed stainless steel cable tag plate)",
+        "PA-SS (Stainless steel carrier strip profile system)",
+        "PKB Stainless Steel Cable Ties (4.6mm x 200mm)",
+        "PTX-EMB Manual Steel Embossing Hand Press Tool",
+        "Laser Markable Stainless Steel Identification Plate",
+        "A4 Grade Stainless Steel Fixing Screws & Mounts",
+        "Round Stainless Steel Valve & Pipe Marker Disc",
+        "High Temperature Ceramic Infused Marker Ink",
+      ],
+      image: "/images/partex-pc.jpg",
+    },
+    {
+      id: "tags",
+      index: "04",
+      code: "SERIES 04 // ENCLOSURE & TERMINAL TAGS",
+      title: "Terminal Block Markers & Cable Tie Tags",
+      shortTitle: "Terminal Tags",
+      desc: "Customizable multi-card terminal markers compatible with Wago, Phoenix Contact, and ABB terminal blocks, plus robust cable tie tags for large bundle identification.",
+      specs: "Polyamide PA66 V0 fire retardant · Snap-in mounting · Laser printable cards",
+      products: [
+        "MP-5 (Multi-card snap-in terminal block marker)",
+        "TF-ZB (Universal flat terminal strip marker)",
+        "PKT-40 (Cable tie plastic identification tag 40x10mm)",
+        "PKT-60 (Large format cable bundle warning tag)",
+        "FL-10 (Flexible legend plate for pushbuttons)",
+        "CAB-01 (Cabinet door legend holder strip)",
+        "PP-CLIP (Snappable marker carrier for DIN rails)",
+        "Self-Adhesive PVC Warning and Caution Label Roll",
       ],
       image: "/images/partex-pks.jpg",
+    },
+    {
+      id: "shrink",
+      index: "05",
+      code: "SERIES 05 // HEAT SHRINK TUBING",
+      title: "Heat Shrinkable Marker Tubing Systems",
+      shortTitle: "Heat Shrink Sleeves",
+      desc: "High-grade polyolefin heat shrink tubing designed for permanent, flame-retardant wire identification across demanding electrical enclosures.",
+      specs: "3:1 and 2:1 shrink ratios · MIL-STD cross-linked polyolefin · RoHS compliant",
+      products: [
+        "PHS-30 (3:1 Heat shrink marker sleeve yellow/white)",
+        "PHS-20 (2:1 Continuous thermal transfer printable shrink tube)",
+        "LEDR Shrink Tubing Reel Dispenser Box",
+        "PWF Pre-Flattened Heat Shrink Wire Marker Card",
+        "Low Smoke Zero Halogen (LSZH) Railway Grade Shrink Tubing",
+        "Dual Wall Adhesive Lined Waterproof Shrink Tube",
+        "Heavy Duty Professional Hot Air Shrink Gun Tool",
+        "Handheld Thermal Heat Shrink Marking Station Kit",
+      ],
+      image: "/images/partex-po.jpg",
+    },
+    {
+      id: "engraving",
+      index: "06",
+      code: "SERIES 06 // GRAVIQ ENGRAVED PLATES",
+      title: "GRAVIQ Multi-Layer Engraved Legend Plates",
+      shortTitle: "Engraved Plates",
+      desc: "Custom-engraved Traffolyte and acrylic legend plates for pushbuttons, switches, panel instrumentation, and emergency disconnects.",
+      specs: "UV resistant acrylic laminate · Self-adhesive or screw mounting · Custom CAD engraving",
+      products: [
+        "GRAVIQ Pushbutton Legend Plate (22mm center hole)",
+        "Emergency Stop Yellow Circular Background Plate",
+        "Multi-Line Danger & Warning Panel Engraved Sign",
+        "Custom Terminal Box Identification Nameplate Tag",
+        "Double-Sided Industrial Grade Adhesive Foam Backing Tape",
+        "Brass Screw Fixings for Engraved Panel Plates",
+        "Stainless Steel Engraved Rating Plate Custom Made",
+        "Portable Mechanical Rotary Engraving Hand Stylus Kit",
+      ],
+      image: "/images/partex-ties.jpg",
+    },
+    {
+      id: "wiremarkers",
+      index: "07",
+      code: "SERIES 07 // CLIP-ON WIRE MARKERS",
+      title: "PO & PZ Snap-On Wire Marking Rings",
+      shortTitle: "Clip-On Markers",
+      desc: "Spring-action snap-on wire markers that lock securely onto pre-terminated cables without requiring disconnection.",
+      specs: "Rigid PVC material · Interlocking profile · High resistance to mechanical torsion",
+      products: [
+        "PO-01 Clip-On Wire Marker Ring (Size 0.5 to 2.0mm²)",
+        "PO-02 Clip-On Wire Marker Ring (Size 2.5 to 4.0mm²)",
+        "PZ-03 Spring Action Wire Marker for Heavy Power Cables",
+        "PK-H Carrier Strip Wand Loaded with Snap-On Markers",
+        "Numbered Color-Coded Marker Assortment Kit (0-9, A-Z)",
+        "Special Symbol & Earth Ground Marker Ring Set",
+        "Manual Marker Applicator Pliers Tool",
+        "Refill Cartridge Pack for Snap-On Marker Wands",
+      ],
+      image: "/images/partex-promark.jpg",
+    },
+    {
+      id: "safety",
+      index: "08",
+      code: "SERIES 08 // HAZARD & SAFETY LABELS",
+      title: "Industrial Safety & Arc Flash Warning Labels",
+      shortTitle: "Safety Labels",
+      desc: "High-visibility safety signs, arc flash hazard stickers, and lockout/tagout identification markers for industrial compliance.",
+      specs: "BS 5378 & ANSI Z535 compliant · Reflective & heavy-duty vinyl · Industrial adhesive",
+      products: [
+        "Arc Flash Hazard Warning Label (415V / 440V Panel)",
+        "High Voltage Electrical Danger Triangle Warning Sticker",
+        "Earth Bonding Point Identification Marker Decal",
+        "Lockout / Tagout (LOTO) Authorized Personnel Tag Set",
+        "Solar PV DC Disconnect Warning Placard",
+        "Phase Red / Yellow / Blue Busbar Identification Label",
+        "Confined Space Entry Caution Adhesive Sign",
+        "Roll of 500 Self-Adhesive Calibration Inspection Labels",
+      ],
+      image: "/images/partex-po.jpg",
     },
   ];
 
@@ -112,42 +202,41 @@ export const AboutPartex: React.FC = () => {
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
-          
-          <div className="lg:col-span-8 rounded-3xl p-8 sm:p-10 border border-emerald-900/40 bg-gradient-to-br from-[#0a2014] via-[#05130b] to-[#020906] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="lg:col-span-8 rounded-3xl p-8 sm:p-10 border border-rose-900/40 bg-gradient-to-br from-[#2b0b13] via-[#16050a] to-[#080204] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="space-y-6 relative z-10">
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="h-12 px-4 bg-white rounded-2xl border border-stone-200 shadow-md flex items-center justify-center">
                   <img
                     src="/images/logo-partex.png"
-                    alt="Partex Sweden Logo"
+                    alt="Partex Logo"
                     className="h-6 w-auto max-w-[120px] object-contain"
                   />
                 </div>
-                <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-[#A5D6A7] font-mono font-bold text-xs uppercase tracking-wider border border-emerald-400/40 flex items-center gap-1.5">
-                  <ShieldCheck size={14} className="text-[#A5D6A7]" />
-                  Official Authorized Distributor
+                <span className="px-3.5 py-1.5 rounded-full bg-rose-500/20 text-rose-300 font-mono font-bold text-xs uppercase tracking-wider border border-rose-400/40 flex items-center gap-1.5">
+                  <ShieldCheck size={14} className="text-rose-400" />
+                  Official Authorized Stockist
                 </span>
-                <span className="px-3.5 py-1.5 rounded-full bg-black/40 text-emerald-200 font-mono text-xs font-semibold border border-emerald-900/50">
-                  🇸🇪 Gullspång, Sweden · Est. 1948
+                <span className="px-3.5 py-1.5 rounded-full bg-black/40 text-rose-200 font-mono text-xs font-semibold border border-rose-900/50">
+                  🇸🇪 Gullspång Sweden
                 </span>
               </div>
 
               <div className="space-y-3">
                 <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-snug">
-                  PARTEX Sweden — Wire, Cable & Panel Identification Systems
+                  PARTEX Sweden — Precision Wire & Cable Marking Systems
                 </h1>
-                <p className="text-emerald-100/80 text-xs sm:text-sm leading-relaxed font-sans">
-                  Founded in 1948 in Gullspång, Sweden, Partex is the undisputed benchmark in electrical marking technology. Siddhi Kabel Corporation is the authorized channel distributor across South India, delivering factory-original closed chevron markers, portable ProMark T-1000 thermal printers, and AISI 316 acid-proof stainless steel tags.
+                <p className="text-rose-100/80 text-xs sm:text-sm leading-relaxed font-sans">
+                  Partex is the world specialist in industrial identification systems. Siddhi Kabel Corporation stocks ProMark printers, chevron sleeves, and stainless steel tags in Bangalore.
                 </p>
               </div>
             </div>
 
-            <div className="pt-6 mt-6 border-t border-emerald-900/40 flex flex-wrap items-center justify-between gap-4 relative z-10 text-xs font-mono text-emerald-200/80">
-              <div className="flex items-center gap-2 text-[#A5D6A7] font-bold">
+            <div className="pt-6 mt-6 border-t border-rose-900/40 flex flex-wrap items-center justify-between gap-4 relative z-10 text-xs font-mono text-rose-200/80">
+              <div className="flex items-center gap-2 text-rose-400 font-bold">
                 <Award size={15} />
-                <span>UL94-V0 Self-Extinguishing</span>
+                <span>ISO 9001 & Halogen-Free Compliance</span>
               </div>
               <div className="flex items-center gap-2 text-emerald-400 font-bold">
                 <Activity size={15} className="animate-pulse" />
@@ -156,48 +245,38 @@ export const AboutPartex: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-4 rounded-3xl p-8 border border-emerald-900/40 bg-gradient-to-br from-[#0a2014] via-[#05130b] to-[#020906] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between space-y-6">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="lg:col-span-4 rounded-3xl p-8 border border-rose-900/40 bg-gradient-to-br from-[#2b0b13] via-[#16050a] to-[#080204] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between space-y-6">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="space-y-3 relative z-10">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#A5D6A7] block">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-rose-400 block">
                 EXECUTIVE PROCUREMENT
               </span>
               <h3 className="text-lg font-bold text-white">
-                Need custom marked cable tags or bulk chevron sleeve reels?
+                Ready to dispatch marking systems?
               </h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                Send your wire schedule or Bill of Materials for rapid pre-printed sleeve dispatches.
+              <p className="text-xs text-rose-100/80 leading-relaxed">
+                Access direct commercial pricing schedules or submit your automated panel tag requirements.
               </p>
             </div>
 
             <div className="space-y-3 relative z-10">
-              <Link
-                to="/#productsSection"
-                className="w-full py-3.5 bg-[#2E7D32] hover:bg-[#1B5E20] text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 hover:scale-102"
-              >
-                <Zap size={14} />
-                <span>Browse Partex In Catalog</span>
-                <ArrowRight size={14} />
-              </Link>
-
               <button
                 type="button"
-                onClick={() => setSelectedProduct("PARTEX Sweden Commercial Price List")}
-                className="w-full py-3.5 bg-black/40 hover:bg-black/60 text-emerald-200 hover:text-white border border-emerald-500/30 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 cursor-pointer"
+                onClick={() => setSelectedProduct("PARTEX Marking Systems Price List")}
+                className="w-full py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 cursor-pointer"
               >
-                <FileText size={14} className="text-[#A5D6A7]" />
+                <FileText size={14} className="text-rose-200" />
                 <span>Request Project Quotation</span>
               </button>
             </div>
           </div>
-
         </div>
 
         <div className="space-y-6 mb-16">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-3 border-b border-stone-300 gap-2">
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-800 font-bold block mb-1 flex items-center gap-1.5">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-rose-700 font-bold block mb-1 flex items-center gap-1.5">
                 <Terminal size={13} /> PARTEX ENGINEERING CONSOLE
               </span>
               <h2 className="text-2xl font-black text-stone-950 tracking-tight">
@@ -218,16 +297,16 @@ export const AboutPartex: React.FC = () => {
                   onClick={() => setActiveSeriesId(cat.id)}
                   className={`p-5 rounded-2xl transition-all duration-300 text-left flex flex-col justify-between group cursor-pointer border relative overflow-hidden shadow-sm ${
                     isSelected
-                      ? "bg-[#05130b] text-white border-emerald-700/60 shadow-xl ring-2 ring-emerald-400/40 translate-y-[-2px]"
+                      ? "bg-[#16050a] text-white border-rose-700/60 shadow-xl ring-2 ring-rose-400/40 translate-y-[-2px]"
                       : "bg-white border-stone-200 text-stone-700 hover:border-stone-400 hover:bg-stone-50"
                   }`}
                 >
                   <div className="space-y-2 relative z-10">
                     <div className="flex items-center justify-between">
-                      <span className={`text-[10px] font-mono font-bold tracking-wider uppercase ${isSelected ? "text-[#A5D6A7]" : "text-stone-500"}`}>
+                      <span className={`text-[10px] font-mono font-bold tracking-wider uppercase ${isSelected ? "text-rose-400" : "text-stone-500"}`}>
                         SERIES {cat.index}
                       </span>
-                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-transform ${isSelected ? "bg-[#2E7D32] text-white font-bold rotate-90" : "bg-stone-100 text-stone-500"}`}>
+                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-transform ${isSelected ? "bg-rose-600 text-white font-bold rotate-90" : "bg-stone-100 text-stone-500"}`}>
                         <ChevronRight size={12} />
                       </div>
                     </div>
@@ -235,8 +314,8 @@ export const AboutPartex: React.FC = () => {
                       {cat.shortTitle}
                     </h4>
                   </div>
-                  <div className={`pt-4 relative z-10 flex items-center gap-2 text-[10px] font-mono ${isSelected ? "text-emerald-200/80 font-bold" : "text-stone-500"}`}>
-                    <Cpu size={12} className={isSelected ? "text-[#A5D6A7] animate-pulse" : ""} />
+                  <div className={`pt-4 relative z-10 flex items-center gap-2 text-[10px] font-mono ${isSelected ? "text-rose-200/80 font-bold" : "text-stone-500"}`}>
+                    <Cpu size={12} className={isSelected ? "text-rose-400 animate-pulse" : ""} />
                     <span>{isSelected ? "Active Console Node" : "Click to Inspect"}</span>
                   </div>
                 </button>
@@ -244,14 +323,13 @@ export const AboutPartex: React.FC = () => {
             })}
           </div>
 
-          <div className="bg-[#05130b] text-white rounded-3xl border border-emerald-900/50 p-6 sm:p-10 relative overflow-hidden shadow-2xl animate-fade-in transition-all duration-500" key={activeCategory.id}>
-            <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="bg-[#16050a] text-white rounded-3xl border border-rose-900/50 p-6 sm:p-10 relative overflow-hidden shadow-2xl animate-fade-in transition-all duration-500" key={activeCategory.id}>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-              
               <div className="lg:col-span-5 space-y-6">
                 <div className="space-y-2">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#A5D6A7] bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-400/30 inline-block shadow-2xs">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400 bg-rose-500/20 px-3 py-1 rounded-full border border-rose-400/30 inline-block shadow-2xs">
                     {activeCategory.code}
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-black text-white leading-snug">
@@ -259,101 +337,63 @@ export const AboutPartex: React.FC = () => {
                   </h3>
                 </div>
 
-                <p className="text-emerald-100/80 text-xs sm:text-sm leading-relaxed font-sans">
+                <p className="text-rose-100/80 text-xs sm:text-sm leading-relaxed font-sans">
                   {activeCategory.desc}
                 </p>
 
-                <div className="w-full h-48 rounded-2xl bg-[#020906] border border-emerald-900/40 p-4 flex items-center justify-center shadow-inner overflow-hidden group">
+                <div className="w-full h-48 rounded-2xl bg-[#080204] border border-rose-900/40 p-4 flex items-center justify-center shadow-inner overflow-hidden group">
                   <img
                     src={activeCategory.image}
                     alt={activeCategory.title}
                     className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       e.currentTarget.onerror = null;
-                      e.currentTarget.src = "/images/partex-pa.jpg";
+                      e.currentTarget.src = "/images/partex-sleeves.jpg";
                     }}
                   />
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => setSelectedProduct(`Partex ${activeCategory.title}`)}
-                  className="w-full py-4 bg-[#2E7D32] hover:bg-[#1B5E20] text-white font-black text-xs rounded-xl transition-all shadow-lg hover:scale-102 cursor-pointer uppercase tracking-wider text-center"
+                  onClick={() => setSelectedProduct(`PARTEX ${activeCategory.title}`)}
+                  className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs rounded-xl transition-all shadow-lg hover:scale-102 cursor-pointer uppercase tracking-wider text-center"
                 >
                   Request Official Series Quotation
                 </button>
               </div>
 
-              <div className="lg:col-span-7 space-y-6 bg-[#0a2014]/90 p-6 sm:p-8 rounded-2xl border border-emerald-900/40 shadow-inner">
-                
+              <div className="lg:col-span-7 space-y-6 bg-[#2b0b13]/90 p-6 sm:p-8 rounded-2xl border border-rose-900/40 shadow-inner">
                 <div className="space-y-2 font-mono">
-                  <div className="flex items-center gap-2 text-[#A5D6A7] text-xs font-bold uppercase tracking-wider">
+                  <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider">
                     <Layers size={16} />
                     <span>Hardware Telemetry & Parameters</span>
                   </div>
-                  <p className="text-stone-900 text-xs sm:text-sm leading-relaxed p-4 rounded-xl bg-[#faf8f5] border border-emerald-300 font-mono shadow-inner font-bold">
+                  <p className="text-stone-900 text-xs sm:text-sm leading-relaxed p-4 rounded-xl bg-[#faf8f5] border border-rose-300 font-mono shadow-inner font-bold">
                     {activeCategory.specs}
                   </p>
                 </div>
 
                 <div className="space-y-3">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-200/70 font-bold block">
-                    Available Stock Configurations & Part Numbers:
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-rose-200/70 font-bold block">
+                    Available Stock Configurations & Part Numbers (8 Standard Items):
                   </span>
-                  <div className="grid grid-cols-1 gap-2.5">
+                  <div className="grid grid-cols-1 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
                     {activeCategory.products.map((p, idx) => (
-                      <div key={idx} className="flex items-center gap-3 p-3.5 rounded-xl bg-[#020906] border border-emerald-900/50 text-xs text-emerald-50 font-medium shadow-sm hover:border-emerald-400 hover:bg-[#05130b] hover:-translate-y-0.5 transition-all duration-300">
-                        <CheckCircle2 size={16} className="text-[#A5D6A7] shrink-0" />
+                      <div key={idx} className="flex items-center gap-3 p-3.5 rounded-xl bg-[#080204] border border-rose-900/50 text-xs text-rose-50 font-medium shadow-sm hover:border-rose-400 hover:bg-[#16050a] hover:-translate-y-0.5 transition-all duration-300">
+                        <CheckCircle2 size={16} className="text-rose-400 shrink-0" />
                         <span>{p}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-emerald-900/40 flex items-center justify-between text-xs">
-                  <Link
-                    to="/#productsSection"
-                    className="font-bold text-emerald-200 hover:text-[#A5D6A7] inline-flex items-center gap-1.5 transition-colors group"
-                  >
-                    <span>Explore Full Catalog Inventory</span>
-                    <ArrowRight size={14} className="text-[#A5D6A7] transition-transform group-hover:translate-x-1" />
-                  </Link>
-                  <span className="font-mono text-emerald-200/60 text-[11px]">Bangalore Hub Stock</span>
+                <div className="pt-4 border-t border-rose-900/40 flex items-center justify-between text-xs">
+                  <span className="font-mono text-rose-200/60 text-[11px]">Bangalore Central Hub Ready Stock</span>
                 </div>
-
               </div>
-
             </div>
-
-          </div>
-
-        </div>
-
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#05130b] text-white shadow-2xl border border-emerald-900/50 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div className="relative z-10 space-y-2 max-w-xl">
-            <span className="text-[#A5D6A7] font-mono text-xs font-bold uppercase tracking-wider">
-              READY INVENTORY · BANGALORE CENTRAL LOGISTICS HUB
-            </span>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
-              Need custom marked cable tags or bulk chevron sleeve reels?
-            </h3>
-            <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
-              Send your wire schedule or Bill of Materials. We provide custom pre-printed sleeves or dispatch portable ProMark printers within 24 hours.
-            </p>
-          </div>
-
-          <div className="relative z-10 flex flex-col sm:flex-row gap-3 shrink-0">
-            <Link
-              to="/#rfqSection"
-              className="px-6 py-3.5 bg-[#2E7D32] hover:bg-[#1B5E20] text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 text-center"
-            >
-              Submit Project RFQ
-            </Link>
           </div>
         </div>
-
       </div>
 
       {selectedProduct && (
