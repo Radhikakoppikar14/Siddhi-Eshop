@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ChevronRight, Search, ShoppingCart, Check, X, Layers, Package, ShieldCheck, Eye, ArrowRight, LayoutGrid, List } from "lucide-react";
+import { ChevronRight, Search, ShoppingCart, Check, X, Layers, Package, ShieldCheck, Eye, ArrowRight, LayoutGrid, List, ZoomIn } from "lucide-react";
 import { LAPP_CATALOG } from "../../../data/lappCatalog";
 import type { LappCategory, LappColumnKey, LappRow, LappSeries } from "../../../data/lappCatalog";
 import { useCart } from "../../../context/CartContext";
 import { useToast } from "../../../context/ToastContext";
 import { useAuth } from "../../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface LappCatalogBrowserProps {
   categoryId: string;
@@ -52,13 +52,30 @@ const countRows = (cats: LappCategory[]) =>
   cats.reduce((n, c) => n + c.series.reduce((m, s) => m + s.rows.length, 0), 0);
 
 /* ------------------------------------------------------------------ */
-/* Interactive Grid Card View with Light Gradient & Zoom Image        */
+/* Interactive Grid Card View with Thumbnails & Zoom                  */
 /* ------------------------------------------------------------------ */
 const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, row }) => {
   const navigate = useNavigate();
   const { addCustomItem } = useCart();
   const { showToast } = useToast();
   const [added, setAdded] = useState(false);
+
+  const productImages = [
+    series.image || FALLBACK_IMG,
+    "/images/cable1.png",
+    "/images/cable2.png",
+  ].filter(Boolean);
+
+  const [selectedImgIndex, setSelectedImgIndex] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomPos({ x, y });
+  };
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -94,17 +111,55 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
           </span>
         </div>
 
-        <div className="w-full h-32 rounded-2xl bg-white border border-stone-100 p-2 flex items-center justify-center overflow-hidden mb-3 group-hover:bg-pink-50/30 transition-colors shadow-2xs">
+        {/* Main Zoomable Image Box */}
+        <div
+          className="w-full h-32 rounded-2xl bg-white border border-stone-100 p-2 flex items-center justify-center overflow-hidden mb-3 relative group/zoom shadow-2xs"
+          onMouseMove={isZoomed ? handleMouseMove : undefined}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsZoomed(!isZoomed);
+          }}
+        >
           <img
-            src={series.image || FALLBACK_IMG}
+            src={productImages[selectedImgIndex]}
             alt={row.description}
-            className="max-h-full max-w-full object-contain group-hover:scale-115 transition-transform duration-500 ease-out"
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = FALLBACK_IMG;
-            }}
+            className={`max-h-full max-w-full object-contain transition-transform duration-200 ${
+              isZoomed ? "scale-175 pointer-events-none" : "scale-100 group-hover/zoom:scale-110"
+            }`}
+            style={
+              isZoomed
+                ? { transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` }
+                : undefined
+            }
           />
+          <div className="absolute bottom-1.5 right-1.5 bg-black/60 backdrop-blur-md text-white text-[9px] font-mono px-1.5 py-0.5 rounded flex items-center gap-1 opacity-70 group-hover/zoom:opacity-100 transition-opacity">
+            <ZoomIn size={10} />
+            <span>{isZoomed ? "Zoom Out" : "Zoom"}</span>
+          </div>
         </div>
+
+        {/* Thumbnail Selector Options */}
+        {productImages.length > 1 && (
+          <div className="flex items-center gap-1.5 mb-3" onClick={(e) => e.stopPropagation()}>
+            {productImages.map((img, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  setSelectedImgIndex(idx);
+                  setIsZoomed(false);
+                }}
+                className={`w-9 h-9 rounded-lg bg-white border p-0.5 overflow-hidden transition-all cursor-pointer flex items-center justify-center ${
+                  selectedImgIndex === idx
+                    ? "border-pink-600 ring-2 ring-pink-500/20 scale-105"
+                    : "border-stone-200 hover:border-stone-400 opacity-70 hover:opacity-100"
+                }`}
+              >
+                <img src={img} alt={`Thumbnail ${idx + 1}`} className="max-h-full max-w-full object-contain" />
+              </button>
+            ))}
+          </div>
+        )}
 
         <span className="text-[10px] font-mono text-pink-600 block mb-1 font-bold">{series.name}</span>
         <h4 className="font-bold text-xs text-stone-950 line-clamp-2 mb-2 group-hover:text-pink-700 transition-colors" title={row.description}>
@@ -210,15 +265,18 @@ const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnK
         </td>
       ))}
 
+      {/* Fixed Price & Discount Rendering using row properties directly */}
       <td className="py-3 px-3 align-middle">
         <div className="font-mono font-black text-emerald-700 text-xs sm:text-sm">
           ₹{inr(row.price)}
           <span className="text-[10px] text-stone-400 font-normal ml-1">/{series.unit}</span>
         </div>
-        {series.discount ? (
+        {row.listPrice && row.listPrice > row.price ? (
           <span className="text-[10px] text-stone-400 font-mono block">
             <span className="line-through">₹{inr(row.listPrice)}</span>{" "}
-            <span className="text-pink-700 font-semibold">−{Math.round(series.discount * 100)}%</span>
+            <span className="text-pink-700 font-semibold">
+              -{Math.round((1 - row.price / row.listPrice) * 100)}%
+            </span>
           </span>
         ) : (
           <span className="text-[9px] text-stone-400 font-mono block">Excl. 18% GST</span>
@@ -292,6 +350,16 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
   const { searchQuery } = useAuth();
   const [localQuery, setLocalQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "details">("details");
+  const [searchParams] = useSearchParams();
+
+  // Sync category and series automatically from URL search parameters on initial load
+  useEffect(() => {
+    const urlCat = searchParams.get("category");
+    const urlSeries = searchParams.get("series");
+    if (urlCat && urlCat !== categoryId) {
+      onSelect(urlCat, urlSeries);
+    }
+  }, [searchParams]);
 
   const scopeCategories = useMemo(() => {
     let cats = LAPP_CATALOG;
@@ -391,30 +459,38 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
       <div className="animate-fade-in space-y-6">
         {breadcrumb}
 
+        {/* Structured 2x2 / Responsive Grid Sub-Category Selector Buttons */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           {category.series.length > 1 ? (
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono w-full">
               {category.series.map((s) => {
                 const isSelected = s.id === activeSeries.id;
                 return (
                   <button
                     key={s.id}
                     type="button"
-                    onClick={() => onSelect(category.id, s.id)}
-                    className={`px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all duration-300 border cursor-pointer font-mono shadow-2xs hover:scale-102 ${
+                    onClick={() => {
+                      onSelect(category.id, s.id);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className={`p-4 rounded-2xl text-left transition-all duration-300 border cursor-pointer font-mono shadow-sm flex flex-col justify-between hover:scale-[1.01] ${
                       isSelected
                         ? "bg-stone-950 text-white font-black border-stone-950 shadow-md ring-2 ring-pink-500/30"
-                        : "bg-white hover:bg-stone-50 text-stone-800 border-stone-300 font-bold"
+                        : "bg-white hover:bg-stone-50 text-stone-800 border-stone-200/80 font-bold"
                     }`}
                   >
-                    {s.name} <span className="opacity-70 font-normal">({s.rows.length})</span>
+                    <span className="text-xs font-bold leading-snug whitespace-normal break-words">{s.name}</span>
+                    <span className={`text-[10px] mt-2 font-mono ${isSelected ? "text-pink-400 font-semibold" : "text-stone-400"}`}>
+                      {s.rows.length} verified products
+                    </span>
                   </button>
                 );
               })}
             </div>
           ) : <div />}
 
-          <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+          <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap shrink-0">
+            {/* Grid / Details Switcher */}
             <div className="flex items-center p-1 bg-stone-900 border border-stone-800 rounded-2xl shadow-md shrink-0">
               <button
                 type="button"
@@ -438,6 +514,7 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
               </button>
             </div>
 
+            {/* Compact Search Box */}
             <div className="relative w-full sm:w-52">
               <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 pointer-events-none" />
               <input
@@ -526,7 +603,10 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
             <button
               key={s.id}
               type="button"
-              onClick={() => onSelect(category.id, s.id)}
+              onClick={() => {
+                onSelect(category.id, s.id);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
               className="text-left bg-gradient-to-br from-white via-stone-50/60 to-pink-50/20 rounded-3xl border border-stone-200/80 shadow-sm hover:shadow-xl hover:border-pink-500/60 hover:-translate-y-1 transition-all duration-300 p-5 cursor-pointer group flex flex-col justify-between"
             >
               <div>
@@ -571,6 +651,7 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
               } else {
                 onSelect(c.id, null);
               }
+              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             className="text-left bg-gradient-to-br from-white via-stone-50/60 to-pink-50/20 rounded-3xl border border-stone-200/80 shadow-sm hover:shadow-xl hover:border-pink-500/60 hover:-translate-y-1 transition-all duration-300 p-6 cursor-pointer group flex flex-col justify-between"
           >

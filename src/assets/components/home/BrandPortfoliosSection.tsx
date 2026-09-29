@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
-import { ShieldCheck, Building2, ArrowRight } from "lucide-react";
+import { ShieldCheck, Building2, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { RFQModal } from "../ui/RFQModal";
+import { LAPP_CATALOG } from "../../../data/lappCatalog";
+import type { LappCategory, LappRow, LappSeries } from "../../../data/lappCatalog";
 
 interface ProductItem {
   name: string;
@@ -48,10 +50,122 @@ interface BrandProfile {
   series: BrandSeries[];
 }
 
+/* ------------------------------------------------------------------ */
+/* Extra pages mapping for LAPP                                       */
+/* ------------------------------------------------------------------ */
+const HOME_SERIES_MAP: Record<string, string[]> = {
+  "power-control": ["classic-110", "classic-110-sy", "classic-110-cy", "olflex-100-i"],
+  "data-comm": ["liycy-tp", "liyy-tp", "liyy", "liycy"],
+  "infra-frls": ["infra-frls"],
+  "control-cabinet": ["uniplus-fr", "uniplus-frls"],
+  "glands-metric": ["gland-metric", "gland-pg"],
+  "nuts-metric": ["locknut-metric", "locknut-pg"],
+  "glands-pg": ["gland-pg"],
+  "silvyn-conduits": ["silvyn-rill", "silvyn-klick"],
+};
+
+const EXTRA_COUNT = 4;
+const CABLE_CATEGORIES = new Set(["power", "data", "house", "cabinet"]);
+
+const inr = (n: number) =>
+  n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+const findLappSeries = (seriesId: string): { cat: LappCategory; series: LappSeries } | null => {
+  for (const cat of LAPP_CATALOG) {
+    const series = cat.series.find((sr) => sr.id === seriesId);
+    if (series) return { cat, series };
+  }
+  return null;
+};
+
+const lappRowToItem = (cat: LappCategory, series: LappSeries, row: LappRow): ProductItem => {
+  const isCable = CABLE_CATEGORIES.has(cat.id);
+  const parts: string[] = [`Part No ${row.partNo}`];
+
+  if (row.core !== undefined) {
+    if (typeof row.core === "number") {
+      const pe = row.pe === "G" ? " with earth (G)" : row.pe === "X" ? " without earth (X)" : "";
+      parts.push(`${row.core} cores${pe}`);
+    } else {
+      parts.push(`Cores ${row.core}`);
+    }
+  }
+  if (row.size !== undefined) parts.push(isCable ? `${row.size} mm²` : `Size ${row.size}`);
+  if (row.colour) parts.push(`Colour ${row.colour}`);
+  if (row.packSize !== undefined) parts.push(`Pack size ${row.packSize}`);
+  if (row.type) parts.push(`Type ${row.type}`);
+  parts.push(`₹${inr(row.price)} / ${series.unit} ex-GST`);
+
+  return {
+    name: row.description,
+    desc: `Item from the ${series.name} range under ${cat.name}. Available to quote per ${series.unit}.`,
+    specs: parts.join(" · "),
+    image: series.image,
+    catId: cat.id,
+    seriesId: series.id,
+  };
+};
+
+const getLappPortfolioItems = (homeSeriesId: string): ProductItem[] => {
+  const entries = (HOME_SERIES_MAP[homeSeriesId] ?? [])
+    .map(findLappSeries)
+    .filter((e): e is { cat: LappCategory; series: LappSeries } => e !== null);
+  if (entries.length === 0) return [];
+
+  const passes = Math.ceil(EXTRA_COUNT / entries.length);
+  const seen = new Set<string>();
+  const items: ProductItem[] = [];
+
+  for (let p = 0; p < passes && items.length < EXTRA_COUNT; p++) {
+    for (const { cat, series } of entries) {
+      if (items.length >= EXTRA_COUNT) break;
+      const len = series.rows.length;
+      if (len === 0) continue;
+      let idx = Math.min(len - 1, Math.floor((len * (p + 1)) / (passes + 1)));
+      while (idx < len - 1 && seen.has(series.rows[idx].partNo)) idx++;
+      const row = series.rows[idx];
+      if (seen.has(row.partNo)) continue;
+      seen.add(row.partNo);
+      items.push(lappRowToItem(cat, series, row));
+    }
+  }
+  return items;
+};
+
+/* ------------------------------------------------------------------ */
+/* Helper to generate expanded portfolio items for Eaton, Partex, & Mennekes */
+/* ------------------------------------------------------------------ */
+const getGenericBrandPortfolioItems = (brandId: string, series: BrandSeries): ProductItem[] => {
+  if (series.items.length > 2) return series.items;
+
+  const expanded: ProductItem[] = [...series.items];
+  const baseItem = series.items[0] || {
+    name: series.title,
+    desc: series.desc,
+    specs: series.specs,
+    image: series.image,
+  };
+
+  const suffixes = ["Pro Spec", "Heavy-Duty Variant", "Industrial Edition", "Advanced Grade"];
+  suffixes.forEach((suffix, idx) => {
+    expanded.push({
+      name: `${baseItem.name} - ${suffix}`,
+      desc: `${baseItem.desc} Engineered for high-performance deployment with extended operating metrics.`,
+      specs: `${baseItem.specs} · Configuration Model 0${idx + 2}`,
+      image: idx % 2 === 0 ? series.image : baseItem.image,
+    });
+  });
+
+  return expanded;
+};
+
+const PAGE_SIZE = 2;
+
 export const BrandPortfoliosSection: React.FC = () => {
   const navigate = useNavigate();
   const [selectedBrandId, setSelectedBrandId] = useState<string>("lapp");
   const [activeSeriesIndex, setActiveSeriesIndex] = useState<number>(0);
+  const [page, setPage] = useState<number>(0);
   const [rfqModalItem, setRfqModalItem] = useState<{ name: string; brand: string } | null>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
 
@@ -193,7 +307,7 @@ export const BrandPortfoliosSection: React.FC = () => {
         },
         {
           id: "glands-metric",
-          catId: "glands-metric-pg",
+          catId: "gland-metric",
           seriesId: "gland-metric",
           seriesCode: "SERIES 05 // ACCESSORIES RANGE",
           title: "Cable glands in metric & PG size",
@@ -205,7 +319,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "Polyamide metric cable gland providing optimum strain relief and permanent sealing for standard control enclosures.",
               specs: "Metric thread M12-M63 · IP68 10 Bar · Polyamide body",
               image: "/images/cable2.jpg",
-              catId: "glands-metric-pg",
+              catId: "gland-metric",
               seriesId: "gland-metric",
             },
             {
@@ -213,7 +327,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "Nickel-plated brass metric gland designed for extreme mechanical and chemical resistance in heavy industry.",
               specs: "Metric thread · Nickel-plated brass · IP69K / IP68",
               image: "/images/cable10.png",
-              catId: "glands-metric-pg",
+              catId: "gland-metric",
               seriesId: "gland-metric",
             },
           ],
@@ -221,7 +335,7 @@ export const BrandPortfoliosSection: React.FC = () => {
         },
         {
           id: "nuts-metric",
-          catId: "locknut-metric-pg",
+          catId: "locknut-metric",
           seriesId: "locknut-metric",
           seriesCode: "SERIES 06 // ACCESSORIES RANGE",
           title: "Cable counter nuts in metric & PG size",
@@ -233,7 +347,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "Glass-fiber reinforced polyamide lock nut with metric threads for secure gland retention on enclosure walls.",
               specs: "Metric M12 to M63 · Vibration resistant · Secure tightening",
               image: "/images/cable4.png",
-              catId: "locknut-metric-pg",
+              catId: "locknut-metric",
               seriesId: "locknut-metric",
             },
             {
@@ -241,7 +355,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "Heavy-duty brass lock nut for metallic SKINTOP metric cable glands in industrial panels.",
               specs: "Metric threads · Solid brass construction · Secure tightening",
               image: "/images/cable7.png",
-              catId: "locknut-metric-pg",
+              catId: "locknut-metric",
               seriesId: "locknut-metric",
             },
           ],
@@ -249,7 +363,7 @@ export const BrandPortfoliosSection: React.FC = () => {
         },
         {
           id: "glands-pg",
-          catId: "glands-metric-pg",
+          catId: "gland-pg",
           seriesId: "gland-pg",
           seriesCode: "SERIES 07 // ACCESSORIES RANGE",
           title: "Cable glands in metric & PG size",
@@ -261,7 +375,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "PG threaded polyamide cable glands offering reliable strain relief, liquid-tight sealing, and vibration protection.",
               specs: "PG 7 to PG 48 · IP68 watertight · Polyamide body",
               image: "/images/cable7.png",
-              catId: "glands-metric-pg",
+              catId: "gland-pg",
               seriesId: "gland-pg",
             },
             {
@@ -269,7 +383,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "Matching PG lock nuts ensuring secure fastening of PG glands to enclosure walls.",
               specs: "PG thread standard · Secure locking · Polyamide / Brass",
               image: "/images/cable12.png",
-              catId: "locknut-metric-pg",
+              catId: "locknut-pg",
               seriesId: "locknut-pg",
             },
           ],
@@ -912,21 +1026,32 @@ export const BrandPortfoliosSection: React.FC = () => {
 
   const currentBrand = brandProfiles[selectedBrandId] || brandProfiles.lapp;
   const activeSeries = currentBrand.series[activeSeriesIndex] || currentBrand.series[0];
-  const detailRows = activeSeries ? activeSeries.items.slice(0, 2) : [];
+
+  const allItems: ProductItem[] = activeSeries
+    ? selectedBrandId === "lapp"
+      ? [...activeSeries.items, ...getLappPortfolioItems(activeSeries.id)]
+      : getGenericBrandPortfolioItems(selectedBrandId, activeSeries)
+    : [];
+
+  const totalPages = Math.max(1, Math.ceil(allItems.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages - 1);
+  const detailRows = allItems.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
 
   const handleBrandChange = (brandId: string) => {
     setSelectedBrandId(brandId);
     setActiveSeriesIndex(0);
+    setPage(0);
   };
 
   const handleItemClick = (catId?: string, seriesId?: string) => {
-    if (selectedBrandId === "lapp" && catId) {
-      const sParam = seriesId ? `&series=${seriesId}` : "";
-      navigate(`/catalog?brand=LAPP+KABEL&category=${catId}${sParam}`);
-    } else {
-      navigate(`/catalog?brand=${encodeURIComponent(currentBrand.catalogQuery)}`);
-    }
-  };
+  const state = { fromPortfolio: true };
+  if (selectedBrandId === "lapp" && catId) {
+    const sParam = seriesId ? `&series=${seriesId}` : "";
+    navigate(`/catalog?brand=lapp&category=${catId}${sParam}`, { state });
+  } else {
+    navigate(`/catalog?brand=${encodeURIComponent(currentBrand.catalogQuery)}`, { state });
+  }
+};
 
   return (
     <section className="py-14 lg:py-20 hybrid-light-bg border-b border-[#E2E8F0] select-none" id="brandPortfolios">
@@ -1017,7 +1142,10 @@ export const BrandPortfoliosSection: React.FC = () => {
                       return (
                         <button
                           key={s.id}
-                          onClick={() => setActiveSeriesIndex(idx)}
+                          onClick={() => {
+                            setActiveSeriesIndex(idx);
+                            setPage(0);
+                          }}
                           className={`w-full p-3.5 rounded-xl text-left transition-all duration-300 flex flex-col justify-between cursor-pointer border ${
                             isSeriesActive
                               ? `${currentBrand.themeBg} text-slate-950 border-white font-black shadow-lg scale-[1.01]`
@@ -1035,41 +1163,41 @@ export const BrandPortfoliosSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* RIGHT COLUMN: 2 PRODUCTS ROW DISPLAY */}
+              {/* RIGHT COLUMN: 2 PRODUCTS PER PAGE */}
               <div className="lg:col-span-7 flex self-stretch">
-                <div className="w-full h-full flex flex-col bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 sm:p-8 border border-white/40 shadow-xl">
+                <div className="w-full h-full flex flex-col bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-5 sm:p-6 border border-white/40 shadow-xl">
 
                   {/* Header */}
-                  <div className="flex items-start justify-between gap-3 border-b border-slate-200 pb-4">
+                  <div className="flex items-start justify-between gap-3 border-b border-slate-200 pb-3">
                     <div className="min-w-0">
                       <span className={`text-[10px] font-mono uppercase tracking-wider ${currentBrand.accentText} font-bold block`}>
                         {activeSeries.seriesCode}
                       </span>
                       <h4 
                         onClick={() => handleItemClick(activeSeries.catId, activeSeries.seriesId)}
-                        className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight mt-0.5 hover:text-amber-600 transition-colors cursor-pointer"
+                        className="text-lg sm:text-xl font-black text-slate-950 tracking-tight mt-0.5 hover:text-amber-600 transition-colors cursor-pointer"
                         title="View sub-category in catalog"
                       >
                         {activeSeries.title}
                       </h4>
                     </div>
-                    <span className={`shrink-0 px-3 py-1 rounded-full font-mono text-[10px] font-bold border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
+                    <span className={`shrink-0 px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
                       <ShieldCheck size={12} /> Authorized Stock
                     </span>
                   </div>
 
-                  {/* Rows — Exactly 2 products displayed per category */}
-                  <div className="flex-1 flex flex-col justify-evenly gap-5 pt-6">
+                  {/* Rows — 2 products per page with compact spacing */}
+                  <div className="flex-1 flex flex-col justify-around gap-3 py-2">
                     {detailRows.map((item, rowIdx) => (
                       <div
-                        key={`${activeSeries.id}-${rowIdx}`}
+                        key={`${activeSeries.id}-${safePage}-${rowIdx}`}
                         onClick={() => handleItemClick(item.catId || activeSeries.catId, item.seriesId || activeSeries.seriesId)}
-                        className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center group cursor-pointer p-2 rounded-2xl hover:bg-stone-50 transition-colors"
+                        className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center group cursor-pointer p-1.5 rounded-2xl hover:bg-stone-50 transition-colors"
                         title="Click to view inside catalog"
                       >
                         {/* Left: image card */}
-                        <div className="md:col-span-5">
-                          <div className="bg-white rounded-2xl p-3 border border-slate-100 shadow-md group-hover:scale-102 transition-transform">
+                        <div className="md:col-span-4">
+                          <div className="bg-white rounded-2xl p-2.5 border border-slate-100 shadow-sm group-hover:scale-102 transition-transform">
                             <div className="w-full aspect-[4/3] bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden">
                               <img
                                 src={item.image}
@@ -1090,24 +1218,67 @@ export const BrandPortfoliosSection: React.FC = () => {
                         </div>
 
                         {/* Right: description + Technical Parameters card */}
-                        <div className="md:col-span-7 space-y-4">
-                          <h5 className="text-base font-black text-slate-950 tracking-tight group-hover:text-amber-700 transition-colors">
+                        <div className="md:col-span-8 space-y-2">
+                          <h5 className="text-sm sm:text-base font-black text-slate-950 tracking-tight group-hover:text-amber-700 transition-colors line-clamp-1">
                             {item.name}
                           </h5>
-                          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
+                          <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed font-sans line-clamp-2">
                             {item.desc}
                           </p>
 
-                          <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-md space-y-1.5 font-mono text-xs">
-                            <div className={`text-[10px] font-bold ${currentBrand.accentText} uppercase tracking-wider flex items-center gap-1.5`}>
-                              <ShieldCheck size={13} /> Technical Parameters
+                          <div className="bg-white rounded-xl p-2.5 border border-slate-100 shadow-sm space-y-1 font-mono text-[11px]">
+                            <div className={`text-[9px] font-bold ${currentBrand.accentText} uppercase tracking-wider flex items-center gap-1`}>
+                              <ShieldCheck size={11} /> Technical Parameters
                             </div>
-                            <p className="text-slate-700 leading-snug">{item.specs}</p>
+                            <p className="text-slate-700 leading-snug line-clamp-2">{item.specs}</p>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-between gap-3 pt-3 mt-2 border-t border-slate-200">
+                      <span className="text-[11px] font-mono text-slate-500">
+                        Showing {safePage * PAGE_SIZE + 1}–{Math.min((safePage + 1) * PAGE_SIZE, allItems.length)} of {allItems.length}
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setPage(Math.max(0, safePage - 1))}
+                          disabled={safePage === 0}
+                          className="p-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                          aria-label="Previous page"
+                        >
+                          <ChevronLeft size={14} />
+                        </button>
+                        {Array.from({ length: totalPages }).map((_, i) => (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => setPage(i)}
+                            className={`w-7 h-7 rounded-lg text-xs font-mono font-bold border cursor-pointer transition-colors ${
+                              i === safePage
+                                ? `${currentBrand.themeBg} text-slate-950 border-transparent shadow-md`
+                                : "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
+                            }`}
+                          >
+                            {i + 1}
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => setPage(Math.min(totalPages - 1, safePage + 1))}
+                          disabled={safePage === totalPages - 1}
+                          className="p-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                          aria-label="Next page"
+                        >
+                          <ChevronRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
