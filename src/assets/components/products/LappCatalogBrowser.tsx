@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ChevronRight, Search, ShoppingCart, Check, X, Layers, Package, ShieldCheck, Eye, ArrowRight, LayoutGrid, List, ZoomIn } from "lucide-react";
+import { ChevronRight, Search, ShoppingCart, Check, X, Layers, Package, ShieldCheck, Eye, ArrowRight, LayoutGrid, List, ZoomIn, Home } from "lucide-react";
 import { LAPP_CATALOG } from "../../../data/lappCatalog";
 import type { LappCategory, LappColumnKey, LappRow, LappSeries } from "../../../data/lappCatalog";
 import { useCart } from "../../../context/CartContext";
@@ -352,13 +352,15 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
   const [viewMode, setViewMode] = useState<"grid" | "details">("details");
   const [searchParams] = useSearchParams();
 
-  // Sync category and series automatically from URL search parameters on initial load
+  // Sync category AND series from the URL whenever the URL changes
+  // (fixes: clicking another series in the same category from BrandPortfolio did not update)
   useEffect(() => {
     const urlCat = searchParams.get("category");
     const urlSeries = searchParams.get("series");
-    if (urlCat && urlCat !== categoryId) {
+    if (urlCat && (urlCat !== categoryId || (urlSeries ?? null) !== seriesId)) {
       onSelect(urlCat, urlSeries);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const scopeCategories = useMemo(() => {
@@ -427,31 +429,61 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
     onCountChange?.(visibleCount);
   }, [visibleCount, onCountChange]);
 
-  const crumbBtn = "hover:text-pink-700 transition-colors cursor-pointer font-semibold";
+  // Big, professional pill-style breadcrumb. The deepest level is the highlighted "current" chip.
+  const showSeriesCrumb = !!(category && activeSeries && category.series.length > 1);
+  const currentLevel: "root" | "category" | "series" = showSeriesCrumb
+    ? "series"
+    : category
+    ? "category"
+    : "root";
+
+  const crumbLink =
+    "inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base lg:text-lg font-bold text-stone-600 hover:text-pink-700 hover:bg-pink-50 transition-all cursor-pointer";
+  const crumbCurrent =
+    "inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl bg-stone-950 text-white text-sm sm:text-base lg:text-lg font-black tracking-tight shadow-md ring-2 ring-pink-500/30";
+  const crumbArrow = <ChevronRight size={20} className="text-stone-300 shrink-0" />;
+
   const breadcrumb = (
-    <div className="flex items-center flex-wrap gap-1.5 text-xs font-mono text-stone-500 mb-5">
-      <button type="button" className={crumbBtn} onClick={() => onSelect("all", null)}>
-        Lapp Kabel
-      </button>
+    <nav
+      aria-label="Breadcrumb"
+      className="flex w-fit max-w-full flex-wrap items-center gap-1 sm:gap-1.5 bg-white border border-stone-200 rounded-2xl p-2 shadow-md font-sans"
+    >
+      {currentLevel === "root" ? (
+        <span className={crumbCurrent}>
+          <Home size={18} className="text-pink-400" />
+          Lapp Kabel
+        </span>
+      ) : (
+        <button type="button" className={crumbLink} onClick={() => onSelect("all", null)}>
+          <Home size={18} className="text-pink-600" />
+          Lapp Kabel
+        </button>
+      )}
+
       {category && (
         <>
-          <ChevronRight size={12} className="text-stone-400" />
-          <button
-            type="button"
-            className={crumbBtn}
-            onClick={() => onSelect(category.id, null)}
-          >
-            {category.name}
-          </button>
+          {crumbArrow}
+          {currentLevel === "category" ? (
+            <span className={crumbCurrent}>{category.name}</span>
+          ) : (
+            <button
+              type="button"
+              className={crumbLink}
+              onClick={() => onSelect(category.id, null)}
+            >
+              {category.name}
+            </button>
+          )}
         </>
       )}
-      {category && activeSeries && category.series.length > 1 && (
+
+      {showSeriesCrumb && activeSeries && (
         <>
-          <ChevronRight size={12} className="text-stone-400" />
-          <span className="text-stone-900 font-bold">{activeSeries.name}</span>
+          {crumbArrow}
+          <span className={crumbCurrent}>{activeSeries.name}</span>
         </>
       )}
-    </div>
+    </nav>
   );
 
   if (activeSeries && category) {

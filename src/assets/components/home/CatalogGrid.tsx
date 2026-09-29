@@ -269,7 +269,8 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
   const { searchQuery, setSearchQuery, searchCategory, setSearchCategory, openQuickView } = useAuth();
 
   // When the user arrives from the Brand Portfolio section, it passes
-  // { fromPortfolio: true } in router state. In that case we hide the brand spotlight banner.
+  // { fromPortfolio: true } in router state. In that case we hide the
+  // "Verified Inventory & Live Specifications" box and the brand spotlight banner.
   const location = useLocation();
   const fromPortfolio = (location.state as { fromPortfolio?: boolean } | null)?.fromPortfolio === true;
 
@@ -473,7 +474,8 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
     <section className="py-10 sm:py-14 select-none bg-[#faf8f5]" id="productsSection">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
+        {/* Section Header (Verified Inventory box) — hidden when arriving from the Brand Portfolio section */}
+        {!fromPortfolio && (
         <div className="bg-gradient-to-br from-white via-[#fcfbfa] to-[#f4efe6] rounded-3xl p-6 sm:p-8 border border-stone-300 shadow-md mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             
@@ -613,6 +615,7 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
             </span>
           </div>
         </div>
+        )}
 
         {/* Brand Spotlight Bento Banner (hidden when arriving from the Brand Portfolio section) */}
         {activeSpotlight && (
