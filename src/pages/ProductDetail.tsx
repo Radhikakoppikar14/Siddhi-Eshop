@@ -106,6 +106,18 @@ export const ProductDetail: React.FC = () => {
     "Flame retardant according to IEC 60332-1-2",
   ];
 
+  // Text that follows the selected core / size / colour
+  const coreCount = selectedCores.split(" ")[0];
+  const earthNote = selectedCores.match(/\(([^)]+)\)/)?.[1] ?? "";
+  const sizeNum = selectedSize.replace(/\s*mm²/, "");
+  const configSummary = `${coreCount} Cores × ${sizeNum} mm² · ${selectedSheath}`;
+  const displaySpecs = [
+    `${coreCount} Cores x ${sizeNum} sq mm${earthNote ? ` (${earthNote})` : ""}`,
+    `Sheath Colour: ${selectedSheath}`,
+    // keep the other product specs, but drop the static core/size/colour lines
+    ...specs.filter((sp) => !/core/i.test(sp) && !/colou?r/i.test(sp)),
+  ];
+
   // Main image + 2 extra images
   const mainImage = catalogProduct?.image || FALLBACK_IMG;
   const galleryImages = useMemo(() => {
@@ -299,7 +311,7 @@ export const ProductDetail: React.FC = () => {
                 </span>
 
                 <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-2 text-xs text-slate-700 font-mono">
-                  {specs.map((sp, idx) => (
+                  {displaySpecs.map((sp, idx) => (
                     <li
                       key={idx}
                       className="flex items-start gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/70"
@@ -329,6 +341,13 @@ export const ProductDetail: React.FC = () => {
                 <h1 className="text-xl sm:text-2xl font-black text-slate-950 leading-snug tracking-tight pr-10">
                   {productName}
                 </h1>
+                <p
+                  key={configSummary}
+                  className="mt-1.5 inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-amber-50 border border-amber-200 text-[11px] sm:text-xs font-mono font-bold text-amber-900 animate-fade-in"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                  {configSummary}
+                </p>
               </div>
 
               {/* DYNAMIC CONFIGURATION SELECTORS */}
