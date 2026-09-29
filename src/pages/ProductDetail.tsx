@@ -10,6 +10,8 @@ import {
   Minus,
   ZoomIn,
   ZoomOut,
+  PackageCheck,
+  BadgeCheck,
 } from "lucide-react";
 import { PRODUCTS_DATA } from "../data/products";
 import { useCart } from "../context/CartContext";
@@ -21,6 +23,28 @@ const FALLBACK_IMG = "/images/card-cables.jpg";
 // The 2 extra images shown after the main image.
 // Override per product by adding `extraImages: string[]` to the product data.
 const EXTRA_IMAGES = ["/images/cable1.png", "/images/cable2.png"];
+
+// ---------------------------------------------------------------
+// PICTURE FOR EACH OPTION — the main picture changes when a
+// core / size / colour button is clicked. Replace these paths with
+// your real photos (one per option).
+// ---------------------------------------------------------------
+const CORE_IMAGES: Record<string, string> = {
+  "3 Cores (with Earth)": "/images/cable1.png",
+  "4 Cores (with Earth)": "/images/cable2.png",
+  "5 Cores (with Earth)": "/images/cable3.png",
+};
+const SIZE_IMAGES: Record<string, string> = {
+  "1.5 mm²": "/images/cable4.png",
+  "2.5 mm²": "/images/cable5.png",
+  "4.0 mm²": "/images/cable7.png",
+  "6.0 mm²": "/images/cable10.png",
+};
+const SHEATH_IMAGES: Record<string, string> = {
+  "Silver-Grey RAL 7001": "/images/cable14.png",
+  "Black Sheath": "/images/cable12.png",
+  "Teal Green RAL 6018": "/images/cable13.png",
+};
 
 export const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,6 +70,14 @@ export const ProductDetail: React.FC = () => {
 
   // Gallery state
   const [activeImg, setActiveImg] = useState(0);
+  // Picture chosen by the last clicked core / size / colour option (null = use gallery)
+  const [variantImg, setVariantImg] = useState<string | null>(null);
+
+  const pickVariant = (image?: string) => {
+    if (image) setVariantImg(image);
+    setZoom(1);
+    setZoomPos({ x: 50, y: 50 });
+  };
 
   // Zoom state (1 = normal, up to 3x)
   const [zoom, setZoom] = useState(1);
@@ -86,6 +118,7 @@ export const ProductDetail: React.FC = () => {
   // Go back to the first image when the product changes
   useEffect(() => {
     setActiveImg(0);
+    setVariantImg(null);
     setZoom(1);
     setZoomPos({ x: 50, y: 50 });
   }, [id]);
@@ -144,23 +177,34 @@ export const ProductDetail: React.FC = () => {
     setSelectedProductForRFQ(`${productName} [${selectedCores}, ${selectedSize}, ${selectedSheath}] (${partNumber})`);
   };
 
+  // Shared style for the option chips (cores / size / sheath)
+  const chipBase =
+    "px-3.5 py-1.5 rounded-xl text-[11px] font-mono font-bold transition-all border cursor-pointer";
+  const chipOff =
+    "bg-white text-slate-700 border-slate-200 hover:border-amber-400 hover:bg-amber-50/60";
+  const chipOn =
+    "bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-amber-400/40";
+
   return (
-    <div className="py-6 bg-zinc-900/50 min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl border border-zinc-200 overflow-hidden relative">
+    // LIGHT GRADIENT #1 — page background: warm champagne -> soft white -> pale sky
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-[#fff7e6] via-[#fbfaf7] to-[#e6f3fb]">
+      <div className="max-w-6xl w-full bg-white rounded-[2rem] shadow-[0_30px_80px_-20px_rgba(15,23,42,0.18)] border border-slate-200/80 overflow-hidden relative">
         {/* Close Button */}
         <Link
           to="/"
-          className="absolute top-4 right-4 p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-600 transition-colors z-20 cursor-pointer"
+          aria-label="Close"
+          className="absolute top-4 right-4 p-2 rounded-full bg-white/90 hover:bg-slate-100 text-slate-600 border border-slate-200 shadow-sm transition-colors z-20 cursor-pointer"
         >
           <X size={18} />
         </Link>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12">
           {/* Left Column: Image Gallery & Stock Badge */}
-          <div className="md:col-span-5 bg-zinc-50/50 p-6 flex flex-col items-center justify-center border-r border-zinc-100 h-full">
+          {/* LIGHT GRADIENT #2 — image panel: soft amber -> white -> soft sky */}
+          <div className="md:col-span-5 bg-gradient-to-b from-amber-50 via-white to-sky-50 p-6 sm:p-8 flex flex-col items-center justify-start border-b md:border-b-0 md:border-r border-slate-200/70">
             {/* Main image */}
             <div
-              className={`relative w-full h-52 sm:h-64 flex items-center justify-center p-2 bg-white rounded-2xl border border-zinc-200 overflow-hidden ${
+              className={`relative w-full h-56 sm:h-72 flex items-center justify-center p-3 bg-white rounded-3xl border border-slate-200 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)] overflow-hidden ${
                 zoom > 1 ? "cursor-zoom-out" : "cursor-zoom-in"
               }`}
               onClick={() => {
@@ -172,10 +216,11 @@ export const ProductDetail: React.FC = () => {
               onMouseLeave={() => zoom > 1 && setZoomPos({ x: 50, y: 50 })}
             >
               <img
-                src={galleryImages[activeImg]}
+                key={variantImg ?? galleryImages[activeImg]}
+                src={variantImg ?? galleryImages[activeImg]}
                 alt={productName}
                 draggable={false}
-                className="max-h-full max-w-full object-contain drop-shadow-md transition-transform duration-200 ease-out select-none pointer-events-none"
+                className="max-h-full max-w-full object-contain drop-shadow-md transition-transform duration-200 ease-out select-none pointer-events-none animate-fade-in"
                 style={{
                   transform: `scale(${zoom})`,
                   transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
@@ -185,7 +230,7 @@ export const ProductDetail: React.FC = () => {
 
               {/* Zoom controls */}
               <div
-                className="absolute bottom-2 right-2 flex items-center gap-1 bg-white/95 border border-zinc-300 rounded-xl p-1 shadow-sm z-10"
+                className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/95 backdrop-blur border border-slate-200 rounded-xl p-1 shadow-md z-10"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -193,11 +238,11 @@ export const ProductDetail: React.FC = () => {
                   onClick={() => changeZoom(-0.5)}
                   disabled={zoom <= 1}
                   aria-label="Zoom out"
-                  className="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <ZoomOut size={14} />
                 </button>
-                <span className="w-9 text-center text-[10px] font-mono font-bold text-zinc-700">
+                <span className="w-10 text-center text-[10px] font-mono font-bold text-slate-700">
                   {Math.round(zoom * 100)}%
                 </span>
                 <button
@@ -205,7 +250,7 @@ export const ProductDetail: React.FC = () => {
                   onClick={() => changeZoom(0.5)}
                   disabled={zoom >= 3}
                   aria-label="Zoom in"
-                  className="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <ZoomIn size={14} />
                 </button>
@@ -213,20 +258,21 @@ export const ProductDetail: React.FC = () => {
             </div>
 
             {/* Thumbnails: main image + 2 extra images */}
-            <div className="mt-3 flex items-center justify-center gap-2">
+            <div className="mt-4 flex items-center justify-center gap-2.5">
               {galleryImages.map((img, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => {
                     setActiveImg(idx);
+                    setVariantImg(null);
                     setZoom(1);
                   }}
                   aria-label={`Show image ${idx + 1}`}
-                  className={`w-14 h-14 rounded-xl bg-white border p-1 flex items-center justify-center overflow-hidden transition-all cursor-pointer ${
-                    activeImg === idx
-                      ? "border-amber-500 ring-2 ring-amber-400/30 scale-105"
-                      : "border-zinc-200 opacity-70 hover:opacity-100 hover:border-zinc-400"
+                  className={`w-16 h-16 rounded-2xl bg-white border p-1.5 flex items-center justify-center overflow-hidden transition-all cursor-pointer ${
+                    !variantImg && activeImg === idx
+                      ? "border-amber-500 ring-2 ring-amber-400/30 shadow-md scale-105"
+                      : "border-slate-200 opacity-70 hover:opacity-100 hover:border-slate-400"
                   }`}
                 >
                   <img
@@ -239,42 +285,69 @@ export const ProductDetail: React.FC = () => {
               ))}
             </div>
 
-            <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-50/50 text-emerald-700 text-[11px] font-semibold font-mono">
+            <div className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-emerald-300/70 bg-emerald-50 text-emerald-800 text-[11px] font-semibold font-mono shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <ShieldCheck size={13} className="text-emerald-600" />
               <span>In Stock (5,000m+)</span>
             </div>
+
+              {/* Technical Specifications Section */}
+              <div className="w-full mt-5 space-y-2">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                  <BadgeCheck size={13} className="text-amber-500" />
+                  Technical Specifications
+                </span>
+
+                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-2 text-xs text-slate-700 font-mono">
+                  {specs.map((sp, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/70"
+                    >
+                      <span className="w-1.5 h-1.5 mt-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                      <span className="leading-snug break-words">{sp}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
           </div>
 
           {/* Right Column: Dynamic Specifications & Actions */}
-          <div className="md:col-span-7 p-6 sm:p-7 flex flex-col justify-between space-y-4">
-            <div>
+          <div className="md:col-span-7 p-6 sm:p-8 flex flex-col justify-between gap-5">
+            <div className="space-y-5">
               {/* Brand Header */}
-              <div className="text-[11px] font-mono font-bold tracking-wider text-amber-600 uppercase mb-0.5">
-                {brandName} · <span className="text-zinc-400">{partNumber}</span>
+              <div>
+                <div className="flex items-center flex-wrap gap-2 mb-2">
+                  <span className="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider">
+                    {brandName}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-mono font-semibold">
+                    Part No: {partNumber}
+                  </span>
+                </div>
+
+                <h1 className="text-xl sm:text-2xl font-black text-slate-950 leading-snug tracking-tight pr-10">
+                  {productName}
+                </h1>
               </div>
 
-              <h1 className="text-lg sm:text-xl font-black text-zinc-950 leading-snug">
-                {productName}
-              </h1>
-
               {/* DYNAMIC CONFIGURATION SELECTORS */}
-              <div className="mt-3 space-y-3 p-3 bg-zinc-50/80 rounded-2xl border border-zinc-200/80">
+              <div className="space-y-4 p-4 sm:p-5 bg-gradient-to-br from-slate-50 via-white to-amber-50/50 rounded-2xl border border-slate-200/80 shadow-sm">
                 {/* Cores Configuration */}
                 <div>
-                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500 block mb-1">
-                    Cores Configuration:
+                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 block mb-1.5">
+                    Cores Configuration
                   </label>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {["3 Cores (with Earth)", "4 Cores (with Earth)", "5 Cores (with Earth)"].map((coreOpt) => (
                       <button
                         key={coreOpt}
                         type="button"
-                        onClick={() => setSelectedCores(coreOpt)}
-                        className={`px-3 py-1 rounded-xl text-[11px] font-mono font-bold transition-all border cursor-pointer ${
-                          selectedCores === coreOpt
-                            ? "bg-zinc-950 text-white border-zinc-950 shadow-xs"
-                            : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-100"
-                        }`}
+                        onClick={() => {
+                          setSelectedCores(coreOpt);
+                          pickVariant(CORE_IMAGES[coreOpt]);
+                        }}
+                        className={`${chipBase} ${selectedCores === coreOpt ? chipOn : chipOff}`}
                       >
                         {coreOpt}
                       </button>
@@ -284,19 +357,22 @@ export const ProductDetail: React.FC = () => {
 
                 {/* Conductor Cross-Section Size */}
                 <div>
-                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500 block mb-1">
-                    Conductor Cross-Section Size:
+                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 block mb-1.5">
+                    Conductor Cross-Section Size
                   </label>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {["1.5 mm²", "2.5 mm²", "4.0 mm²", "6.0 mm²"].map((sizeOpt) => (
                       <button
                         key={sizeOpt}
                         type="button"
-                        onClick={() => setSelectedSize(sizeOpt)}
-                        className={`px-3 py-1 rounded-xl text-[11px] font-mono font-bold transition-all border cursor-pointer ${
+                        onClick={() => {
+                          setSelectedSize(sizeOpt);
+                          pickVariant(SIZE_IMAGES[sizeOpt]);
+                        }}
+                        className={`${chipBase} ${
                           selectedSize === sizeOpt
-                            ? "bg-amber-600 text-white border-amber-600 shadow-xs"
-                            : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-100"
+                            ? "bg-amber-500 text-slate-950 border-amber-500 shadow-md ring-2 ring-amber-300/50"
+                            : chipOff
                         }`}
                       >
                         {sizeOpt}
@@ -307,20 +383,19 @@ export const ProductDetail: React.FC = () => {
 
                 {/* Sheath Color Option */}
                 <div>
-                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500 block mb-1">
-                    Sheath Color Option:
+                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 block mb-1.5">
+                    Sheath Color Option
                   </label>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {["Silver-Grey RAL 7001", "Black Sheath", "Teal Green RAL 6018"].map((colorOpt) => (
                       <button
                         key={colorOpt}
                         type="button"
-                        onClick={() => setSelectedSheath(colorOpt)}
-                        className={`px-3 py-1 rounded-xl text-[11px] font-mono font-bold transition-all border cursor-pointer ${
-                          selectedSheath === colorOpt
-                            ? "bg-zinc-950 text-white border-zinc-950 shadow-xs"
-                            : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-100"
-                        }`}
+                        onClick={() => {
+                          setSelectedSheath(colorOpt);
+                          pickVariant(SHEATH_IMAGES[colorOpt]);
+                        }}
+                        className={`${chipBase} ${selectedSheath === colorOpt ? chipOn : chipOff}`}
                       >
                         {colorOpt}
                       </button>
@@ -328,78 +403,84 @@ export const ProductDetail: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Technical Specifications Section */}
-              <div className="mt-3 space-y-1">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400 block">
-                  Technical Specifications
-                </span>
-
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5 text-xs text-zinc-700 font-mono">
-                  {specs.map((sp, idx) => (
-                    <li key={idx} className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded bg-amber-500 shrink-0"></span>
-                      <span className="truncate">{sp}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             </div>
 
             {/* Pricing & Cart Action Bar */}
-            <div className="pt-3 border-t border-zinc-100 space-y-3">
-              <div className="flex items-baseline justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-white to-amber-50 border border-slate-200/80 shadow-sm">
                 <div>
-                  <span className="text-[10px] text-zinc-400 font-mono uppercase block">
+                  <span className="text-[10px] text-slate-500 font-mono uppercase block tracking-wider">
                     Calculated Rate (Ex-GST)
                   </span>
-                  <div className="text-lg sm:text-xl font-black text-emerald-700 font-mono tabular-nums">
+                  <div className="text-2xl sm:text-3xl font-black text-emerald-700 font-mono tabular-nums leading-tight">
                     ₹{calculatedPrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                    <span className="text-xs font-normal text-zinc-400 ml-1">/ {unit}</span>
+                    <span className="text-xs font-normal text-slate-400 ml-1">/ {unit}</span>
                   </div>
                 </div>
 
                 {/* Quantity Selector Stepper */}
-                <div className="flex items-center border border-zinc-200 rounded-xl bg-zinc-50 p-1">
-                  <button
-                    onClick={() => setQty(Math.max(1, qty - 1))}
-                    className="p-1 hover:bg-white rounded-lg text-zinc-600 transition-colors cursor-pointer"
-                  >
-                    <Minus size={12} />
-                  </button>
-                  <span className="w-10 text-center text-xs font-bold font-mono text-zinc-900">{qty}</span>
-                  <button
-                    onClick={() => setQty(qty + 1)}
-                    className="p-1 hover:bg-white rounded-lg text-zinc-600 transition-colors cursor-pointer"
-                  >
-                    <Plus size={12} />
-                  </button>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">
+                    Quantity ({unit}s)
+                  </span>
+                  <div className="flex items-center border border-slate-200 rounded-xl bg-white p-1 shadow-sm">
+                    <button
+                      type="button"
+                      onClick={() => setQty(Math.max(1, qty - 1))}
+                      aria-label="Decrease quantity"
+                      className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors cursor-pointer"
+                    >
+                      <Minus size={13} />
+                    </button>
+                    <span className="w-12 text-center text-sm font-bold font-mono text-slate-900">{qty}</span>
+                    <button
+                      type="button"
+                      onClick={() => setQty(qty + 1)}
+                      aria-label="Increase quantity"
+                      className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors cursor-pointer"
+                    >
+                      <Plus size={13} />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   onClick={handleAddToCart}
-                  className="py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  className="py-3 px-4 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/25 hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <ShoppingCart size={14} />
+                  <ShoppingCart size={15} />
                   <span>Add to Quote (₹{totalPrice})</span>
                 </button>
 
                 <button
                   onClick={handleDirectRfq}
-                  className="py-2.5 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-2 border border-zinc-200 cursor-pointer"
+                  className="py-3 px-4 bg-white hover:bg-slate-50 text-slate-900 font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 border border-slate-300 hover:border-slate-400 shadow-sm hover:-translate-y-0.5 cursor-pointer"
                 >
-                  <FileText size={14} className="text-amber-600" />
+                  <FileText size={15} className="text-amber-600" />
                   <span>Formal Quotation</span>
                 </button>
               </div>
 
-              <div className="text-center pt-0.5">
+              {/* Trust row */}
+              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[10px] font-mono text-slate-500">
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck size={12} className="text-emerald-600" /> 100% Genuine Factory Stock
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <FileText size={12} className="text-amber-600" /> GST Tax Invoice (18%)
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <PackageCheck size={12} className="text-sky-600" /> Bangalore Warehouse Ready Stock
+                </span>
+              </div>
+
+              <div className="text-center">
                 <Link
                   to="/"
-                  className="text-[11px] font-bold text-zinc-500 hover:text-zinc-900 inline-flex items-center gap-1 transition-colors"
+                  className="text-[11px] font-bold text-slate-500 hover:text-slate-900 inline-flex items-center gap-1 transition-colors"
                 >
                   <span>View Full Technical Data Sheet & Approvals</span>
                   <ArrowRight size={11} />

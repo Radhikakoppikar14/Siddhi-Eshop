@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ChevronRight, Search, ShoppingCart, Check, X, Layers, Package, ShieldCheck, Eye, ArrowRight, LayoutGrid, List, ZoomIn, Home } from "lucide-react";
+import { ChevronRight, Search, ShoppingCart, Check, X, Layers, Package, ShieldCheck, Eye, ArrowRight, LayoutGrid, List, ZoomIn } from "lucide-react";
 import { LAPP_CATALOG } from "../../../data/lappCatalog";
 import type { LappCategory, LappColumnKey, LappRow, LappSeries } from "../../../data/lappCatalog";
 import { useCart } from "../../../context/CartContext";
@@ -429,67 +429,10 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
     onCountChange?.(visibleCount);
   }, [visibleCount, onCountChange]);
 
-  // Big, professional pill-style breadcrumb. The deepest level is the highlighted "current" chip.
-  const showSeriesCrumb = !!(category && activeSeries && category.series.length > 1);
-  const currentLevel: "root" | "category" | "series" = showSeriesCrumb
-    ? "series"
-    : category
-    ? "category"
-    : "root";
-
-  const crumbLink =
-    "inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base lg:text-lg font-bold text-stone-600 hover:text-pink-700 hover:bg-pink-50 transition-all cursor-pointer";
-  const crumbCurrent =
-    "inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl bg-stone-950 text-white text-sm sm:text-base lg:text-lg font-black tracking-tight shadow-md ring-2 ring-pink-500/30";
-  const crumbArrow = <ChevronRight size={20} className="text-stone-300 shrink-0" />;
-
-  const breadcrumb = (
-    <nav
-      aria-label="Breadcrumb"
-      className="flex w-fit max-w-full flex-wrap items-center gap-1 sm:gap-1.5 bg-white border border-stone-200 rounded-2xl p-2 shadow-md font-sans"
-    >
-      {currentLevel === "root" ? (
-        <span className={crumbCurrent}>
-          <Home size={18} className="text-pink-400" />
-          Lapp Kabel
-        </span>
-      ) : (
-        <button type="button" className={crumbLink} onClick={() => onSelect("all", null)}>
-          <Home size={18} className="text-pink-600" />
-          Lapp Kabel
-        </button>
-      )}
-
-      {category && (
-        <>
-          {crumbArrow}
-          {currentLevel === "category" ? (
-            <span className={crumbCurrent}>{category.name}</span>
-          ) : (
-            <button
-              type="button"
-              className={crumbLink}
-              onClick={() => onSelect(category.id, null)}
-            >
-              {category.name}
-            </button>
-          )}
-        </>
-      )}
-
-      {showSeriesCrumb && activeSeries && (
-        <>
-          {crumbArrow}
-          <span className={crumbCurrent}>{activeSeries.name}</span>
-        </>
-      )}
-    </nav>
-  );
 
   if (activeSeries && category) {
     return (
       <div className="animate-fade-in space-y-6">
-        {breadcrumb}
 
         {/* Structured 2x2 / Responsive Grid Sub-Category Selector Buttons */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -599,7 +542,6 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
   if (isSearching) {
     return (
       <div className="animate-fade-in space-y-6">
-        {breadcrumb}
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-black text-stone-950">Search results</h3>
           <span className="text-xs text-stone-500 font-mono">
@@ -623,7 +565,6 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
   if (category) {
     return (
       <div className="animate-fade-in space-y-6">
-        {breadcrumb}
         <div>
           <h3 className="text-xl font-black text-stone-950">{category.name}</h3>
           <p className="text-xs text-stone-500 font-mono mt-0.5">
@@ -671,7 +612,6 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
 
   return (
     <div className="animate-fade-in space-y-6">
-      {breadcrumb}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {scopeCategories.map((c) => (
           <button

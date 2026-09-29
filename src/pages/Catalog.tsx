@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useSearchParams, Link, useLocation } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { CatalogGrid } from "../assets/components/home/CatalogGrid";
-import { Home, ChevronRight, ShieldCheck, Zap, PackageCheck, Layers } from "lucide-react";
+import { ShieldCheck, Zap, PackageCheck, Layers } from "lucide-react";
 
 export const Catalog: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -45,27 +45,10 @@ export const Catalog: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[#faf8f5] py-6 sm:py-10">
+    <main className={`min-h-screen bg-[#faf8f5] ${fromPortfolio ? "py-3 sm:py-5" : "py-6 sm:py-10"}`}>
       {/* Top Breadcrumb & Hero Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${fromPortfolio ? "" : "mb-6"}`}>
         
-        {/* Big professional breadcrumb (same style as the Lapp catalog breadcrumb) */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex w-fit max-w-full flex-wrap items-center gap-1 sm:gap-1.5 bg-white border border-stone-200 rounded-2xl p-2 shadow-md font-sans mb-4"
-        >
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base lg:text-lg font-bold text-stone-600 hover:text-pink-700 hover:bg-pink-50 transition-all"
-          >
-            <Home size={18} className="text-pink-600" />
-            <span>Home</span>
-          </Link>
-          <ChevronRight size={20} className="text-stone-300 shrink-0" />
-          <span className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl bg-stone-950 text-white text-sm sm:text-base lg:text-lg font-black tracking-tight shadow-md ring-2 ring-pink-500/30">
-            Complete Industrial Catalog
-          </span>
-        </nav>
 
         {/* Catalog Page Hero Banner — hidden when arriving from the Brand Portfolio section */}
         {!fromPortfolio && (

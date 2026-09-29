@@ -471,7 +471,7 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
     selectedBrand !== "all" && !fromPortfolio ? brandSpotlights[selectedBrand] : null;
 
   return (
-    <section className="py-10 sm:py-14 select-none bg-[#faf8f5]" id="productsSection">
+    <section className={`select-none bg-[#faf8f5] ${fromPortfolio ? "py-2 sm:py-3" : "py-10 sm:py-14"}`} id="productsSection">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header (Verified Inventory box) — hidden when arriving from the Brand Portfolio section */}
