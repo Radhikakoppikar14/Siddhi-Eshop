@@ -56,11 +56,11 @@ export const Catalog: React.FC = () => {
           <div className="relative z-10 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100/90 border border-amber-300/90 text-amber-950 font-mono text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
               <Layers size={13} className="text-amber-800" />
-              <span>Full OEM Product Library</span>
+              <span>Full Products Library</span>
             </div>
 
             <h1 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight">
-              Industrial Product Catalog
+              Industrial Products Catalog
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-700 mt-2 leading-relaxed font-normal">
@@ -71,7 +71,7 @@ export const Catalog: React.FC = () => {
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-6 pt-6 border-t border-[#e2d0ab] text-xs font-mono">
               <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 text-emerald-900 border border-emerald-300/80 font-medium shadow-2xs">
                 <ShieldCheck size={14} className="text-emerald-600" />
-                <span>100% Genuine OEM Factory Stock</span>
+                <span>100% Genuine Products Factory Stock</span>
               </div>
               <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 text-amber-950 border border-amber-300/80 font-medium shadow-2xs">
                 <Zap size={14} className="text-amber-600" />
