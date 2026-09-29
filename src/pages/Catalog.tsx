@@ -5,7 +5,20 @@ import { ArrowLeft, ShieldCheck, Zap, PackageCheck, Layers } from "lucide-react"
 
 export const Catalog: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const brandParam = searchParams.get("brand") || "all";
+  const rawBrandParam = searchParams.get("brand") || "all";
+
+  // Map incoming URL brand parameter to exact catalog brand keys
+  const getMappedBrand = (b: string) => {
+    if (!b || b === "all") return "all";
+    const lower = b.toLowerCase();
+    if (lower.includes("lapp")) return "LAPP KABEL";
+    if (lower.includes("eaton")) return "EATON - MOELLER";
+    if (lower.includes("partex")) return "PARTEX SWEDEN";
+    if (lower.includes("menn")) return "MENNEKES";
+    return b;
+  };
+
+  const brandParam = getMappedBrand(rawBrandParam);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -15,7 +28,13 @@ export const Catalog: React.FC = () => {
     if (newBrand === "all") {
       searchParams.delete("brand");
     } else {
-      searchParams.set("brand", newBrand);
+      let shortName = "lapp";
+      const upper = newBrand.toUpperCase();
+      if (upper.includes("EATON")) shortName = "eaton";
+      else if (upper.includes("PARTEX")) shortName = "partex";
+      else if (upper.includes("MENNEKES")) shortName = "mennekes";
+      
+      searchParams.set("brand", shortName);
     }
     setSearchParams(searchParams, { replace: true });
   };

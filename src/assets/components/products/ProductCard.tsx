@@ -28,6 +28,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const { showToast } = useToast();
   const [added, setAdded] = useState(false);
 
+  const [selectedCores, setSelectedCores] = useState<string>(getProductCores(product) || "3 Cores");
+  const [selectedSize, setSelectedSize] = useState<string>(getProductSize(product) || "1.5 mm²");
+  const [selectedSheath, setSelectedSheath] = useState<string>("Standard Sheath");
+
+  const calculateDynamicPrice = () => {
+    let basePrice = product.price || 145.0;
+    
+    if (selectedSize.includes("2.5")) basePrice *= 1.35;
+    else if (selectedSize.includes("4.0")) basePrice *= 1.75;
+    else if (selectedSize.includes("6.0") || selectedSize.includes("10")) basePrice *= 2.15;
+
+    if (selectedCores.includes("4")) basePrice *= 1.1;
+    else if (selectedCores.includes("5") || selectedCores.includes("6")) basePrice *= 1.25;
+
+    if (selectedSheath.includes("Teal Green") || selectedSheath.includes("PUR")) basePrice += 15;
+
+    return basePrice;
+  };
+
+  const dynamicPrice = calculateDynamicPrice();
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -105,7 +126,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none"></div>
 
       <div>
-        {/* Visual Stage Window */}
         <div className="h-44 w-full rounded-2xl bg-stone-50 p-4 mb-4 flex items-center justify-center relative overflow-hidden border border-stone-200 group-hover:bg-white transition-colors shadow-inner">
           <img
             src={product.image}
@@ -117,7 +137,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             }}
           />
 
-          {/* Quick View Floating Trigger */}
           <div className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               type="button"
@@ -130,7 +149,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </div>
 
-        {/* Metadata Row: Brand badge & SKU */}
         <div className="flex items-center justify-between text-[11px] font-mono mb-1.5 gap-2">
           <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] border ${theme.badge}`}>
             {product.brand.split(" ")[0]}
@@ -140,7 +158,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </span>
         </div>
 
-        {/* Short Product Title */}
         <h3
           className="text-xs sm:text-sm font-black text-stone-950 group-hover:text-amber-700 transition-colors line-clamp-1 leading-snug"
           title={product.name}
@@ -148,51 +165,49 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {getShortProductName(product.name)}
         </h3>
 
-        {/* Short Specs / Application */}
         <p className="text-[11px] text-stone-600 mt-1 line-clamp-1 font-mono leading-relaxed">
           {product.application || product.specs[0]}
         </p>
 
-        {/* Structured Technical Specs Micro-Grid (Clean Light Neutral Box) */}
-        <div className="mt-2.5 p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-[10px] font-mono space-y-1.5 shadow-inner">
+        <div className="mt-2.5 p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-[10px] font-mono space-y-2 shadow-inner" onClick={(e) => e.stopPropagation()}>
           <div className="grid grid-cols-2 gap-1.5">
-            <div className="bg-white px-2 py-1 rounded-lg border border-stone-200">
-              <span className="text-stone-400 block text-[9px] uppercase font-sans font-semibold">Cores</span>
-              <span className="font-bold text-stone-900 truncate block">
-                {getProductCores(product)}
-              </span>
+            <div className="bg-white px-2 py-1.5 rounded-lg border border-stone-200">
+              <span className="text-stone-400 block text-[9px] uppercase font-sans font-semibold mb-0.5">Cores</span>
+              <select
+                value={selectedCores}
+                onChange={(e) => setSelectedCores(e.target.value)}
+                className="font-bold text-stone-900 bg-transparent text-[10px] w-full outline-none cursor-pointer"
+              >
+                <option value="3 Cores">3 Cores</option>
+                <option value="4 Cores">4 Cores</option>
+                <option value="5 Cores">5 Cores</option>
+              </select>
             </div>
-            <div className="bg-white px-2 py-1 rounded-lg border border-stone-200">
-              <span className="text-stone-400 block text-[9px] uppercase font-sans font-semibold">Size</span>
-              <span className="font-bold text-sky-800 truncate block">
-                {getProductSize(product)}
-              </span>
-            </div>
-          </div>
-          <div className="bg-white px-2 py-1 rounded-lg border border-stone-200 flex items-center justify-between gap-1">
-            <span className="text-stone-400 text-[9px] uppercase font-sans font-semibold shrink-0">Color</span>
-            <div className="flex items-center gap-1.5 truncate">
-              <span
-                className="w-2.5 h-2.5 rounded-full border shrink-0 shadow-2xs"
-                style={{ backgroundColor: colorInfo.dotColor, borderColor: "rgba(0,0,0,0.2)" }}
-              />
-              <span className="font-medium text-stone-800 truncate text-[9.5px]">
-                {colorInfo.label.split("(")[0].trim()}
-              </span>
+            <div className="bg-white px-2 py-1.5 rounded-lg border border-stone-200">
+              <span className="text-stone-400 block text-[9px] uppercase font-sans font-semibold mb-0.5">Size</span>
+              <select
+                value={selectedSize}
+                onChange={(e) => setSelectedSize(e.target.value)}
+                className="font-bold text-sky-800 bg-transparent text-[10px] w-full outline-none cursor-pointer"
+              >
+                <option value="1.5 mm²">1.5 mm²</option>
+                <option value="2.5 mm²">2.5 mm²</option>
+                <option value="4.0 mm²">4.0 mm²</option>
+                <option value="6.0 mm²">6.0 mm²</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Price & CTA Bottom */}
       <div className="mt-5 pt-3.5 border-t border-stone-200">
         <div className="flex items-baseline justify-between mb-3">
           <div>
             <span className="text-[10px] text-stone-500 uppercase font-mono block">
-              Basic Rate
+              Calculated Rate
             </span>
             <div className="text-base font-black font-mono text-emerald-700">
-              ₹{product.price.toFixed(2)}
+              ₹{dynamicPrice.toFixed(2)}
               <span className="text-[11px] font-normal text-stone-500 ml-1">
                 / {product.unit}
               </span>
@@ -201,7 +216,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <span className="text-[10px] text-emerald-800 font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>{(product as any).availability === "out-of-stock" ? "Short Lead" : "Ready Stock"}</span>
+            <span>Ready Stock</span>
           </span>
         </div>
 

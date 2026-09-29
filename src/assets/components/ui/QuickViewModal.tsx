@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   X,
   ShoppingCart,
@@ -53,6 +53,31 @@ export const QuickViewModal: React.FC = () => {
       setIsZoomed(false);
     }
   }, [quickViewProduct]);
+
+  // Real-time dynamic price calculation based on selected core, size, and sheath
+  const calculatedRate = useMemo(() => {
+    let baseRate = quickViewProduct?.price || 145.00;
+
+    // Conductor cross-section size multiplier
+    if (selectedSize.includes("1.5")) baseRate = 145.00;
+    else if (selectedSize.includes("2.5")) baseRate = 185.00;
+    else if (selectedSize.includes("4.0")) baseRate = 215.00;
+    else if (selectedSize.includes("6.0")) baseRate = 245.00;
+
+    // Core count multiplier factor
+    if (selectedCore.includes("3")) baseRate *= 0.85;
+    else if (selectedCore.includes("4")) baseRate *= 0.95;
+    else if (selectedCore.includes("5")) baseRate *= 1.00;
+
+    // Sheath color adjustments
+    if (selectedColor.includes("Teal Green")) baseRate += 15;
+    else if (selectedColor.includes("Black")) baseRate += 0;
+    else if (selectedColor.includes("Silver-Grey")) baseRate -= 10;
+
+    return Number(baseRate.toFixed(2));
+  }, [quickViewProduct?.price, selectedSize, selectedCore, selectedColor]);
+
+  const totalPrice = (calculatedRate * qty).toFixed(2);
 
   if (!quickViewProduct) return null;
 
@@ -319,7 +344,7 @@ export const QuickViewModal: React.FC = () => {
                     Rate:
                   </span>
                   <div className="text-lg font-black text-emerald-700 font-mono tabular-nums">
-                    ₹{quickViewProduct.price.toFixed(2)}
+                    ₹{calculatedRate.toFixed(2)}
                     <span className="text-xs font-normal text-stone-500 ml-1">
                       / {quickViewProduct.unit}
                     </span>
@@ -370,7 +395,7 @@ export const QuickViewModal: React.FC = () => {
                   ) : (
                     <>
                       <ShoppingCart size={15} />
-                      <span>Add to Quotation Cart</span>
+                      <span>Add to Quotation Cart (₹{totalPrice})</span>
                     </>
                   )}
                 </button>

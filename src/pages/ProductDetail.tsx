@@ -32,30 +32,56 @@ export const ProductDetail: React.FC = () => {
   const [qty, setQty] = useState(1);
   const [selectedProductForRFQ, setSelectedProductForRFQ] = useState<string | null>(null);
 
+  // Dynamic configuration states
+  const [selectedCores, setSelectedCores] = useState<string>("5 Cores (with Earth)");
+  const [selectedSize, setSelectedSize] = useState<string>("6.0 mm²");
+  const [selectedSheath, setSelectedSheath] = useState<string>("Teal Green RAL 6018");
+
   const brandName = catalogProduct?.brand || "LAPP KABEL";
-  const productName = catalogProduct?.name || `ÖLFLEX® CLASSIC 110 Control Cable`;
+  const productName = catalogProduct?.name || `ÖLFLEX® FD 855 CP High Flex Chain`;
   const partNumber = catalogProduct?.partNo || (id ? `LAPP-${id}` : "LAPP-1119203");
   const unit = catalogProduct?.unit || "meter";
   const specs = catalogProduct?.specs || [
-    "VDE 0295 Class 5 Conductor",
-    "Nominal Voltage: 300/500V",
+    "VDE 0295 Class 6 Extra Fine Wire Conductor",
+    "PUR Outer Sheath · Highly Oil Resistant",
     "Temperature Range: -40°C to +80°C",
     "Flame retardant according to IEC 60332-1-2"
   ];
 
+  // Dynamic price calculation based on size, core count, and sheath
   const calculatedPrice = useMemo(() => {
-    return catalogProduct?.price || 68.50;
-  }, [catalogProduct]);
+    let baseRate = catalogProduct?.price || 145.00;
+    
+    // Size multiplier factor
+    if (selectedSize.includes("1.5")) baseRate *= 1.0;
+    else if (selectedSize.includes("2.5")) baseRate *= 1.35;
+    else if (selectedSize.includes("4.0")) baseRate *= 1.75;
+    else if (selectedSize.includes("6.0")) baseRate *= 2.15;
+
+    // Core multiplier factor
+    if (selectedCores.includes("3")) baseRate *= 0.85;
+    else if (selectedCores.includes("4")) baseRate *= 0.95;
+    else if (selectedCores.includes("5")) baseRate *= 1.00;
+
+    // Sheath premium
+    if (selectedSheath.includes("Teal Green")) baseRate += 15;
+
+    return Number(baseRate.toFixed(2));
+  }, [catalogProduct, selectedSize, selectedCores, selectedSheath]);
+
+  const totalPrice = (calculatedPrice * qty).toFixed(2);
 
   const handleAddToCart = () => {
     if (!isValidPositiveNumber(qty)) return;
+    const customConfigName = `${productName} [${selectedCores}, ${selectedSize}, ${selectedSheath}]`;
+    
     if (catalogProduct) {
       addToCart(catalogProduct.id, qty);
     } else {
       addCustomItem(
         {
           id: partNumber,
-          name: productName,
+          name: customConfigName,
           partNo: partNumber,
           brand: brandName,
           price: calculatedPrice,
@@ -64,11 +90,11 @@ export const ProductDetail: React.FC = () => {
         qty
       );
     }
-    showToast(`Added ${qty} ${unit}(s) of ${productName} to Quote Cart!`);
+    showToast(`Added ${qty} ${unit}(s) of configured cable to Quote Cart!`);
   };
 
   const handleDirectRfq = () => {
-    setSelectedProductForRFQ(`${productName} (${partNumber})`);
+    setSelectedProductForRFQ(`${productName} [${selectedCores}, ${selectedSize}, ${selectedSheath}] (${partNumber})`);
   };
 
   const productImage = catalogProduct?.image || "/images/card-cables.jpg";
@@ -119,13 +145,87 @@ export const ProductDetail: React.FC = () => {
                 {productName}
               </h1>
 
+              {/* DYNAMIC CONFIGURATION SELECTORS */}
+              <div className="mt-3 space-y-3 p-3 bg-zinc-50/80 rounded-2xl border border-zinc-200/80">
+                
+                {/* Cores Configuration */}
+                <div>
+                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500 block mb-1">
+                    Cores Configuration:
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {["3 Cores (with Earth)", "4 Cores (with Earth)", "5 Cores (with Earth)"].map((coreOpt) => (
+                      <button
+                        key={coreOpt}
+                        type="button"
+                        onClick={() => setSelectedCores(coreOpt)}
+                        className={`px-3 py-1 rounded-xl text-[11px] font-mono font-bold transition-all border cursor-pointer ${
+                          selectedCores === coreOpt
+                            ? "bg-zinc-950 text-white border-zinc-950 shadow-xs"
+                            : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-100"
+                        }`}
+                      >
+                        {coreOpt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Conductor Cross-Section Size */}
+                <div>
+                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500 block mb-1">
+                    Conductor Cross-Section Size:
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {["1.5 mm²", "2.5 mm²", "4.0 mm²", "6.0 mm²"].map((sizeOpt) => (
+                      <button
+                        key={sizeOpt}
+                        type="button"
+                        onClick={() => setSelectedSize(sizeOpt)}
+                        className={`px-3 py-1 rounded-xl text-[11px] font-mono font-bold transition-all border cursor-pointer ${
+                          selectedSize === sizeOpt
+                            ? "bg-amber-600 text-white border-amber-600 shadow-xs"
+                            : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-100"
+                        }`}
+                      >
+                        {sizeOpt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sheath Color Option */}
+                <div>
+                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500 block mb-1">
+                    Sheath Color Option:
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {["Silver-Grey RAL 7001", "Black Sheath", "Teal Green RAL 6018"].map((colorOpt) => (
+                      <button
+                        key={colorOpt}
+                        type="button"
+                        onClick={() => setSelectedSheath(colorOpt)}
+                        className={`px-3 py-1 rounded-xl text-[11px] font-mono font-bold transition-all border cursor-pointer ${
+                          selectedSheath === colorOpt
+                            ? "bg-zinc-950 text-white border-zinc-950 shadow-xs"
+                            : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-100"
+                        }`}
+                      >
+                        {colorOpt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
               {/* Technical Specifications Section */}
-              <div className="mt-3 space-y-1.5">
+              <div className="mt-3 space-y-1">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400 block">
                   Technical Specifications
                 </span>
                 
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-xs text-zinc-700 font-mono">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5 text-xs text-zinc-700 font-mono">
                   {specs.map((sp, idx) => (
                     <li key={idx} className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded bg-amber-500 shrink-0"></span>
@@ -134,11 +234,6 @@ export const ProductDetail: React.FC = () => {
                   ))}
                 </ul>
               </div>
-
-              {/* Application Callout Box */}
-              <div className="mt-3 p-2.5 bg-zinc-50 border border-zinc-200/80 rounded-xl text-[11px] font-mono text-zinc-600">
-                <strong className="text-zinc-900">Application:</strong> Industrial machinery, machine tools, plant engineering, automation.
-              </div>
             </div>
 
             {/* Pricing & Cart Action Bar */}
@@ -146,9 +241,9 @@ export const ProductDetail: React.FC = () => {
               <div className="flex items-baseline justify-between">
                 <div>
                   <span className="text-[10px] text-zinc-400 font-mono uppercase block">
-                    Catalog Base Rate (Ex-GST)
+                    Calculated Rate (Ex-GST)
                   </span>
-                  <div className="text-lg sm:text-xl font-black text-zinc-950 font-mono tabular-nums">
+                  <div className="text-lg sm:text-xl font-black text-emerald-700 font-mono tabular-nums">
                     ₹{calculatedPrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     <span className="text-xs font-normal text-zinc-400 ml-1">/ {unit}</span>
                   </div>
@@ -181,7 +276,7 @@ export const ProductDetail: React.FC = () => {
                   className="py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <ShoppingCart size={14} />
-                  <span>Add to Quote Cart</span>
+                  <span>Add to Quote (₹{totalPrice})</span>
                 </button>
 
                 <button

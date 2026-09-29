@@ -49,12 +49,29 @@ const ProductDetailsRow: React.FC<ProductDetailsRowProps> = ({
   const { showToast } = useToast();
   const [added, setAdded] = useState(false);
 
+  // Dynamic configuration state for table row
+  const [selectedCores, setSelectedCores] = useState<string>(getProductCores(product) || "3 Cores");
+  const [selectedSize, setSelectedSize] = useState<string>(getProductSize(product) || "1.5 mm²");
+
+  // Dynamic price calculation
+  const calculatedPrice = useMemo(() => {
+    let baseRate = product.price || 145.00;
+    if (selectedSize.includes("2.5")) baseRate *= 1.35;
+    else if (selectedSize.includes("4.0")) baseRate *= 1.75;
+    else if (selectedSize.includes("6.0") || selectedSize.includes("10")) baseRate *= 2.15;
+
+    if (selectedCores.includes("4")) baseRate *= 1.1;
+    else if (selectedCores.includes("5") || selectedCores.includes("6")) baseRate *= 1.25;
+
+    return Number(baseRate.toFixed(2));
+  }, [product.price, selectedSize, selectedCores]);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart(product.id, 1);
     setAdded(true);
-    showToast(`Added ${product.name} to RFQ Cart!`);
+    showToast(`Added ${product.name} (${selectedCores}, ${selectedSize}) to RFQ Cart!`);
     setTimeout(() => setAdded(false), 1600);
   };
 
@@ -109,14 +126,27 @@ const ProductDetailsRow: React.FC<ProductDetailsRowProps> = ({
         </span>
       </td>
 
-      <td className="py-3.5 px-3 align-middle">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-stone-100 text-stone-900 font-mono text-[11px] font-bold border border-stone-300">
-            {getProductCores(product)}
-          </span>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-sky-50 text-sky-900 font-mono text-[11px] font-bold border border-sky-200">
-            {getProductSize(product)}
-          </span>
+      <td className="py-3.5 px-3 align-middle" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center gap-1.5">
+          <select
+            value={selectedCores}
+            onChange={(e) => setSelectedCores(e.target.value)}
+            className="px-2 py-1 rounded-md bg-stone-100 text-stone-900 font-mono text-[11px] font-bold border border-stone-300 outline-none cursor-pointer"
+          >
+            <option value="3 Cores">3 Cores</option>
+            <option value="4 Cores">4 Cores</option>
+            <option value="5 Cores">5 Cores</option>
+          </select>
+          <select
+            value={selectedSize}
+            onChange={(e) => setSelectedSize(e.target.value)}
+            className="px-2 py-1 rounded-md bg-sky-50 text-sky-900 font-mono text-[11px] font-bold border border-sky-200 outline-none cursor-pointer"
+          >
+            <option value="1.5 mm²">1.5 mm²</option>
+            <option value="2.5 mm²">2.5 mm²</option>
+            <option value="4.0 mm²">4.0 mm²</option>
+            <option value="6.0 mm²">6.0 mm²</option>
+          </select>
         </div>
       </td>
 
@@ -156,7 +186,7 @@ const ProductDetailsRow: React.FC<ProductDetailsRowProps> = ({
 
       <td className="py-3.5 px-4 align-middle">
         <div className="font-mono font-black text-emerald-700 text-xs sm:text-sm">
-          ₹{product.price.toFixed(2)}
+          ₹{calculatedPrice.toFixed(2)}
           <span className="text-[10px] text-stone-400 font-normal ml-1">/{product.unit}</span>
         </div>
         <span className="text-[9px] text-stone-400 font-mono block">Excl. 18% GST</span>
@@ -203,7 +233,6 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
   onBrandChange: controlledSetBrand,
   isFullPage = false,
 }) => {
-  // If not on full catalog page, do not render anything on the home page
   if (!isFullPage) return null;
 
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -401,11 +430,10 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
   const activeSpotlight = selectedBrand !== "all" ? brandSpotlights[selectedBrand] : null;
 
   return (
-    <section className="py-10 sm:py-14 select-none bg-[#faf8f5] relative" id="productsSection">
-      <div id="catalog" className="absolute -top-16 left-0 pointer-events-none" />
+    <section className="py-10 sm:py-14 select-none bg-[#faf8f5]" id="productsSection">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header Section with Refined Control Console Card */}
+        {/* Section Header */}
         <div className="bg-gradient-to-br from-white via-[#fcfbfa] to-[#f4efe6] rounded-3xl p-6 sm:p-8 border border-stone-300 shadow-md mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             
