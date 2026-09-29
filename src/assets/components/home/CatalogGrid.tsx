@@ -26,7 +26,7 @@ import {
   ShoppingCart,
   Eye,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { Product } from "../../../types";
 
 interface CatalogGridProps {
@@ -268,6 +268,11 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
 
   const { searchQuery, setSearchQuery, searchCategory, setSearchCategory, openQuickView } = useAuth();
 
+  // When the user arrives from the Brand Portfolio section, it passes
+  // { fromPortfolio: true } in router state. In that case we hide the brand spotlight banner.
+  const location = useLocation();
+  const fromPortfolio = (location.state as { fromPortfolio?: boolean } | null)?.fromPortfolio === true;
+
   const handleBrandChange = (brand: string) => {
     if (controlledSetBrand) controlledSetBrand(brand);
     setInternalSelectedBrand(brand);
@@ -460,7 +465,9 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
     searchCategory !== "all" ||
     sortBy !== "featured";
 
-  const activeSpotlight = selectedBrand !== "all" ? brandSpotlights[selectedBrand] : null;
+  // Hide the brand spotlight banner when the user came from the Brand Portfolio section
+  const activeSpotlight =
+    selectedBrand !== "all" && !fromPortfolio ? brandSpotlights[selectedBrand] : null;
 
   return (
     <section className="py-10 sm:py-14 select-none bg-[#faf8f5]" id="productsSection">
@@ -607,7 +614,7 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
           </div>
         </div>
 
-        {/* Brand Spotlight Bento Banner */}
+        {/* Brand Spotlight Bento Banner (hidden when arriving from the Brand Portfolio section) */}
         {activeSpotlight && (
           <div
             className={`mb-8 p-6 sm:p-8 rounded-3xl bg-gradient-to-br ${activeSpotlight.themeBg} text-white border ${activeSpotlight.borderColor} shadow-2xl animate-fade-in relative overflow-hidden`}
