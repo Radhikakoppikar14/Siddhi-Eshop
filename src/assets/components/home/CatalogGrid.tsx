@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { PRODUCTS_DATA } from "../../../data/products";
 import { ProductCard } from "../products/ProductCard";
+import { LappCatalogBrowser } from "../products/LappCatalogBrowser";
+import { LAPP_CATALOG, LAPP_TOTAL_PRODUCTS } from "../../../data/lappCatalog";
 import { useAuth } from "../../../context/AuthContext";
 import { useCart } from "../../../context/CartContext";
 import { useToast } from "../../../context/ToastContext";
@@ -242,7 +244,28 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
   const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc" | "name">("featured");
   const [viewMode, setViewMode] = useState<"grid" | "details">("grid");
   const [selectedProduct, setSelectedProduct] = useState<Product>(PRODUCTS_DATA[0]);
-  
+
+  // LAPP drill-down state: category -> sub-category (series) -> product table
+  const [lappCategory, setLappCategory] = useState("all");
+  const [lappSeries, setLappSeries] = useState<string | null>(null);
+  const [lappCount, setLappCount] = useState(LAPP_TOTAL_PRODUCTS);
+  const isLapp = selectedBrand === "LAPP KABEL";
+  // With "All Brands", these chips open the LAPP category -> sub-category -> product drill-down
+  const lappChipMap: Record<string, { open: string; filter: string[] }> = {
+    cables: { open: "power", filter: ["power", "house", "cabinet"] },
+    data: { open: "data", filter: ["data"] },
+    accessories: {
+      open: "all",
+      filter: ["gland-metric", "locknut-metric", "gland-pg", "locknut-pg", "klick", "rill"],
+    },
+  };
+  const lappChip = selectedBrand === "all" ? lappChipMap[selectedCategory] : undefined;
+  const showLapp = isLapp || !!lappChip;
+  const openLapp = (cat: string, series: string | null) => {
+    setLappCategory(cat);
+    setLappSeries(series);
+  };
+
   const { searchQuery, setSearchQuery, searchCategory, setSearchCategory, openQuickView } = useAuth();
 
   const handleBrandChange = (brand: string) => {
@@ -250,6 +273,7 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
     setInternalSelectedBrand(brand);
     setBrandSubFilter("all");
     setSelectedCategory("all");
+    openLapp("all", null);
   };
 
   useEffect(() => {
@@ -283,6 +307,15 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
     { id: "EATON - MOELLER", label: "Eaton Moeller", activeClass: "bg-stone-700 text-white font-black border-stone-800 shadow-md" },
     { id: "PARTEX SWEDEN", label: "Partex Sweden", activeClass: "bg-pink-700 text-white font-black border-pink-800 shadow-md" },
     { id: "MENNEKES", label: "Mennekes Germany", activeClass: "bg-stone-800 text-white font-black border-stone-900 shadow-md" },
+  ];
+
+  // Quick-series shortcuts shown in the LAPP spotlight banner (jump straight to a series in the Excel catalog)
+  const lappQuickSeries: { label: string; cat: string; series: string | null }[] = [
+    { label: "All LAPP Products", cat: "all", series: null },
+    { label: "ÖLFLEX® 110 Control", cat: "power", series: "classic-110" },
+    { label: "110 SY (Steel Braid)", cat: "power", series: "classic-110-sy" },
+    { label: "110 CY (Screened EMC)", cat: "power", series: "classic-110-cy" },
+    { label: "SKINTOP® Glands", cat: "gland-metric", series: null },
   ];
 
   const brandSpotlights: Record<string, { logo: string; origin: string; partnerTag: string; headline: string; description: string; themeBg: string; borderColor: string; makeSheetUrl: string; subFilters: { id: string; label: string; match: string }[]; }> = {
@@ -454,42 +487,47 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
 
             {/* Engineering Control Dock */}
             <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <div className="flex items-center p-1 bg-stone-900 border border-stone-800 rounded-2xl shadow-md">
-                <button
-                  type="button"
-                  onClick={() => setViewMode("grid")}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    viewMode === "grid" ? "bg-pink-600 text-white shadow-xs" : "text-stone-400 hover:text-white"
-                  }`}
-                >
-                  <LayoutGrid size={13} />
-                  <span>Grid</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode("details")}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    viewMode === "details" ? "bg-pink-600 text-white shadow-xs" : "text-stone-400 hover:text-white"
-                  }`}
-                >
-                  <List size={14} />
-                  <span>Details</span>
-                </button>
-              </div>
+              {/* Grid/Details toggle and sort do not apply to the LAPP Excel catalog view */}
+              {!showLapp && (
+                <>
+                  <div className="flex items-center p-1 bg-stone-900 border border-stone-800 rounded-2xl shadow-md">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("grid")}
+                      className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        viewMode === "grid" ? "bg-pink-600 text-white shadow-xs" : "text-stone-400 hover:text-white"
+                      }`}
+                    >
+                      <LayoutGrid size={13} />
+                      <span>Grid</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("details")}
+                      className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        viewMode === "details" ? "bg-pink-600 text-white shadow-xs" : "text-stone-400 hover:text-white"
+                      }`}
+                    >
+                      <List size={14} />
+                      <span>Details</span>
+                    </button>
+                  </div>
 
-              <div className="flex items-center gap-2 bg-white border border-stone-300 rounded-2xl px-4 py-2 text-xs text-stone-900 shadow-2xs">
-                <ArrowUpDown size={13} className="text-pink-600" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-transparent font-bold outline-none cursor-pointer text-stone-900 font-mono"
-                >
-                  <option value="featured">Featured First</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="name">Name: A to Z</option>
-                </select>
-              </div>
+                  <div className="flex items-center gap-2 bg-white border border-stone-300 rounded-2xl px-4 py-2 text-xs text-stone-900 shadow-2xs">
+                    <ArrowUpDown size={13} className="text-pink-600" />
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      className="bg-transparent font-bold outline-none cursor-pointer text-stone-900 font-mono"
+                    >
+                      <option value="featured">Featured First</option>
+                      <option value="price-asc">Price: Low to High</option>
+                      <option value="price-desc">Price: High to Low</option>
+                      <option value="name">Name: A to Z</option>
+                    </select>
+                  </div>
+                </>
+              )}
 
               {hasActiveFilters && (
                 <button
@@ -507,20 +545,40 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
 
           {/* Categories Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-6 mt-6 border-t border-stone-300/80 scrollbar-none">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all border cursor-pointer font-mono ${
-                  selectedCategory === cat.id
-                    ? cat.activeClass
-                    : "bg-white hover:bg-stone-100 text-stone-700 border-stone-300 font-medium shadow-2xs"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+            {isLapp
+              ? [{ id: "all", name: "All Lapp Categories" }, ...LAPP_CATALOG].map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => openLapp(c.id, null)}
+                    className={`px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all border cursor-pointer font-mono ${
+                      lappCategory === c.id
+                        ? "bg-pink-600 text-white font-black shadow-md border-pink-500"
+                        : "bg-white hover:bg-stone-100 text-stone-700 border-stone-300 font-medium shadow-2xs"
+                    }`}
+                  >
+                    {c.name}
+                  </button>
+                ))
+              : categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory(cat.id);
+                      // Power / Data / Glands chips -> show LAPP sub-categories first
+                      const m = selectedBrand === "all" ? lappChipMap[cat.id] : undefined;
+                      openLapp(m ? m.open : "all", null);
+                    }}
+                    className={`px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all border cursor-pointer font-mono ${
+                      selectedCategory === cat.id
+                        ? cat.activeClass
+                        : "bg-white hover:bg-stone-100 text-stone-700 border-stone-300 font-medium shadow-2xs"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
           </div>
 
           {/* Brand Filter Pills */}
@@ -544,7 +602,7 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
             ))}
 
             <span className="ml-auto text-xs text-stone-500 tabular-nums shrink-0 font-bold">
-              Showing <strong className="text-stone-950 font-black">{filteredProducts.length}</strong> items
+              Showing <strong className="text-stone-950 font-black">{showLapp ? lappCount : filteredProducts.length}</strong> items
             </span>
           </div>
         </div>
@@ -589,20 +647,41 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
                   <span className="text-[11px] font-mono font-semibold text-stone-400">
                     Quick Series:
                   </span>
-                  {activeSpotlight.subFilters.map((sub) => (
-                    <button
-                      key={sub.id}
-                      type="button"
-                      onClick={() => setBrandSubFilter(sub.id)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer font-mono ${
-                        brandSubFilter === sub.id
-                          ? "bg-white text-stone-950 border-white shadow-xs font-bold"
-                          : "bg-black/30 hover:bg-black/50 text-slate-200 border-white/10"
-                      }`}
-                    >
-                      {sub.label}
-                    </button>
-                  ))}
+                  {isLapp
+                    ? lappQuickSeries.map((q) => {
+                        const active =
+                          q.cat === "all"
+                            ? lappCategory === "all"
+                            : lappCategory === q.cat && lappSeries === q.series;
+                        return (
+                          <button
+                            key={q.label}
+                            type="button"
+                            onClick={() => openLapp(q.cat, q.series)}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer font-mono ${
+                              active
+                                ? "bg-white text-stone-950 border-white shadow-xs font-bold"
+                                : "bg-black/30 hover:bg-black/50 text-slate-200 border-white/10"
+                            }`}
+                          >
+                            {q.label}
+                          </button>
+                        );
+                      })
+                    : activeSpotlight.subFilters.map((sub) => (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => setBrandSubFilter(sub.id)}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer font-mono ${
+                            brandSubFilter === sub.id
+                              ? "bg-white text-stone-950 border-white shadow-xs font-bold"
+                              : "bg-black/30 hover:bg-black/50 text-slate-200 border-white/10"
+                          }`}
+                        >
+                          {sub.label}
+                        </button>
+                      ))}
                 </div>
 
               </div>
@@ -631,8 +710,16 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
           </div>
         )}
 
-        {/* Product Display (Grid or Details Table) */}
-        {displayedProducts.length > 0 ? (
+        {/* Product Display (LAPP Excel catalog, or Grid / Details Table for other brands) */}
+        {showLapp ? (
+          <LappCatalogBrowser
+            categoryId={lappCategory}
+            seriesId={lappSeries}
+            categoryFilter={lappChip?.filter}
+            onSelect={openLapp}
+            onCountChange={setLappCount}
+          />
+        ) : displayedProducts.length > 0 ? (
           viewMode === "grid" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
               {displayedProducts.map((product) => (

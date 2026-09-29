@@ -7,7 +7,6 @@ export const Catalog: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const rawBrandParam = searchParams.get("brand") || "all";
 
-  // Map incoming URL brand parameter to exact catalog brand keys
   const getMappedBrand = (b: string) => {
     if (!b || b === "all") return "all";
     const lower = b.toLowerCase();
@@ -72,35 +71,40 @@ export const Catalog: React.FC = () => {
             }}
           />
 
-          <div className="relative z-10 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100/90 border border-amber-300/90 text-amber-950 font-mono text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
-              <Layers size={13} className="text-amber-800" />
-              <span>Full Products Library</span>
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            
+            {/* Left Column: Title and Description */}
+            <div className="lg:col-span-7 space-y-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100/90 border border-amber-300/90 text-amber-950 font-mono text-xs font-bold uppercase tracking-wider mb-2 shadow-2xs">
+                <Layers size={13} className="text-amber-800" />
+                <span>Full Products Library</span>
+              </div>
+
+              <h1 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight">
+                Industrial Products Catalog
+              </h1>
+
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                Browse our complete catalog of certified industrial cables, flexible control wires, motor switchgear, wire marking systems, and CEE industrial plugs. Direct authorized distribution from Bangalore Central Warehouse.
+              </p>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight">
-              Industrial Products Catalog
-            </h1>
-
-            <p className="text-xs sm:text-sm text-slate-700 mt-2 leading-relaxed font-normal">
-              Browse our complete catalog of certified industrial cables, flexible control wires, motor switchgear, wire marking systems, and CEE industrial plugs. Direct authorized distribution from Bangalore Central Warehouse.
-            </p>
-
-            {/* Quick Metrics Bar */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-6 pt-6 border-t border-[#e2d0ab] text-xs font-mono">
-              <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 text-emerald-900 border border-emerald-300/80 font-medium shadow-2xs">
-                <ShieldCheck size={14} className="text-emerald-600" />
+            {/* Right Column: 3 Metric Pills aligned to the right corner */}
+            <div className="lg:col-span-5 flex flex-col items-start lg:items-end gap-2.5 text-xs font-mono">
+              <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/95 text-emerald-900 border border-emerald-300/80 font-medium shadow-2xs">
+                <ShieldCheck size={14} className="text-emerald-600 shrink-0" />
                 <span>100% Genuine Products Factory Stock</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 text-amber-950 border border-amber-300/80 font-medium shadow-2xs">
-                <Zap size={14} className="text-amber-600" />
+              <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/95 text-amber-950 border border-amber-300/80 font-medium shadow-2xs">
+                <Zap size={14} className="text-amber-600 shrink-0" />
                 <span>GST Tax Credit (18%) Pass-Through</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 text-sky-950 border border-sky-300/80 font-medium shadow-2xs">
-                <PackageCheck size={14} className="text-sky-600" />
+              <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/95 text-sky-950 border border-sky-300/80 font-medium shadow-2xs">
+                <PackageCheck size={14} className="text-sky-600 shrink-0" />
                 <span>Bangalore Warehouse Ready Stock</span>
               </div>
             </div>
+
           </div>
         </div>
       </div>

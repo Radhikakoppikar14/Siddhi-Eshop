@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { ShieldCheck, Building2 } from "lucide-react";
+import { ShieldCheck, Building2, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { RFQModal } from "../ui/RFQModal";
 
 interface ProductItem {
@@ -7,6 +8,8 @@ interface ProductItem {
   desc: string;
   specs: string;
   image: string;
+  catId?: string;
+  seriesId?: string;
 }
 
 interface BrandSeries {
@@ -15,8 +18,10 @@ interface BrandSeries {
   title: string;
   desc: string;
   specs: string;
-  items: ProductItem[]; // the two products shown under this series
-  image: string; // fallback image for the series
+  items: ProductItem[];
+  image: string;
+  catId?: string;
+  seriesId?: string;
 }
 
 interface BrandProfile {
@@ -44,6 +49,7 @@ interface BrandProfile {
 }
 
 export const BrandPortfoliosSection: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedBrandId, setSelectedBrandId] = useState<string>("lapp");
   const [activeSeriesIndex, setActiveSeriesIndex] = useState<number>(0);
   const [rfqModalItem, setRfqModalItem] = useState<{ name: string; brand: string } | null>(null);
@@ -60,7 +66,7 @@ export const BrandPortfoliosSection: React.FC = () => {
       logo: "/images/logo-lapp.png",
       desc: "Global pioneer in integrated cable and connection technology. Inventor of ÖLFLEX®.",
       tagline:
-        "Founded in Stuttgart, Germany by Oskar Lapp, LAPP is the world's leading manufacturer of integrated cable and connection systems. In India, LAPP operates manufacturing plants in Jigani (Bangalore) and Pilukhedi (Bhopal). Siddhi Kabel Corporation is an authorized channel partner providing warehouse drum stock of ÖLFLEX®, UNITRONIC®, and SKINTOP® with direct factory test certificates (EN 10204 3.1).",
+        "Founded in Stuttgart, Germany by Oskar Lapp, LAPP is the world's leading manufacturer of integrated cable and connection systems. In India, LAPP operates manufacturing plants in Jigani (Bangalore) and Pilukhedi (Bhopal). Siddhi Kabel Corporation is an authorized channel partner providing warehouse drum stock across all 8 core LAPP product ranges with direct factory test certificates (EN 10204 3.1).",
       partnerBadge: "Official Authorized Channel Partner",
       certs: "VDE Reg. No. 7030 & ISO 9001:2015 · EN 10204 3.1 Certified",
       catalogQuery: "LAPP KABEL",
@@ -74,177 +80,225 @@ export const BrandPortfoliosSection: React.FC = () => {
       accentText: "text-amber-300",
       series: [
         {
-          id: "olflex",
-          seriesCode: "SERIES 01 // OIL RESISTANT",
-          title: "ÖLFLEX® Power & Control Cables",
-          desc: "European benchmark oil-resistant flexible control and power cables for machinery, automated assembly lines, drag chains, and CNC machine tools.",
-          specs: "VDE Reg. No. 7030 · PVC / PUR / TPE outer sheath · Flame retardant to IEC 60332-1-2 · -40°C to +80°C",
+          id: "power-control",
+          catId: "power",
+          seriesId: "classic-110",
+          seriesCode: "SERIES 01 // CABLE RANGE",
+          title: "Power and control cables",
+          desc: "European benchmark oil-resistant flexible control and power cables, steel wire braided (SY), tinned copper EMC screened (CY), and color-coded power variants for machinery and automated assembly lines.",
+          specs: "VDE Reg. No. 7030 · PVC / PUR outer sheath · Flame retardant to IEC 60332-1-2 · -40°C to +80°C",
           items: [
             {
-              name: "ÖLFLEX CLASSIC 110",
-              desc: "Oil-resistant PVC control cable with coloured cores, made for fixed and light-flex use on machine tools, conveyors and production lines.",
+              name: "ÖLFLEX® CLASSIC 110",
+              desc: "Oil-resistant PVC control cable with numbered/colored cores, made for fixed and light-flex use on machine tools, conveyors and production lines.",
               specs: "300/500 V · PVC insulation and sheath · Oil resistant · Fixed -40°C to +80°C",
               image: "/images/cable13.png",
+              catId: "power",
+              seriesId: "classic-110",
             },
             {
-              name: "ÖLFLEX CLASSIC 110 CY",
-              desc: "Screened version of CLASSIC 110 with a tinned copper braid and transparent PVC sheath, keeping control signals clear of electrical interference.",
-              specs: "300/500 V · Tinned copper braided screen · Transparent PVC sheath · Oil resistant",
-              image: "/images/olflex-v2.jpg",
+              name: "ÖLFLEX® CLASSIC 110 SY / CY",
+              desc: "Steel wire braided (SY) or tinned copper screened (CY) control cables providing mechanical protection and electromagnetic interference shielding.",
+              specs: "300/500 V · Braided / Screened protection · Oil resistant · Industrial automation",
+              image: "/images/cable1.png",
+              catId: "power",
+              seriesId: "classic-110-sy",
             },
           ],
           image: "/images/cable1.png",
         },
         {
-          id: "unitronic",
-          seriesCode: "SERIES 02 // FIELDBUS & DATA",
-          title: "UNITRONIC® & ETHERLINE® Data Cables",
-          desc: "High-speed sensor, instrumentation, and fieldbus communication cables for PROFINET, Industrial Gigabit Ethernet, RS-485, and CAN bus automation.",
-          specs: "10 Gbit/s Cat.6A · Optimum screening against electrical interference · Tinned copper braided shield",
+          id: "data-comm",
+          catId: "data",
+          seriesId: "liycy-tp",
+          seriesCode: "SERIES 02 // CABLE RANGE",
+          title: "Data communication cables",
+          desc: "High-speed sensor, instrumentation, and data communication cables including twisted-pair (TP) and overall copper braid screening for automated signal transmission.",
+          specs: "Low capacitance · Optimum screening against electrical interference · Tinned copper braided shield",
           items: [
             {
-              name: "UNITRONIC LiYCY",
-              desc: "Screened data and signal cable with fine-wire conductors, for electronic control, measurement and instrumentation lines in noisy environments.",
-              specs: "Tinned copper braided screen · Fine-wire stranded conductors · PVC insulation and sheath",
-              image: "/images/cable10.png",
+              name: "UNITRONIC® LiYY / LIYCY",
+              desc: "Unscreened (LiYY) and screened (LIYCY) data and signal cables with fine-wire conductors for electronic control, measurement and instrumentation.",
+              specs: "DIN 47100 color code · Fine-wire stranded conductors · PVC insulation",
+              image: "/images/cable14.png",
+              catId: "data",
+              seriesId: "liyy",
             },
             {
-              name: "ETHERLINE Cat.5e & Cat.6A",
-              desc: "Industrial Ethernet cables for PROFINET and Gigabit networks. The Cat.6A versions carry up to 10 Gbit/s over screened twisted pairs.",
-              specs: "Cat.5e for Gigabit · Cat.6A up to 10 Gbit/s · Screened twisted pairs",
-              image: "/images/cable8.jpg",
+              name: "UNITRONIC® LiYY (TP) & LiYCY (TP)",
+              desc: "Twisted-pair (TP) data communication cables providing excellent protection against cross-talk and electrical noise in signal circuits.",
+              specs: "Twisted pairs (TP) · Screened and unscreened variants · Low attenuation",
+              image: "/images/cable10.png",
+              catId: "data",
+              seriesId: "liycy-tp",
             },
           ],
           image: "/images/cable14.png",
         },
         {
-          id: "skintop",
-          seriesCode: "SERIES 03 // CABLE GLANDS",
-          title: "SKINTOP® Cable Glands & Metric Nuts",
-          desc: "Worldwide patented cable entry systems providing reliable IP68 strain relief, liquid tightness, and vibration-proof locking for electrical enclosures.",
-          specs: "Metric M12 to M63 · Nickel-plated Brass & Polyamide · IP68 10 Bar pressure tightness · Lamellar cage",
+          id: "infra-frls",
+          catId: "house",
+          seriesId: "infra-frls",
+          seriesCode: "SERIES 03 // CABLE RANGE",
+          title: "Single core for domestic purpose / house wiring",
+          desc: "Flame retardant low smoke (FRLS) single core building wires engineered for safe domestic and commercial building installations with high temperature withstand.",
+          specs: "FRLS insulation · Low smoke emission · High current carrying capacity · Multiple color options",
           items: [
             {
-              name: "SKINTOP MS-M Brass",
-              desc: "Nickel-plated brass cable gland for rugged strain relief and sealing where enclosures see vibration, heat or heavy handling.",
-              specs: "Metric M12 to M63 · Nickel-plated brass · IP68 · Lamellar cage",
-              image: "/images/cable10.png",
+              name: "ÖLFLEX® INFRA FRLS (1.0 mm²)",
+              desc: "Single core FRLS building wire for domestic and commercial wiring with low smoke zero halogen properties.",
+              specs: "FRLS compound · Low smoke density · High insulation resistance",
+              image: "/images/cable3.png",
+              catId: "house",
+              seriesId: "infra-frls",
             },
             {
-              name: "SKINTOP ST-M Polyamide",
-              desc: "Polyamide cable gland that gives light, economical entry protection for general industrial enclosures and junction boxes.",
-              specs: "Metric thread · Polyamide (PA) · IP68 · Sealing ring included",
-               image: "/images/cable7.jpg",
-            },
-          ],
-          image: "/images/cable3.jpg",
-        },
-        {
-          id: "uniplus",
-          seriesCode: "SERIES 04 // PANEL SINGLE CORES",
-          title: "UNIPLUS® Control Cabinet Single Cores",
-          desc: "High-performance panel wiring single cores with bright annealed electrolytic copper and heat-resistant PVC for control desks, switchgear, and relays.",
-          specs: "450/750V rating · IS:694 & HAR standard · High flexibility Class 5 copper · Multiple bright colors",
-          items: [
-            {
-              name: "UNIPLUS H05V-K",
-              desc: "Fine-stranded single core for internal wiring of control panels, relays and small switchgear where space is tight.",
-              specs: "300/500 V · Class 5 flexible copper · PVC insulation · Multiple colours",
-              image: "/images/cable2.png",
-            },
-            {
-              name: "UNIPLUS H07V-K",
-              desc: "Heavier-duty single core for switchgear and power wiring inside cabinets, available in larger cross-sections.",
-              specs: "450/750 V · Class 5 flexible copper · PVC insulation · Multiple colours",
-              image: "/images/cable4.jpg",
+              name: "ÖLFLEX® INFRA FRLS (2.5 mm² & 4.0 mm²)",
+              desc: "Higher cross-section FRLS building wire for heavy lighting and appliance circuits in residential and commercial buildings.",
+              specs: "IS:694 standard · FRLS insulation · Flame retardant",
+              image: "/images/cable5.png",
+              catId: "house",
+              seriesId: "infra-frls",
             },
           ],
           image: "/images/cable3.png",
         },
         {
-          id: "silflex",
-          seriesCode: "SERIES 05 // HIGH TEMP SILICONE",
-          title: "SILFLEX® Heat-Resistant Silicone Cables",
-          desc: "Halogen-free silicone cables designed for high ambient temperature applications such as steel mills, foundries, glass plants, and sauna construction.",
-          specs: "-50°C to +180°C continuous · Halogen-free · Flame retardant · Excellent UV and ozone resistance",
+          id: "control-cabinet",
+          catId: "cabinet",
+          seriesId: "uniplus-fr",
+          seriesCode: "SERIES 04 // CABLE RANGE",
+          title: "Control cabinet single cores",
+          desc: "High-performance panel wiring single cores with bright annealed electrolytic copper and heat-resistant PVC/FRLS insulation for switchgear, control desks, and relays.",
+          specs: "450/750V rating · IS:694 & HAR standard · Class 5 flexible copper · Full color-coded range",
           items: [
             {
-              name: "SILFLEX EWKF Classic",
-              desc: "Multi-core silicone-insulated cable for connections near ovens, furnaces and heaters where PVC would soften or fail.",
-              specs: "-50°C to +180°C continuous · Silicone insulation · Halogen-free",
+              name: "ÖLFLEX® UNIPLUS FR",
+              desc: "Flame retardant panel wiring single core for internal wiring of switchgear cabinets and control desks.",
+              specs: "450/750V · Class 5 flexible copper · Flame retardant PVC",
+              image: "/images/cable2.png",
+              catId: "cabinet",
+              seriesId: "uniplus-fr",
+            },
+            {
+              name: "ÖLFLEX® UNIPLUS FRLS",
+              desc: "Flame retardant low smoke single core wire designed for critical control cabinet and switchboard installations.",
+              specs: "FRLS compound · Class 5 copper · Low smoke emission",
+              image: "/images/cable4.jpg",
+              catId: "cabinet",
+              seriesId: "uniplus-frls",
+            },
+          ],
+          image: "/images/cable3.png",
+        },
+        {
+          id: "glands-metric",
+          catId: "glands-metric-pg",
+          seriesId: "gland-metric",
+          seriesCode: "SERIES 05 // ACCESSORIES RANGE",
+          title: "Cable glands in metric & PG size",
+          desc: "Worldwide patented cable entry systems providing reliable IP68 strain relief, liquid tightness, and vibration-proof metric locking for electrical enclosures.",
+          specs: "Metric M12 to M63 · Nickel-plated Brass & Polyamide · IP68 10 Bar pressure tightness",
+          items: [
+            {
+              name: "SKINTOP® ST-M (Polyamide)",
+              desc: "Polyamide metric cable gland providing optimum strain relief and permanent sealing for standard control enclosures.",
+              specs: "Metric thread M12-M63 · IP68 10 Bar · Polyamide body",
+              image: "/images/cable2.jpg",
+              catId: "glands-metric-pg",
+              seriesId: "gland-metric",
+            },
+            {
+              name: "SKINTOP® MS-M (Brass)",
+              desc: "Nickel-plated brass metric gland designed for extreme mechanical and chemical resistance in heavy industry.",
+              specs: "Metric thread · Nickel-plated brass · IP69K / IP68",
+              image: "/images/cable10.png",
+              catId: "glands-metric-pg",
+              seriesId: "gland-metric",
+            },
+          ],
+          image: "/images/cable2.jpg",
+        },
+        {
+          id: "nuts-metric",
+          catId: "locknut-metric-pg",
+          seriesId: "locknut-metric",
+          seriesCode: "SERIES 06 // ACCESSORIES RANGE",
+          title: "Cable counter nuts in metric & PG size",
+          desc: "Durable metric lock nuts designed to secure cable entries and conduit fittings safely onto threaded switchboard knockouts and enclosures.",
+          specs: "Metric M12 to M63 · Polyamide / Nickel-plated Brass · Secure vibration-resistant grip",
+          items: [
+            {
+              name: "SKINTOP® GMP-GL-M (Polyamide)",
+              desc: "Glass-fiber reinforced polyamide lock nut with metric threads for secure gland retention on enclosure walls.",
+              specs: "Metric M12 to M63 · Vibration resistant · Secure tightening",
               image: "/images/cable4.png",
+              catId: "locknut-metric-pg",
+              seriesId: "locknut-metric",
             },
             {
-              name: "SIHF Silicone Single Cores",
-              desc: "Silicone single cores for wiring inside hot equipment, heating elements and lighting fittings.",
-              specs: "-50°C to +180°C continuous · Flexible copper · UV and ozone resistant",
-              image: "/images/cable7.jpg",
-            },
-          ],
-          image: "/images/cable5.png",
-        },
-        {
-          id: "solarlink",
-          seriesCode: "SERIES 06 // PHOTOVOLTAIC",
-          title: "ÖLFLEX® SOLAR PV DC Power Cables",
-          desc: "Electron-beam cross-linked solar cables engineered for extreme weather resistance and multi-decade service life in commercial photovoltaic solar farms.",
-          specs: "TÜV approved · Weather & UV resistant · Double insulated · Halogen-free cross-linked copolymer",
-          items: [
-            {
-              name: "ÖLFLEX SOLAR XLS",
-              desc: "Single-core cross-linked solar cable for the DC string wiring between panels and inverters in commercial PV plants.",
-              specs: "TÜV approved · Cross-linked, halogen-free · UV and weather resistant",
-              image: "/images/cable9.png",
-            },
-            {
-              name: "ÖLFLEX SOLAR H1Z2Z2-K",
-              desc: "Double-insulated PV cable to the H1Z2Z2-K standard, built for long outdoor service in solar farms.",
-              specs: "Tinned copper · Double insulated · Halogen-free · UV and weather resistant",
-              image: "/images/cable8.jpg",
-            },
-          ],
-          image: "/images/cable7.png",
-        },
-        {
-          id: "epiglass",
-          seriesCode: "SERIES 07 // ARMOURED POWER",
-          title: "NYY-J / NYY-O Underground Power Cables",
-          desc: "Heavy-duty PVC insulated power and control cables for fixed underground installation in power stations, industrial plants, and switchboards.",
-          specs: "0.6/1 kV rating · Solid/stranded copper conductor · Direct burial rated · Flame retardant",
-          items: [
-            {
-              name: "NYY-J 3-Core Power",
-              desc: "Three-core PVC power cable including a green-yellow earth conductor, for fixed installation indoors, in ducts and underground.",
-              specs: "0.6/1 kV · 3 cores with earth · PVC insulation and sheath · Direct burial rated",
-              image: "/images/cable1.png",
-            },
-            {
-              name: "NYY-J 4-Core Armoured",
-              desc: "Four-core version for three-phase distribution with neutral, for plants, switchboards and buried feeders.",
-              specs: "0.6/1 kV · 4 cores · PVC insulation and sheath · Flame retardant",
-              image: "/images/cable8.jpg",
+              name: "SKINTOP® Brass Metric Lock Nut",
+              desc: "Heavy-duty brass lock nut for metallic SKINTOP metric cable glands in industrial panels.",
+              specs: "Metric threads · Solid brass construction · Secure tightening",
+              image: "/images/cable7.png",
+              catId: "locknut-metric-pg",
+              seriesId: "locknut-metric",
             },
           ],
           image: "/images/cable4.png",
         },
         {
-          id: "epic",
-          seriesCode: "SERIES 08 // INDUSTRIAL CONNECTORS",
-          title: "EPIC® Heavy-Duty Rectangular Connectors",
-          desc: "Modular industrial rectangular plug connectors providing secure power and signal transmission in harsh factory environments and robotics.",
-          specs: "IP65 / IP68 protection · Die-cast aluminium housing · Gold-plated crimp contacts · Modular inserts",
+          id: "glands-pg",
+          catId: "glands-metric-pg",
+          seriesId: "gland-pg",
+          seriesCode: "SERIES 07 // ACCESSORIES RANGE",
+          title: "Cable glands in metric & PG size",
+          desc: "Standardized Panzer-Gewinde (PG) threaded cable glands and matching counter nuts for industrial machinery and legacy panel enclosures.",
+          specs: "PG 7 to PG 48 thread sizes · Polyamide glass-fiber reinforced · IP68 watertight sealing",
           items: [
             {
-              name: "EPIC H-B Connectors",
-              desc: "Heavy-duty rectangular housings that carry power and signal connections through machine and robot cabling.",
-              specs: "IP65 / IP68 · Die-cast aluminium housing · Modular inserts",
-              image: "/images/cable11.png",
+              name: "SKINTOP® ST PG Glands",
+              desc: "PG threaded polyamide cable glands offering reliable strain relief, liquid-tight sealing, and vibration protection.",
+              specs: "PG 7 to PG 48 · IP68 watertight · Polyamide body",
+              image: "/images/cable7.png",
+              catId: "glands-metric-pg",
+              seriesId: "gland-pg",
             },
             {
-              name: "EPIC MHS Inserts",
-              desc: "Insert modules that fit inside EPIC housings, letting you mix power, signal and data contacts in one connector.",
-              specs: "Gold-plated crimp contacts · Modular design · Fits EPIC housings",
-              image: "/images/cable13.jpg",
+              name: "SKINTOP® LOCK NUT PG",
+              desc: "Matching PG lock nuts ensuring secure fastening of PG glands to enclosure walls.",
+              specs: "PG thread standard · Secure locking · Polyamide / Brass",
+              image: "/images/cable12.png",
+              catId: "locknut-metric-pg",
+              seriesId: "locknut-pg",
+            },
+          ],
+          image: "/images/cable7.png",
+        },
+        {
+          id: "silvyn-conduits",
+          catId: "rill",
+          seriesId: "silvyn-rill",
+          seriesCode: "SERIES 08 // CONDUITS RANGE",
+          title: "Protective rills / conduits",
+          desc: "Protective corrugated plastic conduit rills (PA6) and quick-assembly KLICK snap-in fittings providing robust mechanical protection for cable routing.",
+          specs: "NW 10 to NW 54.5 sizes · High impact resistance · Halogen-free · IP67 system rating",
+          items: [
+            {
+              name: "SILVYN® RILL Corrugated Conduit",
+              desc: "Flexible protective conduit tubing made of specially modified polyamide for dynamic and static cable protection.",
+              specs: "PA6 material · High impact resistance · Temperature range -40°C to +115°C",
+              image: "/images/cable13.png",
+              catId: "rill",
+              seriesId: "silvyn-rill",
+            },
+            {
+              name: "SILVYN® KLICK Fittings",
+              desc: "Quick-mounting snap-in conduit fitting that connects SILVYN RILL conduits securely to enclosures with a single click.",
+              specs: "Quick assembly · IP67 system rating · Vibration resistant",
+              image: "/images/cable12.png",
+              catId: "klick",
+              seriesId: "silvyn-klick",
             },
           ],
           image: "/images/cable12.png",
@@ -858,14 +912,20 @@ export const BrandPortfoliosSection: React.FC = () => {
 
   const currentBrand = brandProfiles[selectedBrandId] || brandProfiles.lapp;
   const activeSeries = currentBrand.series[activeSeriesIndex] || currentBrand.series[0];
-
-  // Each series shows its two products, each with its own image, description and specs.
-  // Image fallback order: product image -> series image -> /images/card-cables.jpg
-  const detailRows = activeSeries.items.slice(0, 2);
+  const detailRows = activeSeries ? activeSeries.items.slice(0, 2) : [];
 
   const handleBrandChange = (brandId: string) => {
     setSelectedBrandId(brandId);
     setActiveSeriesIndex(0);
+  };
+
+  const handleItemClick = (catId?: string, seriesId?: string) => {
+    if (selectedBrandId === "lapp" && catId) {
+      const sParam = seriesId ? `&series=${seriesId}` : "";
+      navigate(`/catalog?brand=LAPP+KABEL&category=${catId}${sParam}`);
+    } else {
+      navigate(`/catalog?brand=${encodeURIComponent(currentBrand.catalogQuery)}`);
+    }
   };
 
   return (
@@ -912,140 +972,149 @@ export const BrandPortfoliosSection: React.FC = () => {
         </div>
 
         {/* SPLIT DOSSIER & SPEC VAULT */}
-        <div
-          ref={showcaseRef}
-          className={`rounded-[2.5rem] p-6 sm:p-10 border relative overflow-hidden transition-all duration-700 ${currentBrand.containerBg}`}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch relative z-10">
+        {activeSeries && (
+          <div
+            ref={showcaseRef}
+            className={`rounded-[2.5rem] p-6 sm:p-10 border relative overflow-hidden transition-all duration-700 ${currentBrand.containerBg}`}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch relative z-10">
 
-            {/* LEFT COLUMN: EXECUTIVE DOSSIER & SERIES SELECTOR */}
-            <div className="lg:col-span-5 space-y-6">
+              {/* LEFT COLUMN: EXECUTIVE DOSSIER & SERIES SELECTOR */}
+              <div className="lg:col-span-5 space-y-6">
 
-              <div className="space-y-3 pb-6 border-b border-white/10">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <span className={`px-3.5 py-1 rounded-full font-mono text-xs font-bold uppercase tracking-wider border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
-                    <Building2 size={13} />
-                    {currentBrand.partnerBadge}
-                  </span>
-                  <span className="text-xs font-mono text-slate-300">{currentBrand.origin}</span>
-                </div>
-
-                <h3 className="text-2xl font-black text-white tracking-tight leading-snug">
-                  {currentBrand.fullName}
-                </h3>
-
-                <p className="text-slate-200 text-xs sm:text-sm leading-relaxed font-sans">
-                  {currentBrand.tagline}
-                </p>
-
-                <div className={`flex items-center gap-2 text-xs font-mono ${currentBrand.accentText} font-semibold pt-1`}>
-                  <ShieldCheck size={14} />
-                  <span>{currentBrand.certs}</span>
-                </div>
-              </div>
-
-              {/* SERIES SELECTOR TABS (2-COLUMN GRID) */}
-              <div className="space-y-3">
-                <span className="text-[11px] font-mono uppercase tracking-widest text-slate-300 font-bold block">
-                  Products Range ({currentBrand.series.length}):
-                </span>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {currentBrand.series.map((s, idx) => {
-                    const isSeriesActive = activeSeriesIndex === idx;
-                    return (
-                      <button
-                        key={s.id}
-                        onClick={() => setActiveSeriesIndex(idx)}
-                        className={`w-full p-3.5 rounded-xl text-left transition-all duration-300 flex flex-col justify-between cursor-pointer border ${
-                          isSeriesActive
-                            ? `${currentBrand.themeBg} text-slate-950 border-white font-black shadow-lg scale-[1.01]`
-                            : "bg-black/30 text-slate-200 border-white/10 hover:bg-black/50"
-                        }`}
-                      >
-                        <span className={`text-[9px] font-mono uppercase block tracking-wider mb-0.5 ${isSeriesActive ? "text-slate-900 font-bold" : "text-slate-400"}`}>
-                          SERIES {String(idx + 1).padStart(2, "0")}
-                        </span>
-                        <span className="font-bold text-xs tracking-tight line-clamp-1">{s.title}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN: ONE HEADER CARD, THEN ROWS OF [IMAGE CARD | DESCRIPTION + PARAMETERS] */}
-            <div className="lg:col-span-7 flex self-stretch">
-              <div className="w-full h-full flex flex-col bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 sm:p-8 border border-white/40 shadow-xl">
-
-                {/* Header: series code + title on the left, Authorized Stock pill on the right */}
-                <div className="flex items-start justify-between gap-3 border-b border-slate-200 pb-4">
-                  <div className="min-w-0">
-                    <span className={`text-[10px] font-mono uppercase tracking-wider ${currentBrand.accentText} font-bold block`}>
-                      {activeSeries.seriesCode}
+                <div className="space-y-3 pb-6 border-b border-white/10">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className={`px-3.5 py-1 rounded-full font-mono text-xs font-bold uppercase tracking-wider border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
+                      <Building2 size={13} />
+                      {currentBrand.partnerBadge}
                     </span>
-                    <h4 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight mt-0.5">
-                      {activeSeries.title}
-                    </h4>
+                    <span className="text-xs font-mono text-slate-300">{currentBrand.origin}</span>
                   </div>
-                  <span className={`shrink-0 px-3 py-1 rounded-full font-mono text-[10px] font-bold border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
-                    <ShieldCheck size={12} /> Authorized Stock
-                  </span>
+
+                  <h3 className="text-2xl font-black text-white tracking-tight leading-snug">
+                    {currentBrand.fullName}
+                  </h3>
+
+                  <p className="text-slate-200 text-xs sm:text-sm leading-relaxed font-sans">
+                    {currentBrand.tagline}
+                  </p>
+
+                  <div className={`flex items-center gap-2 text-xs font-mono ${currentBrand.accentText} font-semibold pt-1`}>
+                    <ShieldCheck size={14} />
+                    <span>{currentBrand.certs}</span>
+                  </div>
                 </div>
 
-                {/* Rows */}
-                <div className="flex-1 flex flex-col justify-evenly gap-5 pt-6">
-                  {detailRows.map((item, rowIdx) => (
-                    <div
-                      key={`${activeSeries.id}-${rowIdx}`}
-                      className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center"
-                    >
-                      {/* Left: image card (white tile with a light grey image well) */}
-                      <div className="md:col-span-5">
-                        <div className="bg-white rounded-2xl p-3 border border-slate-100 shadow-md">
-                          <div className="w-full aspect-[4/3] bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="max-h-full max-w-full object-contain rounded-xl"
-                              onError={(e) => {
-                                const img = e.currentTarget;
-                                if (!img.src.endsWith(activeSeries.image)) {
-                                  img.src = activeSeries.image;
-                                  return;
-                                }
-                                img.onerror = null;
-                                img.src = "/images/card-cables.jpg";
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
+                {/* SERIES SELECTOR TABS (2-COLUMN GRID) */}
+                <div className="space-y-3">
+                  <span className="text-[11px] font-mono uppercase tracking-widest text-slate-300 font-bold block">
+                    Products Range ({currentBrand.series.length}):
+                  </span>
 
-                      {/* Right: description + Technical Parameters card */}
-                      <div className="md:col-span-7 space-y-4">
-                        <h5 className="text-base font-black text-slate-950 tracking-tight">
-                          {item.name}
-                        </h5>
-                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
-                          {item.desc}
-                        </p>
-
-                        <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-md space-y-1.5 font-mono text-xs">
-                          <div className={`text-[10px] font-bold ${currentBrand.accentText} uppercase tracking-wider flex items-center gap-1.5`}>
-                            <ShieldCheck size={13} /> Technical Parameters
-                          </div>
-                          <p className="text-slate-700 leading-snug">{item.specs}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {currentBrand.series.map((s, idx) => {
+                      const isSeriesActive = activeSeriesIndex === idx;
+                      return (
+                        <button
+                          key={s.id}
+                          onClick={() => setActiveSeriesIndex(idx)}
+                          className={`w-full p-3.5 rounded-xl text-left transition-all duration-300 flex flex-col justify-between cursor-pointer border ${
+                            isSeriesActive
+                              ? `${currentBrand.themeBg} text-slate-950 border-white font-black shadow-lg scale-[1.01]`
+                              : "bg-black/30 text-slate-200 border-white/10 hover:bg-black/50"
+                          }`}
+                        >
+                          <span className={`text-[9px] font-mono uppercase block tracking-wider mb-0.5 ${isSeriesActive ? "text-slate-900 font-bold" : "text-slate-400"}`}>
+                            SERIES {String(idx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="font-bold text-xs tracking-tight line-clamp-1">{s.title}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
 
+              {/* RIGHT COLUMN: 2 PRODUCTS ROW DISPLAY */}
+              <div className="lg:col-span-7 flex self-stretch">
+                <div className="w-full h-full flex flex-col bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 sm:p-8 border border-white/40 shadow-xl">
+
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-3 border-b border-slate-200 pb-4">
+                    <div className="min-w-0">
+                      <span className={`text-[10px] font-mono uppercase tracking-wider ${currentBrand.accentText} font-bold block`}>
+                        {activeSeries.seriesCode}
+                      </span>
+                      <h4 
+                        onClick={() => handleItemClick(activeSeries.catId, activeSeries.seriesId)}
+                        className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight mt-0.5 hover:text-amber-600 transition-colors cursor-pointer"
+                        title="View sub-category in catalog"
+                      >
+                        {activeSeries.title}
+                      </h4>
+                    </div>
+                    <span className={`shrink-0 px-3 py-1 rounded-full font-mono text-[10px] font-bold border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
+                      <ShieldCheck size={12} /> Authorized Stock
+                    </span>
+                  </div>
+
+                  {/* Rows — Exactly 2 products displayed per category */}
+                  <div className="flex-1 flex flex-col justify-evenly gap-5 pt-6">
+                    {detailRows.map((item, rowIdx) => (
+                      <div
+                        key={`${activeSeries.id}-${rowIdx}`}
+                        onClick={() => handleItemClick(item.catId || activeSeries.catId, item.seriesId || activeSeries.seriesId)}
+                        className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center group cursor-pointer p-2 rounded-2xl hover:bg-stone-50 transition-colors"
+                        title="Click to view inside catalog"
+                      >
+                        {/* Left: image card */}
+                        <div className="md:col-span-5">
+                          <div className="bg-white rounded-2xl p-3 border border-slate-100 shadow-md group-hover:scale-102 transition-transform">
+                            <div className="w-full aspect-[4/3] bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden">
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="max-h-full max-w-full object-contain rounded-xl group-hover:scale-110 transition-transform duration-500"
+                                onError={(e) => {
+                                  const img = e.currentTarget;
+                                  if (!img.src.endsWith(activeSeries.image)) {
+                                    img.src = activeSeries.image;
+                                    return;
+                                  }
+                                  img.onerror = null;
+                                  img.src = "/images/card-cables.jpg";
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right: description + Technical Parameters card */}
+                        <div className="md:col-span-7 space-y-4">
+                          <h5 className="text-base font-black text-slate-950 tracking-tight group-hover:text-amber-700 transition-colors">
+                            {item.name}
+                          </h5>
+                          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
+                            {item.desc}
+                          </p>
+
+                          <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-md space-y-1.5 font-mono text-xs">
+                            <div className={`text-[10px] font-bold ${currentBrand.accentText} uppercase tracking-wider flex items-center gap-1.5`}>
+                              <ShieldCheck size={13} /> Technical Parameters
+                            </div>
+                            <p className="text-slate-700 leading-snug">{item.specs}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
-        </div>
+        )}
+
       </div>
 
       {/* RFQ Quote Modal */}

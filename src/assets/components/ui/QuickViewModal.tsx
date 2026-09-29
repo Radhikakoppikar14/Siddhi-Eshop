@@ -58,18 +58,15 @@ export const QuickViewModal: React.FC = () => {
   const calculatedRate = useMemo(() => {
     let baseRate = quickViewProduct?.price || 145.00;
 
-    // Conductor cross-section size multiplier
     if (selectedSize.includes("1.5")) baseRate = 145.00;
     else if (selectedSize.includes("2.5")) baseRate = 185.00;
     else if (selectedSize.includes("4.0")) baseRate = 215.00;
     else if (selectedSize.includes("6.0")) baseRate = 245.00;
 
-    // Core count multiplier factor
     if (selectedCore.includes("3")) baseRate *= 0.85;
     else if (selectedCore.includes("4")) baseRate *= 0.95;
     else if (selectedCore.includes("5")) baseRate *= 1.00;
 
-    // Sheath color adjustments
     if (selectedColor.includes("Teal Green")) baseRate += 15;
     else if (selectedColor.includes("Black")) baseRate += 0;
     else if (selectedColor.includes("Silver-Grey")) baseRate -= 10;
@@ -83,7 +80,6 @@ export const QuickViewModal: React.FC = () => {
 
   const isLapp = quickViewProduct.brand.toLowerCase().includes("lapp");
 
-  // Options for LAPP interactive selectors
   const coreOptions = ["3 Cores (with Earth)", "4 Cores (with Earth)", "5 Cores (with Earth)"];
   const sizeOptions = ["1.5 mm²", "2.5 mm²", "4.0 mm²", "6.0 mm²"];
   const colorOptions = ["Silver-Grey RAL 7001", "Black Sheath", "Teal Green RAL 6018"];
@@ -93,7 +89,9 @@ export const QuickViewModal: React.FC = () => {
     setAdded(true);
     const specDetails = isLapp ? ` [${selectedCore}, ${selectedSize}, ${selectedColor}]` : "";
     showToast(`Added ${qty} ${quickViewProduct.unit} of ${quickViewProduct.name}${specDetails} to RFQ Cart!`);
-    setTimeout(() => setAdded(false), 2000);
+    setTimeout(() => {
+      setAdded(false);
+    }, 2000);
   };
 
   const handleCustomQuote = () => {
@@ -132,13 +130,14 @@ export const QuickViewModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fade-in select-none">
       <div
-        className="relative bg-white text-stone-900 rounded-3xl shadow-2xl border border-stone-300 w-full max-w-4xl max-h-[95vh] flex flex-col overflow-hidden"
+        className="relative bg-gradient-to-br from-white via-[#fcfbfa] to-[#f7f2ea] text-stone-900 rounded-3xl shadow-2xl border border-stone-200/80 w-full max-w-4xl max-h-[95vh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
+          type="button"
           onClick={closeQuickView}
-          className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-950 transition-colors border border-stone-300 cursor-pointer"
+          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-950 transition-colors border border-stone-300 cursor-pointer"
           aria-label="Close dialog"
         >
           <X size={16} />
@@ -148,9 +147,9 @@ export const QuickViewModal: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 sm:p-8 overflow-y-auto items-center">
           
           {/* Left Column: Image Stage with Zoom */}
-          <div className="md:col-span-5 flex flex-col items-center justify-between bg-stone-50 rounded-2xl p-4 border border-stone-200 h-full shadow-inner">
+          <div className="md:col-span-5 flex flex-col items-center justify-between bg-stone-50/60 rounded-2xl p-4 border border-stone-200 h-full shadow-inner">
             <div
-              className={`relative w-full aspect-square bg-white rounded-2xl border border-stone-300 p-4 flex items-center justify-center overflow-hidden ${
+              className={`relative w-full aspect-square bg-white rounded-2xl border border-stone-200 p-4 flex items-center justify-center overflow-hidden shadow-2xs group ${
                 isZoomed ? "cursor-crosshair" : "cursor-zoom-in"
               }`}
               onClick={() => setIsZoomed(!isZoomed)}
@@ -161,7 +160,7 @@ export const QuickViewModal: React.FC = () => {
                 <img
                   src={productImage}
                   alt={quickViewProduct.name}
-                  className="max-h-full max-w-full object-contain transition-transform duration-300 hover:scale-105"
+                  className="max-h-full max-w-full object-contain transition-transform duration-500 ease-out group-hover:scale-110"
                   onError={(e) => {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = "/images/card-cables.jpg";
@@ -231,20 +230,20 @@ export const QuickViewModal: React.FC = () => {
               {isLapp ? (
                 <div className="mt-4 space-y-2.5 font-mono text-xs">
                   {/* Cores Selector */}
-                  <div className="p-2.5 bg-stone-50 rounded-2xl border border-stone-200 space-y-1.5 shadow-2xs">
+                  <div className="p-3 bg-white/90 rounded-2xl border border-stone-200/90 space-y-2 shadow-2xs">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] text-stone-500 font-bold uppercase flex items-center gap-1">
                         <Layers size={11} className="text-sky-600" /> Cores Configuration:
                       </span>
                       <span className="text-[10px] font-bold text-stone-900">{selectedCore}</span>
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="grid grid-cols-3 gap-1.5">
                       {coreOptions.map((c) => (
                         <button
                           key={c}
                           type="button"
                           onClick={() => setSelectedCore(c)}
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border cursor-pointer ${
+                          className={`px-2 py-1.5 rounded-xl text-[10px] font-semibold transition-all border cursor-pointer text-center truncate ${
                             selectedCore === c
                               ? "bg-stone-950 text-white border-stone-950 shadow-2xs"
                               : "bg-white text-stone-700 border-stone-300 hover:bg-stone-100"
@@ -257,20 +256,20 @@ export const QuickViewModal: React.FC = () => {
                   </div>
 
                   {/* Size Selector */}
-                  <div className="p-2.5 bg-stone-50 rounded-2xl border border-stone-200 space-y-1.5 shadow-2xs">
+                  <div className="p-3 bg-white/90 rounded-2xl border border-stone-200/90 space-y-2 shadow-2xs">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] text-stone-500 font-bold uppercase flex items-center gap-1">
                         <Ruler size={11} className="text-indigo-600" /> Conductor Cross-Section Size:
                       </span>
                       <span className="text-[10px] font-bold text-indigo-700">{selectedSize}</span>
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="grid grid-cols-4 gap-1.5">
                       {sizeOptions.map((s) => (
                         <button
                           key={s}
                           type="button"
                           onClick={() => setSelectedSize(s)}
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border cursor-pointer ${
+                          className={`px-2 py-1.5 rounded-xl text-[10px] font-semibold transition-all border cursor-pointer text-center truncate ${
                             selectedSize === s
                               ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
                               : "bg-white text-stone-700 border-stone-300 hover:bg-stone-100"
@@ -283,20 +282,20 @@ export const QuickViewModal: React.FC = () => {
                   </div>
 
                   {/* Color Selector */}
-                  <div className="p-2.5 bg-stone-50 rounded-2xl border border-stone-200 space-y-1.5 shadow-2xs">
+                  <div className="p-3 bg-white/90 rounded-2xl border border-stone-200/90 space-y-2 shadow-2xs">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] text-stone-500 font-bold uppercase flex items-center gap-1">
                         <Palette size={11} className="text-amber-600" /> Sheath Color Option:
                       </span>
                       <span className="text-[10px] font-bold text-stone-900">{selectedColor}</span>
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="grid grid-cols-3 gap-1.5">
                       {colorOptions.map((col) => (
                         <button
                           key={col}
                           type="button"
                           onClick={() => setSelectedColor(col)}
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border cursor-pointer flex items-center gap-1.5 ${
+                          className={`px-2 py-1.5 rounded-xl text-[10px] font-semibold transition-all border cursor-pointer flex items-center justify-center gap-1 truncate ${
                             selectedColor === col
                               ? "bg-stone-950 text-white border-stone-950 shadow-2xs"
                               : "bg-white text-stone-700 border-stone-300 hover:bg-stone-100"
@@ -309,15 +308,14 @@ export const QuickViewModal: React.FC = () => {
                               borderColor: "rgba(0,0,0,0.2)",
                             }}
                           />
-                          {col}
+                          <span className="truncate">{col.split(" ")[0]}</span>
                         </button>
                       ))}
                     </div>
                   </div>
                 </div>
               ) : (
-                /* Description and Main Content for Non-Lapp Products */
-                <div className="mt-4 p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2 shadow-2xs">
+                <div className="mt-4 p-4 bg-white/90 rounded-2xl border border-stone-200/90 space-y-2 shadow-2xs">
                   <div className="flex items-center gap-1.5 text-stone-700 text-xs font-bold font-mono uppercase">
                     <FileText size={13} className="text-pink-700" />
                     <span>Product Application & Specification</span>
@@ -325,20 +323,11 @@ export const QuickViewModal: React.FC = () => {
                   <p className="text-xs text-stone-600 leading-relaxed font-sans">
                     {quickViewProduct.application || quickViewProduct.name}
                   </p>
-                  {quickViewProduct.specs && quickViewProduct.specs.length > 0 && (
-                    <div className="pt-2 border-t border-stone-200 flex flex-wrap gap-1.5">
-                      {quickViewProduct.specs.map((spec, i) => (
-                        <span key={i} className="px-2 py-0.5 rounded-md bg-white text-stone-700 font-mono text-[10px] border border-stone-300">
-                          {spec}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               )}
 
               {/* Rate Banner */}
-              <div className="mt-3 px-4 py-3 bg-stone-50 border border-stone-200 rounded-2xl flex items-center justify-between shadow-2xs">
+              <div className="mt-3 px-4 py-3 bg-white/90 border border-stone-200/90 rounded-2xl flex items-center justify-between shadow-2xs">
                 <div className="flex items-center gap-3">
                   <span className="text-[11px] text-stone-500 uppercase tracking-wider font-mono">
                     Rate:
@@ -356,12 +345,13 @@ export const QuickViewModal: React.FC = () => {
               </div>
             </div>
 
-            {/* Actions: Quantity Stepper + Add to Cart + Discount Note */}
-            <div className="pt-3 border-t border-stone-200 space-y-3">
+            {/* Actions */}
+            <div className="pt-3 border-t border-stone-200/90 space-y-3">
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 {/* Stepper Qty */}
                 <div className="flex items-center justify-between sm:justify-start border border-stone-300 rounded-xl bg-stone-100 p-1.5">
                   <button
+                    type="button"
                     onClick={() => setQty(Math.max(1, qty - 1))}
                     className="p-1.5 hover:bg-white rounded-lg text-stone-700 transition-colors cursor-pointer shadow-2xs"
                   >
@@ -371,6 +361,7 @@ export const QuickViewModal: React.FC = () => {
                     {qty}
                   </span>
                   <button
+                    type="button"
                     onClick={() => setQty(qty + 1)}
                     className="p-1.5 hover:bg-white rounded-lg text-stone-700 transition-colors cursor-pointer shadow-2xs"
                   >
@@ -379,6 +370,7 @@ export const QuickViewModal: React.FC = () => {
                 </div>
 
                 <button
+                  type="button"
                   onClick={handleAddToCart}
                   disabled={added}
                   className={`flex-1 py-3 px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md hover:scale-102 ${
@@ -403,6 +395,7 @@ export const QuickViewModal: React.FC = () => {
 
               <div>
                 <button
+                  type="button"
                   onClick={handleCustomQuote}
                   className="w-full py-3 px-4 bg-pink-50 hover:bg-pink-100 text-pink-900 font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer text-center border border-pink-300 shadow-2xs hover:scale-102"
                 >
