@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { CatalogGrid } from "../assets/components/home/CatalogGrid";
 import { ShieldCheck, Zap, PackageCheck, Layers } from "lucide-react";
@@ -12,6 +12,9 @@ export const Catalog: React.FC = () => {
   const location = useLocation();
   const fromPortfolio =
     (location.state as { fromPortfolio?: boolean } | null)?.fromPortfolio === true;
+
+  // true when a category is selected on the plain /catalog page (CatalogGrid tells us)
+  const [compact, setCompact] = useState(false);
 
   const getMappedBrand = (b: string) => {
     if (!b || b === "all") return "all";
@@ -45,13 +48,13 @@ export const Catalog: React.FC = () => {
   };
 
   return (
-    <main className={`min-h-screen bg-[#faf8f5] ${fromPortfolio ? "py-3 sm:py-5" : "py-6 sm:py-10"}`}>
+    <main className={`min-h-screen bg-[#faf8f5] ${fromPortfolio || compact ? "py-3 sm:py-5" : "py-6 sm:py-10"}`}>
       {/* Top Breadcrumb & Hero Header */}
-      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${fromPortfolio ? "" : "mb-6"}`}>
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${fromPortfolio || compact ? "" : "mb-6"}`}>
         
 
         {/* Catalog Page Hero Banner — hidden when arriving from the Brand Portfolio section */}
-        {!fromPortfolio && (
+        {!fromPortfolio && !compact && (
           <div className="bg-gradient-to-br from-[#fffdf6] via-[#faf3e3] to-[#f3e7cb] text-slate-900 rounded-3xl p-6 sm:p-10 border border-[#e5d5b3] shadow-[0_16px_40px_-12px_rgba(180,130,50,0.12),0_2px_8px_rgba(0,0,0,0.03)] relative overflow-hidden">
             {/* Subtle Ambient Radial Golden Glows */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-amber-200/25 rounded-full blur-3xl pointer-events-none" />
@@ -110,6 +113,7 @@ export const Catalog: React.FC = () => {
         selectedBrand={brandParam}
         onBrandChange={handleBrandChange}
         isFullPage={true}
+        onCompactChange={setCompact}
       />
     </main>
   );

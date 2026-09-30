@@ -33,6 +33,7 @@ interface CatalogGridProps {
   selectedBrand?: string;
   onBrandChange?: (brand: string) => void;
   isFullPage?: boolean;
+  onCompactChange?: (compact: boolean) => void;
 }
 
 interface ProductDetailsRowProps {
@@ -234,6 +235,7 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
   selectedBrand: controlledBrand,
   onBrandChange: controlledSetBrand,
   isFullPage = false,
+  onCompactChange,
 }) => {
   if (!isFullPage) return null;
 
@@ -265,6 +267,12 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
     setLappCategory(cat);
     setLappSeries(series);
   };
+  // Opening a LAPP category jumps straight to its first series page (series buttons + product list)
+  const openLappCategory = (cat: string) => {
+    const first =
+      cat === "all" ? null : LAPP_CATALOG.find((c) => c.id === cat)?.series[0]?.id ?? null;
+    openLapp(cat, first);
+  };
 
   const { searchQuery, setSearchQuery, searchCategory, setSearchCategory, openQuickView } = useAuth();
 
@@ -273,6 +281,14 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
   // "Verified Inventory & Live Specifications" box and the brand spotlight banner.
   const location = useLocation();
   const fromPortfolio = (location.state as { fromPortfolio?: boolean } | null)?.fromPortfolio === true;
+
+  // "compact" = a category is selected on the plain /catalog page:
+  // hide the big headings (banner + inventory title) and keep only the filter chips + products.
+  const compact =
+    !fromPortfolio && (selectedCategory !== "all" || (isLapp && lappCategory !== "all"));
+  useEffect(() => {
+    onCompactChange?.(compact);
+  }, [compact, onCompactChange]);
 
   const handleBrandChange = (brand: string) => {
     if (controlledSetBrand) controlledSetBrand(brand);
@@ -471,14 +487,15 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
     selectedBrand !== "all" && !fromPortfolio ? brandSpotlights[selectedBrand] : null;
 
   return (
-    <section className={`select-none bg-[#faf8f5] ${fromPortfolio ? "py-2 sm:py-3" : "py-10 sm:py-14"}`} id="productsSection">
+    <section className={`select-none bg-[#faf8f5] ${fromPortfolio || compact ? "py-2 sm:py-3" : "py-10 sm:py-14"}`} id="productsSection">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header (Verified Inventory box) — hidden when arriving from the Brand Portfolio section */}
         {!fromPortfolio && (
         <div className="bg-gradient-to-br from-white via-[#fcfbfa] to-[#f4efe6] rounded-3xl p-6 sm:p-8 border border-stone-300 shadow-md mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className={`flex flex-col lg:flex-row lg:items-center gap-6 ${compact ? "lg:justify-end" : "justify-between"}`}>
             
+            {!compact && (
             <div className="space-y-1.5">
               <div className="flex items-center gap-2 font-mono text-xs">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -493,6 +510,7 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
                 Switch between Grid and Details views to compare live technical specifications, drum stock availability, and commercial rates.
               </p>
             </div>
+            )}
 
             {/* Engineering Control Dock */}
             <div className="flex flex-wrap items-center gap-3 shrink-0">
@@ -553,13 +571,13 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
           </div>
 
           {/* Categories Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-6 mt-6 border-t border-stone-300/80 scrollbar-none">
+          <div className={`flex items-center gap-2 overflow-x-auto pb-2 border-t border-stone-300/80 scrollbar-none ${compact ? "pt-4 mt-4" : "pt-6 mt-6"}`}>
             {isLapp
               ? [{ id: "all", name: "All Lapp Categories" }, ...LAPP_CATALOG].map((c) => (
                   <button
                     key={c.id}
                     type="button"
-                    onClick={() => openLapp(c.id, null)}
+                    onClick={() => openLappCategory(c.id)}
                     className={`px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all border cursor-pointer font-mono ${
                       lappCategory === c.id
                         ? "bg-pink-600 text-white font-black shadow-md border-pink-500"
@@ -577,7 +595,8 @@ export const CatalogGrid: React.FC<CatalogGridProps> = ({
                       setSelectedCategory(cat.id);
                       // Power / Data / Glands chips -> show LAPP sub-categories first
                       const m = selectedBrand === "all" ? lappChipMap[cat.id] : undefined;
-                      openLapp(m ? m.open : "all", null);
+                      if (m) openLappCategory(m.open);
+                      else openLapp("all", null);
                     }}
                     className={`px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all border cursor-pointer font-mono ${
                       selectedCategory === cat.id
