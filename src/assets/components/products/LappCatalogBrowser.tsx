@@ -1,7 +1,26 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ChevronRight, Search, ShoppingCart, Check, X, Layers, Package, ShieldCheck, Eye, ArrowRight, LayoutGrid, List, ZoomIn } from "lucide-react";
+import {
+  ChevronRight,
+  Search,
+  ShoppingCart,
+  Check,
+  X,
+  Layers,
+  Package,
+  ShieldCheck,
+  Eye,
+  ArrowRight,
+  LayoutGrid,
+  List,
+  ZoomIn,
+} from "lucide-react";
 import { LAPP_CATALOG } from "../../../data/lappCatalog";
-import type { LappCategory, LappColumnKey, LappRow, LappSeries } from "../../../data/lappCatalog";
+import type {
+  LappCategory,
+  LappColumnKey,
+  LappRow,
+  LappSeries,
+} from "../../../data/lappCatalog";
 import { useCart } from "../../../context/CartContext";
 import { useToast } from "../../../context/ToastContext";
 import { useAuth } from "../../../context/AuthContext";
@@ -38,15 +57,29 @@ const FALLBACK_IMG = "/images/card-cables.jpg";
 const MAX_SEARCH_RESULTS = 200;
 
 const inr = (n: number) =>
-  n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  n.toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
 const rowText = (r: LappRow, seriesName: string) =>
-  [seriesName, r.partNo, r.description, r.core, r.pe, r.size, r.colour, r.packSize, r.type]
+  [
+    seriesName,
+    r.partNo,
+    r.description,
+    r.core,
+    r.pe,
+    r.size,
+    r.colour,
+    r.packSize,
+    r.type,
+  ]
     .filter((v) => v !== undefined && v !== null)
     .join(" ")
     .toLowerCase();
 
-const matchesAll = (text: string, terms: string[]) => terms.every((t) => text.includes(t));
+const matchesAll = (text: string, terms: string[]) =>
+  terms.every((t) => text.includes(t));
 
 const countRows = (cats: LappCategory[]) =>
   cats.reduce((n, c) => n + c.series.reduce((m, s) => m + s.rows.length, 0), 0);
@@ -54,7 +87,10 @@ const countRows = (cats: LappCategory[]) =>
 /* ------------------------------------------------------------------ */
 /* Interactive Grid Card View with Thumbnails & Zoom                  */
 /* ------------------------------------------------------------------ */
-const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, row }) => {
+const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({
+  series,
+  row,
+}) => {
   const navigate = useNavigate();
   const { addCustomItem } = useCart();
   const { showToast } = useToast();
@@ -71,7 +107,8 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
     const y = ((e.clientY - top) / height) * 100;
     setZoomPos({ x, y });
@@ -89,7 +126,7 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
         price: row.price,
         unit: series.unit,
       },
-      1
+      1,
     );
     setAdded(true);
     showToast(`Added ${row.description} to RFQ Cart!`);
@@ -107,7 +144,8 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
             LAPP KABEL
           </span>
           <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 font-semibold flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Ready Stock
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />{" "}
+            Ready Stock
           </span>
         </div>
 
@@ -124,7 +162,9 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
             src={productImages[selectedImgIndex]}
             alt={row.description}
             className={`max-h-full max-w-full object-contain transition-transform duration-200 ${
-              isZoomed ? "scale-175 pointer-events-none" : "scale-100 group-hover/zoom:scale-110"
+              isZoomed
+                ? "scale-175 pointer-events-none"
+                : "scale-100 group-hover/zoom:scale-110"
             }`}
             style={
               isZoomed
@@ -140,7 +180,10 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
 
         {/* Thumbnail Selector Options */}
         {productImages.length > 1 && (
-          <div className="flex items-center gap-1.5 mb-3" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex items-center gap-1.5 mb-3"
+            onClick={(e) => e.stopPropagation()}
+          >
             {productImages.map((img, idx) => (
               <button
                 key={idx}
@@ -155,31 +198,62 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
                     : "border-stone-200 hover:border-stone-400 opacity-70 hover:opacity-100"
                 }`}
               >
-                <img src={img} alt={`Thumbnail ${idx + 1}`} className="max-h-full max-w-full object-contain" />
+                <img
+                  src={img}
+                  alt={`Thumbnail ${idx + 1}`}
+                  className="max-h-full max-w-full object-contain"
+                />
               </button>
             ))}
           </div>
         )}
 
-        <span className="text-[10px] font-mono text-pink-600 block mb-1 font-bold">{series.name}</span>
-        <h4 className="font-bold text-xs text-stone-950 line-clamp-2 mb-2 group-hover:text-pink-700 transition-colors" title={row.description}>
+        <span className="text-[10px] font-mono text-pink-600 block mb-1 font-bold">
+          {series.name}
+        </span>
+        <h4
+          className="font-bold text-xs text-stone-950 line-clamp-2 mb-2 group-hover:text-pink-700 transition-colors"
+          title={row.description}
+        >
           {row.description}
         </h4>
 
         <div className="p-2.5 bg-white/80 rounded-2xl border border-stone-200/60 text-[10px] font-mono grid grid-cols-2 gap-1.5 mb-3 shadow-2xs">
-          <div><span className="text-stone-400">Part No:</span> <strong className="text-stone-800">{row.partNo}</strong></div>
-          {row.size !== undefined && <div><span className="text-stone-400">Size:</span> <strong className="text-stone-800">{row.size}</strong></div>}
-          {row.core !== undefined && <div><span className="text-stone-400">Cores:</span> <strong className="text-stone-800">{row.core}</strong></div>}
-          {row.colour !== undefined && <div><span className="text-stone-400">Color:</span> <strong className="text-stone-800">{row.colour}</strong></div>}
+          <div>
+            <span className="text-stone-400">Part No:</span>{" "}
+            <strong className="text-stone-800">{row.partNo}</strong>
+          </div>
+          {row.size !== undefined && (
+            <div>
+              <span className="text-stone-400">Size:</span>{" "}
+              <strong className="text-stone-800">{row.size}</strong>
+            </div>
+          )}
+          {row.core !== undefined && (
+            <div>
+              <span className="text-stone-400">Cores:</span>{" "}
+              <strong className="text-stone-800">{row.core}</strong>
+            </div>
+          )}
+          {row.colour !== undefined && (
+            <div>
+              <span className="text-stone-400">Color:</span>{" "}
+              <strong className="text-stone-800">{row.colour}</strong>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="pt-3 border-t border-stone-200/60 flex items-center justify-between">
         <div>
-          <span className="text-[9px] text-stone-400 block uppercase font-mono">Rate</span>
+          <span className="text-[9px] text-stone-400 block uppercase font-mono">
+            Rate
+          </span>
           <span className="text-sm font-black font-mono text-emerald-700">
             ₹{inr(row.price)}
-            <span className="text-[10px] font-normal text-stone-400 ml-1">/{series.unit}</span>
+            <span className="text-[10px] font-normal text-stone-400 ml-1">
+              /{series.unit}
+            </span>
           </span>
         </div>
 
@@ -187,7 +261,9 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
           type="button"
           onClick={handleAdd}
           className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 shadow-2xs cursor-pointer text-white hover:scale-105 ${
-            added ? "bg-emerald-600 ring-2 ring-emerald-300" : "bg-stone-950 hover:bg-pink-600"
+            added
+              ? "bg-emerald-600 ring-2 ring-emerald-300"
+              : "bg-stone-950 hover:bg-pink-600"
           }`}
         >
           {added ? <Check size={12} /> : <ShoppingCart size={12} />}
@@ -201,11 +277,11 @@ const LappGridCard: React.FC<{ series: LappSeries; row: LappRow }> = ({ series, 
 /* ------------------------------------------------------------------ */
 /* Table Row View                                                    */
 /* ------------------------------------------------------------------ */
-const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnKey[] }> = ({
-  series,
-  row,
-  columns,
-}) => {
+const LappRowLine: React.FC<{
+  series: LappSeries;
+  row: LappRow;
+  columns: ColumnKey[];
+}> = ({ series, row, columns }) => {
   const navigate = useNavigate();
   const { addCustomItem } = useCart();
   const { showToast } = useToast();
@@ -224,17 +300,23 @@ const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnK
         price: row.price,
         unit: series.unit,
       },
-      q
+      q,
     );
     setAdded(true);
-    showToast(`Added ${q} ${series.unit}(s) of ${row.description} to RFQ Cart!`);
+    showToast(
+      `Added ${q} ${series.unit}(s) of ${row.description} to RFQ Cart!`,
+    );
     setTimeout(() => setAdded(false), 1600);
   };
 
   const renderCell = (key: ColumnKey) => {
     switch (key) {
       case "series":
-        return <span className="text-[11px] text-stone-600 font-mono">{series.name}</span>;
+        return (
+          <span className="text-[11px] text-stone-600 font-mono">
+            {series.name}
+          </span>
+        );
       case "partNo":
         return (
           <span className="font-mono text-xs font-semibold text-stone-800 bg-stone-100 px-2 py-1 rounded-md border border-stone-300">
@@ -242,7 +324,11 @@ const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnK
           </span>
         );
       case "description":
-        return <span className="font-bold text-stone-900 text-xs hover:text-pink-600 transition-colors">{row.description}</span>;
+        return (
+          <span className="font-bold text-stone-900 text-xs hover:text-pink-600 transition-colors">
+            {row.description}
+          </span>
+        );
       default: {
         const v = row[key];
         return (
@@ -269,7 +355,9 @@ const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnK
       <td className="py-3 px-3 align-middle">
         <div className="font-mono font-black text-emerald-700 text-xs sm:text-sm">
           ₹{inr(row.price)}
-          <span className="text-[10px] text-stone-400 font-normal ml-1">/{series.unit}</span>
+          <span className="text-[10px] text-stone-400 font-normal ml-1">
+            /{series.unit}
+          </span>
         </div>
         {row.listPrice && row.listPrice > row.price ? (
           <span className="text-[10px] text-stone-400 font-mono block">
@@ -279,11 +367,16 @@ const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnK
             </span>
           </span>
         ) : (
-          <span className="text-[9px] text-stone-400 font-mono block">Excl. 18% GST</span>
+          <span className="text-[9px] text-stone-400 font-mono block">
+            Excl. 18% GST
+          </span>
         )}
       </td>
 
-      <td className="py-3 px-3 align-middle" onClick={(e) => e.stopPropagation()}>
+      <td
+        className="py-3 px-3 align-middle"
+        onClick={(e) => e.stopPropagation()}
+      >
         <input
           type="number"
           min={1}
@@ -299,7 +392,9 @@ const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnK
           type="button"
           onClick={handleAdd}
           className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 inline-flex items-center gap-1.5 shadow-2xs cursor-pointer text-white hover:scale-105 ${
-            added ? "bg-emerald-600 ring-2 ring-emerald-300" : "bg-stone-950 hover:bg-pink-600"
+            added
+              ? "bg-emerald-600 ring-2 ring-emerald-300"
+              : "bg-stone-950 hover:bg-pink-600"
           }`}
         >
           {added ? <Check size={12} /> : <ShoppingCart size={12} />}
@@ -313,7 +408,10 @@ const LappRowLine: React.FC<{ series: LappSeries; row: LappRow; columns: ColumnK
 /* ------------------------------------------------------------------ */
 /* Table View Container                                               */
 /* ------------------------------------------------------------------ */
-const LappTable: React.FC<{ items: FlatRow[]; columns: ColumnKey[] }> = ({ items, columns }) => (
+const LappTable: React.FC<{ items: FlatRow[]; columns: ColumnKey[] }> = ({
+  items,
+  columns,
+}) => (
   <div className="bg-white rounded-3xl border border-stone-200 shadow-xl overflow-x-auto">
     <table className="w-full text-left border-collapse text-xs">
       <thead>
@@ -330,7 +428,12 @@ const LappTable: React.FC<{ items: FlatRow[]; columns: ColumnKey[] }> = ({ items
       </thead>
       <tbody>
         {items.map(({ series, row }) => (
-          <LappRowLine key={`${series.id}-${row.partNo}`} series={series} row={row} columns={columns} />
+          <LappRowLine
+            key={`${series.id}-${row.partNo}`}
+            series={series}
+            row={row}
+            columns={columns}
+          />
         ))}
       </tbody>
     </table>
@@ -357,8 +460,22 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
   useEffect(() => {
     const urlCat = searchParams.get("category");
     const urlSeries = searchParams.get("series");
-    if (urlCat && (urlCat !== categoryId || (urlSeries ?? null) !== seriesId)) {
-      onSelect(urlCat, urlSeries);
+    if (!urlCat) return;
+
+    const category = LAPP_CATALOG.find((item) => item.id === urlCat);
+    const seriesCategory = category
+      ? null
+      : LAPP_CATALOG.find((item) =>
+          item.series.some((series) => series.id === urlCat),
+        );
+    const resolvedCategoryId = category?.id ?? seriesCategory?.id ?? "all";
+    const resolvedSeriesId = seriesCategory ? urlCat : urlSeries;
+
+    if (
+      resolvedCategoryId !== categoryId ||
+      (resolvedSeriesId ?? null) !== seriesId
+    ) {
+      onSelect(resolvedCategoryId, resolvedSeriesId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
@@ -375,8 +492,11 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
   }, [categoryId, categoryFilter]);
 
   const category = useMemo(
-    () => (categoryId === "all" ? null : LAPP_CATALOG.find((c) => c.id === categoryId) ?? null),
-    [categoryId]
+    () =>
+      categoryId === "all"
+        ? null
+        : (LAPP_CATALOG.find((c) => c.id === categoryId) ?? null),
+    [categoryId],
   );
 
   const activeSeries = useMemo(() => {
@@ -395,14 +515,16 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
         .toLowerCase()
         .split(/\s+/)
         .filter(Boolean),
-    [searchQuery, localQuery]
+    [searchQuery, localQuery],
   );
   const isSearching = terms.length > 0;
 
   const seriesRows = useMemo<FlatRow[]>(() => {
     if (!activeSeries) return [];
     return activeSeries.rows
-      .filter((r) => !isSearching || matchesAll(rowText(r, activeSeries.name), terms))
+      .filter(
+        (r) => !isSearching || matchesAll(rowText(r, activeSeries.name), terms),
+      )
       .map((row) => ({ series: activeSeries, row }));
   }, [activeSeries, terms, isSearching]);
 
@@ -412,7 +534,8 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
     for (const c of scopeCategories) {
       for (const s of c.series) {
         for (const r of s.rows) {
-          if (matchesAll(rowText(r, s.name), terms)) out.push({ series: s, row: r });
+          if (matchesAll(rowText(r, s.name), terms))
+            out.push({ series: s, row: r });
         }
       }
     }
@@ -422,18 +545,16 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
   const visibleCount = activeSeries
     ? seriesRows.length
     : isSearching
-    ? searchResults.length
-    : countRows(scopeCategories);
+      ? searchResults.length
+      : countRows(scopeCategories);
 
   useEffect(() => {
     onCountChange?.(visibleCount);
   }, [visibleCount, onCountChange]);
 
-
   if (activeSeries && category) {
     return (
       <div className="animate-fade-in space-y-6">
-
         {/* Structured 2x2 / Responsive Grid Sub-Category Selector Buttons */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           {category.series.length > 1 ? (
@@ -454,15 +575,21 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
                         : "bg-white hover:bg-stone-50 text-stone-800 border-stone-200/80 font-bold"
                     }`}
                   >
-                    <span className="text-xs font-bold leading-snug whitespace-normal break-words">{s.name}</span>
-                    <span className={`text-[10px] mt-2 font-mono ${isSelected ? "text-pink-400 font-semibold" : "text-stone-400"}`}>
+                    <span className="text-xs font-bold leading-snug whitespace-normal break-words">
+                      {s.name}
+                    </span>
+                    <span
+                      className={`text-[10px] mt-2 font-mono ${isSelected ? "text-pink-400 font-semibold" : "text-stone-400"}`}
+                    >
                       {s.rows.length} verified products
                     </span>
                   </button>
                 );
               })}
             </div>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
 
           <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap shrink-0">
             {/* Grid / Details Switcher */}
@@ -471,7 +598,9 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
                 type="button"
                 onClick={() => setViewMode("grid")}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  viewMode === "grid" ? "bg-pink-600 text-white shadow-xs" : "text-stone-400 hover:text-white"
+                  viewMode === "grid"
+                    ? "bg-pink-600 text-white shadow-xs"
+                    : "text-stone-400 hover:text-white"
                 }`}
               >
                 <LayoutGrid size={13} />
@@ -481,7 +610,9 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
                 type="button"
                 onClick={() => setViewMode("details")}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  viewMode === "details" ? "bg-pink-600 text-white shadow-xs" : "text-stone-400 hover:text-white"
+                  viewMode === "details"
+                    ? "bg-pink-600 text-white shadow-xs"
+                    : "text-stone-400 hover:text-white"
                 }`}
               >
                 <List size={14} />
@@ -491,7 +622,10 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
 
             {/* Compact Search Box */}
             <div className="relative w-full sm:w-52">
-              <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 pointer-events-none" />
+              <Search
+                size={12}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 pointer-events-none"
+              />
               <input
                 type="text"
                 value={localQuery}
@@ -514,9 +648,12 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
         </div>
 
         <div>
-          <h3 className="text-xl font-black text-stone-950">{activeSeries.name}</h3>
+          <h3 className="text-xl font-black text-stone-950">
+            {activeSeries.name}
+          </h3>
           <p className="text-xs text-stone-500 font-mono mt-0.5">
-            {seriesRows.length} of {activeSeries.rows.length} products available · rates per {activeSeries.unit}, ex-GST
+            {seriesRows.length} of {activeSeries.rows.length} products available
+            · rates per {activeSeries.unit}, ex-GST
           </p>
         </div>
 
@@ -524,7 +661,11 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
           viewMode === "grid" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {seriesRows.map(({ series, row }) => (
-                <LappGridCard key={`${series.id}-${row.partNo}`} series={series} row={row} />
+                <LappGridCard
+                  key={`${series.id}-${row.partNo}`}
+                  series={series}
+                  row={row}
+                />
               ))}
             </div>
           ) : (
@@ -568,7 +709,8 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
         <div>
           <h3 className="text-xl font-black text-stone-950">{category.name}</h3>
           <p className="text-xs text-stone-500 font-mono mt-0.5">
-            Select a sub-category range · {category.series.length} options available
+            Select a sub-category range · {category.series.length} options
+            available
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -597,11 +739,16 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
                 <div className="font-black text-sm text-stone-950 group-hover:text-pink-700 transition-colors">
                   {s.name}
                 </div>
-                <div className="mt-1 text-xs font-mono text-stone-500">{s.rows.length} verified products</div>
+                <div className="mt-1 text-xs font-mono text-stone-500">
+                  {s.rows.length} verified products
+                </div>
               </div>
               <div className="mt-4 pt-3 border-t border-stone-200/60 flex items-center justify-between text-xs font-bold text-pink-600 group-hover:text-pink-700">
                 <span>Explore range</span>
-                <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                <ChevronRight
+                  size={14}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
               </div>
             </button>
           ))}
@@ -630,14 +777,20 @@ export const LappCatalogBrowser: React.FC<LappCatalogBrowserProps> = ({
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-2xl bg-pink-50 border border-pink-200 text-pink-600 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-pink-600 group-hover:text-white transition-all duration-300 shadow-2xs">
-                  {c.series.length > 1 ? <Layers size={20} /> : <Package size={20} />}
+                  {c.series.length > 1 ? (
+                    <Layers size={20} />
+                  ) : (
+                    <Package size={20} />
+                  )}
                 </div>
                 <div className="font-black text-base text-stone-950 group-hover:text-pink-700 transition-colors leading-snug">
                   {c.name}
                 </div>
               </div>
               <div className="text-xs font-mono text-stone-500 mb-4">
-                {c.series.length > 1 ? `${c.series.length} sub-categories · ` : ""}
+                {c.series.length > 1
+                  ? `${c.series.length} sub-categories · `
+                  : ""}
                 {countRows([c])} products available
               </div>
             </div>

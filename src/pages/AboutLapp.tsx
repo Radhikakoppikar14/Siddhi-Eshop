@@ -28,7 +28,8 @@ export const AboutLapp: React.FC = () => {
       title: "Power and control cables",
       shortTitle: "Power and control cables",
       desc: "ÖLFLEX® classic oil-resistant flexible control and power cables including SY steel wire braided and CY EMC screened variants for machinery and automated production lines.",
-      specs: "VDE Reg. No. 7030 · PVC / PUR outer sheath · Flame retardant to IEC 60332-1-2 · -40°C to +80°C",
+      specs:
+        "VDE Reg. No. 7030 · PVC / PUR outer sheath · Flame retardant to IEC 60332-1-2 · -40°C to +80°C",
       products: [
         "ÖLFLEX® CLASSIC 110 (Numbered black cores + earth 0.5 to 35mm²)",
         "ÖLFLEX® CLASSIC 110 SY (Galvanised steel wire braid armour)",
@@ -45,7 +46,8 @@ export const AboutLapp: React.FC = () => {
       title: "Data communication cables",
       shortTitle: "Data communication cables",
       desc: "UNITRONIC® high-speed sensor, instrumentation, and data communication cables including twisted-pair (TP) and overall copper braid screening for automated signal transmission.",
-      specs: "Low capacitance · Optimum screening against electrical interference · Tinned copper braided shield",
+      specs:
+        "Low capacitance · Optimum screening against electrical interference · Tinned copper braided shield",
       products: [
         "UNITRONIC® LiYCY (TP) (Twisted pair overall copper screened data cable)",
         "UNITRONIC® LiYY (TP) (Twisted pair unscreened instrumentation cable)",
@@ -62,7 +64,8 @@ export const AboutLapp: React.FC = () => {
       title: "Single core for domestic purpose / house wiring",
       shortTitle: "Single core for domestic purpose / house wiring",
       desc: "ÖLFLEX® INFRA FRLS single core building wires engineered for safe domestic and commercial building installations with high temperature withstand and low smoke properties.",
-      specs: "FRLS insulation · Low smoke emission · High current carrying capacity · Multiple color options",
+      specs:
+        "FRLS insulation · Low smoke emission · High current carrying capacity · Multiple color options",
       products: [
         "ÖLFLEX® INFRA FRLS 1X1 (Black, Blue, Red, Yellow, Green, Grey)",
         "ÖLFLEX® INFRA FRLS 1X1.5 (High performance building wire)",
@@ -79,7 +82,8 @@ export const AboutLapp: React.FC = () => {
       title: "Control cabinet single cores",
       shortTitle: "Control cabinet single cores",
       desc: "ÖLFLEX® UNIPLUS FR and FRLS panel wiring single cores with bright annealed electrolytic copper and heat-resistant insulation for switchgear, control desks, and relays.",
-      specs: "450/750V rating · IS:694 & HAR standard · Class 5 flexible copper · Full color-coded range",
+      specs:
+        "450/750V rating · IS:694 & HAR standard · Class 5 flexible copper · Full color-coded range",
       products: [
         "ÖLFLEX® UNIPLUS FR (Flame retardant panel wiring single core)",
         "ÖLFLEX® UNIPLUS FRLS (Low smoke flame retardant switchboard wire)",
@@ -90,13 +94,14 @@ export const AboutLapp: React.FC = () => {
     },
     {
       id: "glands-metric-pg",
-      catId: "glands-metric-pg",
+      catId: "gland-metric-pg",
       index: "05",
       code: "SERIES 05 // CABLE GLANDS (METRIC & PG)",
       title: "Cable glands in metric & PG size",
       shortTitle: "Cable glands in metric & PG size",
       desc: "SKINTOP® worldwide patented cable entry systems providing reliable IP68 strain relief, liquid tightness, and vibration-proof metric & PG locking for electrical enclosures.",
-      specs: "Metric M12 to M63 & PG 7 to PG 48 · Nickel-plated Brass & Polyamide · IP68 10 Bar pressure tightness",
+      specs:
+        "Metric M12 to M63 & PG 7 to PG 48 · Nickel-plated Brass & Polyamide · IP68 10 Bar pressure tightness",
       products: [
         "SKINTOP® ST-M (Polyamide metric cable glands M12 to M63)",
         "SKINTOP® ST PG (Panzer-Gewinde PG 7 to PG 48 cable glands)",
@@ -112,7 +117,8 @@ export const AboutLapp: React.FC = () => {
       title: "Cable counter nuts in metric & PG size",
       shortTitle: "Cable counter nuts in metric & PG size",
       desc: "SKINTOP® durable metric and PG lock nuts designed to secure cable entries and conduit fittings safely onto threaded switchboard knockouts and enclosures.",
-      specs: "Metric M12-M63 & PG 7-PG 48 · Glass-fiber reinforced polyamide · Secure vibration-resistant grip",
+      specs:
+        "Metric M12-M63 & PG 7-PG 48 · Glass-fiber reinforced polyamide · Secure vibration-resistant grip",
       products: [
         "SKINTOP® GMP-GL-M (Polyamide metric lock nuts)",
         "SKINTOP® GMP-GL PG (Polyamide PG thread lock nuts)",
@@ -128,7 +134,8 @@ export const AboutLapp: React.FC = () => {
       title: "Klick for rills / conduits",
       shortTitle: "Klick for rills / conduits",
       desc: "SILVYN® KLICK quick-assembly snap-in conduit fittings providing robust mechanical connection for corrugated protective tubing.",
-      specs: "Metric M12 to M63 connections · Quick assembly · IP67 system rating · Vibration resistant",
+      specs:
+        "Metric M12 to M63 connections · Quick assembly · IP67 system rating · Vibration resistant",
       products: [
         "SILVYN® KLICK M12 to M63 straight conduit connectors (Grey / Black)",
         "Secure quick-mounting snap-in locking mechanism for corrugated rills",
@@ -143,7 +150,8 @@ export const AboutLapp: React.FC = () => {
       title: "Protective rills / conduits",
       shortTitle: "Protective rills / conduits",
       desc: "SILVYN® RILL PA6 flexible protective corrugated conduit tubing engineered to protect automation wiring against mechanical friction, chips, and fluids.",
-      specs: "NW 10 to NW 54.5 sizes · High impact resistance · Halogen-free · Temperature -40°C to +115°C",
+      specs:
+        "NW 10 to NW 54.5 sizes · High impact resistance · Halogen-free · Temperature -40°C to +115°C",
       products: [
         "SILVYN® RILL PA6 L (Standard wall flexible corrugated conduit)",
         "SILVYN® RILL PA6 L-B (Heavy duty corrugated conduit in Grey & Black)",
@@ -152,7 +160,8 @@ export const AboutLapp: React.FC = () => {
     },
   ];
 
-  const activeCategory = lappCategories.find((c) => c.id === activeSeriesId) || lappCategories[0];
+  const activeCategory =
+    lappCategories.find((c) => c.id === activeSeriesId) || lappCategories[0];
 
   const handleNavigateToCatalog = (catId: string) => {
     navigate(`/catalog?brand=LAPP+KABEL&category=${catId}`);
@@ -161,14 +170,16 @@ export const AboutLapp: React.FC = () => {
   return (
     <div className="pt-6 pb-24 bg-[#faf8f5] text-stone-900 min-h-screen select-none relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center gap-2 text-xs text-stone-500 mb-8 font-mono">
           <Link to="/" className="hover:text-stone-950 transition-colors">
             Home
           </Link>
           <ChevronRight size={13} className="text-stone-400" />
-          <Link to="/#brandPortfolios" className="hover:text-stone-950 transition-colors">
+          <Link
+            to="/#brandPortfolios"
+            className="hover:text-stone-950 transition-colors"
+          >
             Authorized Brands
           </Link>
           <ChevronRight size={13} className="text-stone-400" />
@@ -179,7 +190,6 @@ export const AboutLapp: React.FC = () => {
 
         {/* LAPP BRAND HERO CONTAINER */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
-          
           <div className="lg:col-span-8 rounded-3xl p-8 sm:p-10 border border-amber-900/40 bg-gradient-to-br from-[#1f150b] via-[#140e07] to-[#0a0704] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between">
             <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -203,10 +213,16 @@ export const AboutLapp: React.FC = () => {
 
               <div className="space-y-3">
                 <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-snug">
-                  LAPP India Private Limited — Integrated Cable & Connection Systems
+                  LAPP India Private Limited — Integrated Cable & Connection
+                  Systems
                 </h1>
                 <p className="text-amber-100/80 text-xs sm:text-sm leading-relaxed font-sans">
-                  Founded in Stuttgart, Germany by Oskar Lapp, LAPP is the world's leading manufacturer of integrated cable and connection systems. Siddhi Kabel Corporation is an authorized channel partner providing warehouse drum stock of ÖLFLEX®, UNITRONIC®, and SKINTOP® with direct factory test certificates (EN 10204 3.1).
+                  Founded in Stuttgart, Germany by Oskar Lapp, LAPP is the
+                  world's leading manufacturer of integrated cable and
+                  connection systems. Siddhi Kabel Corporation is an authorized
+                  channel partner providing warehouse drum stock of ÖLFLEX®,
+                  UNITRONIC®, and SKINTOP® with direct factory test certificates
+                  (EN 10204 3.1).
                 </p>
               </div>
             </div>
@@ -234,14 +250,17 @@ export const AboutLapp: React.FC = () => {
                 Need custom drum cutting or project pricing?
               </h3>
               <p className="text-xs text-amber-100/80 leading-relaxed">
-                Access direct commercial pricing schedules or submit your calibrated cable schedule.
+                Access direct commercial pricing schedules or submit your
+                calibrated cable schedule.
               </p>
             </div>
 
             <div className="space-y-3 relative z-10">
               <button
                 type="button"
-                onClick={() => setSelectedProduct("LAPP India Commercial Price List")}
+                onClick={() =>
+                  setSelectedProduct("LAPP India Commercial Price List")
+                }
                 className="w-full py-3.5 bg-[#FFCC4D] hover:bg-[#F2B935] text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 hover:scale-102 cursor-pointer"
               >
                 <FileText size={14} className="text-slate-950" />
@@ -249,7 +268,6 @@ export const AboutLapp: React.FC = () => {
               </button>
             </div>
           </div>
-
         </div>
 
         {/* BENTO SPOTLIGHT SPEC-MATRIX */}
@@ -284,20 +302,35 @@ export const AboutLapp: React.FC = () => {
                 >
                   <div className="space-y-2 relative z-10">
                     <div className="flex items-center justify-between">
-                      <span className={`text-[10px] font-mono font-bold tracking-wider uppercase ${isSelected ? "text-[#FFCC4D]" : "text-stone-500"}`}>
+                      <span
+                        className={`text-[10px] font-mono font-bold tracking-wider uppercase ${isSelected ? "text-[#FFCC4D]" : "text-stone-500"}`}
+                      >
                         SERIES {cat.index}
                       </span>
-                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-transform ${isSelected ? "bg-[#FFCC4D] text-slate-950 font-bold rotate-90" : "bg-stone-100 text-stone-500"}`}>
+                      <div
+                        className={`w-6 h-6 rounded-lg flex items-center justify-center transition-transform ${isSelected ? "bg-[#FFCC4D] text-slate-950 font-bold rotate-90" : "bg-stone-100 text-stone-500"}`}
+                      >
                         <ChevronRight size={12} />
                       </div>
                     </div>
-                    <h4 className={`text-sm font-black leading-snug ${isSelected ? "text-white" : "text-stone-900"}`}>
+                    <h4
+                      className={`text-sm font-black leading-snug ${isSelected ? "text-white" : "text-stone-900"}`}
+                    >
                       {cat.shortTitle}
                     </h4>
                   </div>
-                  <div className={`pt-4 relative z-10 flex items-center gap-2 text-[10px] font-mono ${isSelected ? "text-amber-200/80 font-bold" : "text-stone-500"}`}>
-                    <Cpu size={12} className={isSelected ? "text-[#FFCC4D] animate-pulse" : ""} />
-                    <span>{isSelected ? "Active Console Node" : "Click to Inspect"}</span>
+                  <div
+                    className={`pt-4 relative z-10 flex items-center gap-2 text-[10px] font-mono ${isSelected ? "text-amber-200/80 font-bold" : "text-stone-500"}`}
+                  >
+                    <Cpu
+                      size={12}
+                      className={
+                        isSelected ? "text-[#FFCC4D] animate-pulse" : ""
+                      }
+                    />
+                    <span>
+                      {isSelected ? "Active Console Node" : "Click to Inspect"}
+                    </span>
                   </div>
                 </button>
               );
@@ -305,19 +338,23 @@ export const AboutLapp: React.FC = () => {
           </div>
 
           {/* Asymmetric Spotlight Display Card */}
-          <div className="bg-[#140e07] text-white rounded-3xl border border-amber-900/50 p-6 sm:p-10 relative overflow-hidden shadow-2xl animate-fade-in transition-all duration-500" key={activeCategory.id}>
+          <div
+            className="bg-[#140e07] text-white rounded-3xl border border-amber-900/50 p-6 sm:p-10 relative overflow-hidden shadow-2xl animate-fade-in transition-all duration-500"
+            key={activeCategory.id}
+          >
             <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-              
               {/* Left Column: Spotlight Series Info & Image */}
               <div className="lg:col-span-5 space-y-6">
                 <div className="space-y-2">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#FFCC4D] bg-amber-500/20 px-3 py-1 rounded-full border border-amber-400/30 inline-block shadow-2xs">
                     {activeCategory.code}
                   </span>
-                  <h3 
-                    onClick={() => handleNavigateToCatalog(activeCategory.catId)}
+                  <h3
+                    onClick={() =>
+                      handleNavigateToCatalog(activeCategory.catId)
+                    }
                     className="text-2xl sm:text-3xl font-black text-white leading-snug hover:text-amber-300 transition-colors cursor-pointer"
                     title="Go to category in catalog"
                   >
@@ -330,7 +367,7 @@ export const AboutLapp: React.FC = () => {
                 </p>
 
                 {/* Floating Preview Pedestal - Clickable to Catalog */}
-                <div 
+                <div
                   onClick={() => handleNavigateToCatalog(activeCategory.catId)}
                   className="w-full h-48 rounded-2xl bg-[#0a0704] border border-amber-900/40 p-4 flex items-center justify-center shadow-inner overflow-hidden group cursor-pointer"
                   title="Click to view category products"
@@ -349,7 +386,9 @@ export const AboutLapp: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => handleNavigateToCatalog(activeCategory.catId)}
+                    onClick={() =>
+                      handleNavigateToCatalog(activeCategory.catId)
+                    }
                     className="w-full py-3.5 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold text-xs rounded-xl transition-all shadow-md cursor-pointer uppercase tracking-wider text-center flex items-center justify-center gap-2"
                   >
                     <span>View Category</span>
@@ -358,7 +397,9 @@ export const AboutLapp: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={() => setSelectedProduct(`LAPP ${activeCategory.title}`)}
+                    onClick={() =>
+                      setSelectedProduct(`LAPP ${activeCategory.title}`)
+                    }
                     className="w-full py-3.5 bg-[#FFCC4D] hover:bg-[#F2B935] text-slate-950 font-black text-xs rounded-xl transition-all shadow-lg hover:scale-102 cursor-pointer uppercase tracking-wider text-center"
                   >
                     Request Quotation
@@ -368,7 +409,6 @@ export const AboutLapp: React.FC = () => {
 
               {/* Right Column: Hardware Parameter Matrix & Part Lists */}
               <div className="lg:col-span-7 space-y-6 bg-[#1f150b]/90 p-6 sm:p-8 rounded-2xl border border-amber-900/40 shadow-inner">
-                
                 <div className="space-y-2 font-mono">
                   <div className="flex items-center gap-2 text-[#FFCC4D] text-xs font-bold uppercase tracking-wider">
                     <Layers size={16} />
@@ -385,13 +425,18 @@ export const AboutLapp: React.FC = () => {
                   </span>
                   <div className="grid grid-cols-1 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
                     {activeCategory.products.map((p, idx) => (
-                      <div 
-                        key={idx} 
-                        onClick={() => handleNavigateToCatalog(activeCategory.catId)}
+                      <div
+                        key={idx}
+                        onClick={() =>
+                          handleNavigateToCatalog(activeCategory.catId)
+                        }
                         className="flex items-center gap-3 p-3.5 rounded-xl bg-[#0a0704] border border-amber-900/50 text-xs text-amber-50 font-medium shadow-sm hover:border-amber-400 hover:bg-[#140e07] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                         title="Click to view in catalog"
                       >
-                        <CheckCircle2 size={16} className="text-[#FFCC4D] shrink-0" />
+                        <CheckCircle2
+                          size={16}
+                          className="text-[#FFCC4D] shrink-0"
+                        />
                         <span>{p}</span>
                       </div>
                     ))}
@@ -399,17 +444,14 @@ export const AboutLapp: React.FC = () => {
                 </div>
 
                 <div className="pt-4 border-t border-amber-900/40 flex items-center justify-between text-xs">
-                  <span className="font-mono text-amber-200/60 text-[11px]">Bangalore Central Hub Ready Stock</span>
+                  <span className="font-mono text-amber-200/60 text-[11px]">
+                    Bangalore Central Hub Ready Stock
+                  </span>
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
 
       {selectedProduct && (

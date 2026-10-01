@@ -76,7 +76,7 @@ const HOME_SERIES_MAP: Record<string, string[]> = {
   "glands-metric": ["gland-metric", "gland-pg"],
   "nuts-metric": ["locknut-metric", "locknut-pg"],
   "glands-pg": ["gland-pg"],
-  "silvyn-conduits": ["silvyn-rill", "silvyn-klick"],
+  "silvyn-conduits": ["silvyn-rill"],
 };
 
 const EXTRA_COUNT = 4;
@@ -360,7 +360,7 @@ export const BrandPortfoliosSection: React.FC = () => {
         },
         {
           id: "glands-metric",
-          catId: "gland-metric",
+          catId: "gland-metric-pg",
           seriesId: "gland-metric",
           seriesCode: "SERIES 05 // ACCESSORIES RANGE",
           title: "Cable glands in metric & PG size",
@@ -373,7 +373,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "Polyamide metric cable gland providing optimum strain relief and permanent sealing for standard control enclosures.",
               specs: "Metric thread M12-M63 · IP68 10 Bar · Polyamide body",
               image: "/images/cable2.jpg",
-              catId: "gland-metric",
+              catId: "gland-metric-pg",
               seriesId: "gland-metric",
             },
             {
@@ -381,7 +381,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               desc: "Nickel-plated brass metric gland designed for extreme mechanical and chemical resistance in heavy industry.",
               specs: "Metric thread · Nickel-plated brass · IP69K / IP68",
               image: "/images/cable10.png",
-              catId: "gland-metric",
+              catId: "gland-metric-pg",
               seriesId: "gland-metric",
             },
           ],
@@ -389,7 +389,7 @@ export const BrandPortfoliosSection: React.FC = () => {
         },
         {
           id: "nuts-metric",
-          catId: "locknut-metric",
+          catId: "locknut-metric-pg",
           seriesId: "locknut-metric",
           seriesCode: "SERIES 06 // ACCESSORIES RANGE",
           title: "Cable counter nuts in metric & PG size",
@@ -403,7 +403,7 @@ export const BrandPortfoliosSection: React.FC = () => {
               specs:
                 "Metric M12 to M63 · Vibration resistant · Secure tightening",
               image: "/images/cable4.png",
-              catId: "locknut-metric",
+              catId: "locknut-metric-pg",
               seriesId: "locknut-metric",
             },
             {
@@ -412,40 +412,48 @@ export const BrandPortfoliosSection: React.FC = () => {
               specs:
                 "Metric threads · Solid brass construction · Secure tightening",
               image: "/images/cable7.png",
-              catId: "locknut-metric",
+              catId: "locknut-metric-pg",
               seriesId: "locknut-metric",
             },
           ],
           image: "/images/cable4.png",
         },
         {
-          id: "glands-pg",
-          catId: "gland-pg",
-          seriesId: "gland-pg",
-          seriesCode: "SERIES 07 // ACCESSORIES RANGE",
-          title: "Cable glands in metric & PG size",
-          desc: "Standardized Panzer-Gewinde (PG) threaded cable glands and matching counter nuts for industrial machinery and legacy panel enclosures.",
+          id: "silvyn-klick",
+          catId: "klick",
+          seriesId: "silvyn-klick",
+          seriesCode: "SERIES 07 // KLICK CONDUIT FITTINGS",
+          title: "Klick for rills / conduits",
+          desc: "SILVYN® KLICK quick-assembly snap-in fittings connect corrugated protective conduits securely to enclosures.",
           specs:
-            "PG 7 to PG 48 thread sizes · Polyamide glass-fiber reinforced · IP68 watertight sealing",
+            "Metric M12 to M63 connections · Quick assembly · IP67 system rating · Vibration resistant",
           items: [
             {
-              name: "SKINTOP® ST PG Glands",
-              desc: "PG threaded polyamide cable glands offering reliable strain relief, liquid-tight sealing, and vibration protection.",
-              specs: "PG 7 to PG 48 · IP68 watertight · Polyamide body",
-              image: "/images/cable7.png",
-              catId: "gland-pg",
-              seriesId: "gland-pg",
+              name: "SILVYN® KLICK M12 to M63 Fittings",
+              desc: "Quick-mounting snap-in conduit fittings for secure SILVYN RILL connections to enclosures.",
+              specs: "M12 to M63 · IP67 system rating · Vibration resistant",
+              image: "/images/cable12.png",
+              catId: "klick",
+              seriesId: "silvyn-klick",
             },
             {
-              name: "SKINTOP® LOCK NUT PG",
-              desc: "Matching PG lock nuts ensuring secure fastening of PG glands to enclosure walls.",
-              specs: "PG thread standard · Secure locking · Polyamide / Brass",
-              image: "/images/cable12.png",
-              catId: "locknut-pg",
-              seriesId: "locknut-pg",
+              name: "SILVYN® KLICK M16X1,5/1 GY",
+              desc: "Grey snap-in conduit fitting for connecting SILVYN RILL tubing to an enclosure.",
+              specs: "Part No 55501020 · M16 × 1.5/1 · Grey",
+              image: "/images/connector-glands.jpg",
+              catId: "klick",
+              seriesId: "silvyn-klick",
+            },
+            {
+              name: "SILVYN® KLICK M16X1,5/2 GY",
+              desc: "Grey snap-in conduit fitting for secure installation of SILVYN RILL protective tubing.",
+              specs: "Part No 55501030 · M16 × 1.5/2 · Grey",
+              image: "/images/card-conduit.jpg",
+              catId: "klick",
+              seriesId: "silvyn-klick",
             },
           ],
-          image: "/images/cable7.png",
+          image: "/images/cable12.png",
         },
         {
           id: "silvyn-conduits",
@@ -1330,7 +1338,12 @@ export const BrandPortfoliosSection: React.FC = () => {
                         {activeSeries.seriesCode}
                       </span>
                       <h4
-                        onClick={() => handleItemClick(activeSeries.catId)}
+                        onClick={() =>
+                          handleItemClick(
+                            activeSeries.catId,
+                            activeSeries.seriesId,
+                          )
+                        }
                         className="text-lg sm:text-xl font-black text-slate-950 tracking-tight mt-0.5 hover:text-amber-600 transition-colors cursor-pointer"
                         title="View sub-category in catalog"
                       >
