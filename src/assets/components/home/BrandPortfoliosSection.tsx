@@ -1,9 +1,19 @@
 import React, { useState, useRef } from "react";
-import { ShieldCheck, Building2, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ShieldCheck,
+  Building2,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { RFQModal } from "../ui/RFQModal";
 import { LAPP_CATALOG } from "../../../data/lappCatalog";
-import type { LappCategory, LappRow, LappSeries } from "../../../data/lappCatalog";
+import type {
+  LappCategory,
+  LappRow,
+  LappSeries,
+} from "../../../data/lappCatalog";
 
 interface ProductItem {
   name: string;
@@ -54,7 +64,12 @@ interface BrandProfile {
 /* Extra pages mapping for LAPP                                       */
 /* ------------------------------------------------------------------ */
 const HOME_SERIES_MAP: Record<string, string[]> = {
-  "power-control": ["classic-110", "classic-110-sy", "classic-110-cy", "olflex-100-i"],
+  "power-control": [
+    "classic-110",
+    "classic-110-sy",
+    "classic-110-cy",
+    "olflex-100-i",
+  ],
   "data-comm": ["liycy-tp", "liyy-tp", "liyy", "liycy"],
   "infra-frls": ["infra-frls"],
   "control-cabinet": ["uniplus-fr", "uniplus-frls"],
@@ -68,9 +83,14 @@ const EXTRA_COUNT = 4;
 const CABLE_CATEGORIES = new Set(["power", "data", "house", "cabinet"]);
 
 const inr = (n: number) =>
-  n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  n.toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
-const findLappSeries = (seriesId: string): { cat: LappCategory; series: LappSeries } | null => {
+const findLappSeries = (
+  seriesId: string,
+): { cat: LappCategory; series: LappSeries } | null => {
   for (const cat of LAPP_CATALOG) {
     const series = cat.series.find((sr) => sr.id === seriesId);
     if (series) return { cat, series };
@@ -78,19 +98,29 @@ const findLappSeries = (seriesId: string): { cat: LappCategory; series: LappSeri
   return null;
 };
 
-const lappRowToItem = (cat: LappCategory, series: LappSeries, row: LappRow): ProductItem => {
+const lappRowToItem = (
+  cat: LappCategory,
+  series: LappSeries,
+  row: LappRow,
+): ProductItem => {
   const isCable = CABLE_CATEGORIES.has(cat.id);
   const parts: string[] = [`Part No ${row.partNo}`];
 
   if (row.core !== undefined) {
     if (typeof row.core === "number") {
-      const pe = row.pe === "G" ? " with earth (G)" : row.pe === "X" ? " without earth (X)" : "";
+      const pe =
+        row.pe === "G"
+          ? " with earth (G)"
+          : row.pe === "X"
+            ? " without earth (X)"
+            : "";
       parts.push(`${row.core} cores${pe}`);
     } else {
       parts.push(`Cores ${row.core}`);
     }
   }
-  if (row.size !== undefined) parts.push(isCable ? `${row.size} mm²` : `Size ${row.size}`);
+  if (row.size !== undefined)
+    parts.push(isCable ? `${row.size} mm²` : `Size ${row.size}`);
   if (row.colour) parts.push(`Colour ${row.colour}`);
   if (row.packSize !== undefined) parts.push(`Pack size ${row.packSize}`);
   if (row.type) parts.push(`Type ${row.type}`);
@@ -135,7 +165,10 @@ const getLappPortfolioItems = (homeSeriesId: string): ProductItem[] => {
 /* ------------------------------------------------------------------ */
 /* Helper to generate expanded portfolio items for Eaton, Partex, & Mennekes */
 /* ------------------------------------------------------------------ */
-const getGenericBrandPortfolioItems = (brandId: string, series: BrandSeries): ProductItem[] => {
+const getGenericBrandPortfolioItems = (
+  brandId: string,
+  series: BrandSeries,
+): ProductItem[] => {
   if (series.items.length > 2) return series.items;
 
   const expanded: ProductItem[] = [...series.items];
@@ -146,7 +179,12 @@ const getGenericBrandPortfolioItems = (brandId: string, series: BrandSeries): Pr
     image: series.image,
   };
 
-  const suffixes = ["Pro Spec", "Heavy-Duty Variant", "Industrial Edition", "Advanced Grade"];
+  const suffixes = [
+    "Pro Spec",
+    "Heavy-Duty Variant",
+    "Industrial Edition",
+    "Advanced Grade",
+  ];
   suffixes.forEach((suffix, idx) => {
     expanded.push({
       name: `${baseItem.name} - ${suffix}`,
@@ -166,14 +204,18 @@ export const BrandPortfoliosSection: React.FC = () => {
   const [selectedBrandId, setSelectedBrandId] = useState<string>("lapp");
   const [activeSeriesIndex, setActiveSeriesIndex] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
-  const [rfqModalItem, setRfqModalItem] = useState<{ name: string; brand: string } | null>(null);
+  const [rfqModalItem, setRfqModalItem] = useState<{
+    name: string;
+    brand: string;
+  } | null>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
 
   const brandProfiles: Record<string, BrandProfile> = {
     lapp: {
       id: "lapp",
       name: "LAPP KABEL",
-      fullName: "LAPP India Private Limited — Integrated Cable & Connection Systems",
+      fullName:
+        "LAPP India Private Limited — Integrated Cable & Connection Systems",
       country: "GERMANY",
       flag: "🇩🇪",
       origin: "Stuttgart, Germany · Bangalore, Bhopal, India",
@@ -186,8 +228,10 @@ export const BrandPortfoliosSection: React.FC = () => {
       catalogQuery: "LAPP KABEL",
       themeBg: "bg-amber-500",
       themeHex: "#F59E0B",
-      selectedCardBg: "bg-gradient-to-br from-[#421714] via-[#60241E] to-[#2B0E0B] text-white border-amber-400 shadow-2xl scale-[1.01]",
-      containerBg: "bg-gradient-to-br from-[#421714] via-[#521c16] to-[#250c0a] text-white border-amber-500/40 shadow-2xl",
+      selectedCardBg:
+        "bg-gradient-to-br from-[#421714] via-[#60241E] to-[#2B0E0B] text-white border-amber-400 shadow-2xl scale-[1.01]",
+      containerBg:
+        "bg-gradient-to-br from-[#421714] via-[#521c16] to-[#250c0a] text-white border-amber-500/40 shadow-2xl",
       borderAccent: "border-l-4 border-l-amber-400",
       buttonBg: "bg-amber-400 hover:bg-amber-300 text-slate-950 font-black",
       badgeStyle: "bg-black/40 text-amber-300 border-amber-400/40",
@@ -200,12 +244,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 01 // CABLE RANGE",
           title: "Power and control cables",
           desc: "European benchmark oil-resistant flexible control and power cables, steel wire braided (SY), tinned copper EMC screened (CY), and color-coded power variants for machinery and automated assembly lines.",
-          specs: "VDE Reg. No. 7030 · PVC / PUR outer sheath · Flame retardant to IEC 60332-1-2 · -40°C to +80°C",
+          specs:
+            "VDE Reg. No. 7030 · PVC / PUR outer sheath · Flame retardant to IEC 60332-1-2 · -40°C to +80°C",
           items: [
             {
               name: "ÖLFLEX® CLASSIC 110",
               desc: "Oil-resistant PVC control cable with numbered/colored cores, made for fixed and light-flex use on machine tools, conveyors and production lines.",
-              specs: "300/500 V · PVC insulation and sheath · Oil resistant · Fixed -40°C to +80°C",
+              specs:
+                "300/500 V · PVC insulation and sheath · Oil resistant · Fixed -40°C to +80°C",
               image: "/images/cable13.png",
               catId: "power",
               seriesId: "classic-110",
@@ -213,7 +259,8 @@ export const BrandPortfoliosSection: React.FC = () => {
             {
               name: "ÖLFLEX® CLASSIC 110 SY / CY",
               desc: "Steel wire braided (SY) or tinned copper screened (CY) control cables providing mechanical protection and electromagnetic interference shielding.",
-              specs: "300/500 V · Braided / Screened protection · Oil resistant · Industrial automation",
+              specs:
+                "300/500 V · Braided / Screened protection · Oil resistant · Industrial automation",
               image: "/images/cable1.png",
               catId: "power",
               seriesId: "classic-110-sy",
@@ -228,12 +275,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 02 // CABLE RANGE",
           title: "Data communication cables",
           desc: "High-speed sensor, instrumentation, and data communication cables including twisted-pair (TP) and overall copper braid screening for automated signal transmission.",
-          specs: "Low capacitance · Optimum screening against electrical interference · Tinned copper braided shield",
+          specs:
+            "Low capacitance · Optimum screening against electrical interference · Tinned copper braided shield",
           items: [
             {
               name: "UNITRONIC® LiYY / LIYCY",
               desc: "Unscreened (LiYY) and screened (LIYCY) data and signal cables with fine-wire conductors for electronic control, measurement and instrumentation.",
-              specs: "DIN 47100 color code · Fine-wire stranded conductors · PVC insulation",
+              specs:
+                "DIN 47100 color code · Fine-wire stranded conductors · PVC insulation",
               image: "/images/cable14.png",
               catId: "data",
               seriesId: "liyy",
@@ -241,7 +290,8 @@ export const BrandPortfoliosSection: React.FC = () => {
             {
               name: "UNITRONIC® LiYY (TP) & LiYCY (TP)",
               desc: "Twisted-pair (TP) data communication cables providing excellent protection against cross-talk and electrical noise in signal circuits.",
-              specs: "Twisted pairs (TP) · Screened and unscreened variants · Low attenuation",
+              specs:
+                "Twisted pairs (TP) · Screened and unscreened variants · Low attenuation",
               image: "/images/cable10.png",
               catId: "data",
               seriesId: "liycy-tp",
@@ -256,12 +306,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 03 // CABLE RANGE",
           title: "Single core for domestic purpose / house wiring",
           desc: "Flame retardant low smoke (FRLS) single core building wires engineered for safe domestic and commercial building installations with high temperature withstand.",
-          specs: "FRLS insulation · Low smoke emission · High current carrying capacity · Multiple color options",
+          specs:
+            "FRLS insulation · Low smoke emission · High current carrying capacity · Multiple color options",
           items: [
             {
               name: "ÖLFLEX® INFRA FRLS (1.0 mm²)",
               desc: "Single core FRLS building wire for domestic and commercial wiring with low smoke zero halogen properties.",
-              specs: "FRLS compound · Low smoke density · High insulation resistance",
+              specs:
+                "FRLS compound · Low smoke density · High insulation resistance",
               image: "/images/cable3.png",
               catId: "house",
               seriesId: "infra-frls",
@@ -284,7 +336,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 04 // CABLE RANGE",
           title: "Control cabinet single cores",
           desc: "High-performance panel wiring single cores with bright annealed electrolytic copper and heat-resistant PVC/FRLS insulation for switchgear, control desks, and relays.",
-          specs: "450/750V rating · IS:694 & HAR standard · Class 5 flexible copper · Full color-coded range",
+          specs:
+            "450/750V rating · IS:694 & HAR standard · Class 5 flexible copper · Full color-coded range",
           items: [
             {
               name: "ÖLFLEX® UNIPLUS FR",
@@ -312,7 +365,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 05 // ACCESSORIES RANGE",
           title: "Cable glands in metric & PG size",
           desc: "Worldwide patented cable entry systems providing reliable IP68 strain relief, liquid tightness, and vibration-proof metric locking for electrical enclosures.",
-          specs: "Metric M12 to M63 · Nickel-plated Brass & Polyamide · IP68 10 Bar pressure tightness",
+          specs:
+            "Metric M12 to M63 · Nickel-plated Brass & Polyamide · IP68 10 Bar pressure tightness",
           items: [
             {
               name: "SKINTOP® ST-M (Polyamide)",
@@ -340,12 +394,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 06 // ACCESSORIES RANGE",
           title: "Cable counter nuts in metric & PG size",
           desc: "Durable metric lock nuts designed to secure cable entries and conduit fittings safely onto threaded switchboard knockouts and enclosures.",
-          specs: "Metric M12 to M63 · Polyamide / Nickel-plated Brass · Secure vibration-resistant grip",
+          specs:
+            "Metric M12 to M63 · Polyamide / Nickel-plated Brass · Secure vibration-resistant grip",
           items: [
             {
               name: "SKINTOP® GMP-GL-M (Polyamide)",
               desc: "Glass-fiber reinforced polyamide lock nut with metric threads for secure gland retention on enclosure walls.",
-              specs: "Metric M12 to M63 · Vibration resistant · Secure tightening",
+              specs:
+                "Metric M12 to M63 · Vibration resistant · Secure tightening",
               image: "/images/cable4.png",
               catId: "locknut-metric",
               seriesId: "locknut-metric",
@@ -353,7 +409,8 @@ export const BrandPortfoliosSection: React.FC = () => {
             {
               name: "SKINTOP® Brass Metric Lock Nut",
               desc: "Heavy-duty brass lock nut for metallic SKINTOP metric cable glands in industrial panels.",
-              specs: "Metric threads · Solid brass construction · Secure tightening",
+              specs:
+                "Metric threads · Solid brass construction · Secure tightening",
               image: "/images/cable7.png",
               catId: "locknut-metric",
               seriesId: "locknut-metric",
@@ -368,7 +425,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 07 // ACCESSORIES RANGE",
           title: "Cable glands in metric & PG size",
           desc: "Standardized Panzer-Gewinde (PG) threaded cable glands and matching counter nuts for industrial machinery and legacy panel enclosures.",
-          specs: "PG 7 to PG 48 thread sizes · Polyamide glass-fiber reinforced · IP68 watertight sealing",
+          specs:
+            "PG 7 to PG 48 thread sizes · Polyamide glass-fiber reinforced · IP68 watertight sealing",
           items: [
             {
               name: "SKINTOP® ST PG Glands",
@@ -396,12 +454,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 08 // CONDUITS RANGE",
           title: "Protective rills / conduits",
           desc: "Protective corrugated plastic conduit rills (PA6) and quick-assembly KLICK snap-in fittings providing robust mechanical protection for cable routing.",
-          specs: "NW 10 to NW 54.5 sizes · High impact resistance · Halogen-free · IP67 system rating",
+          specs:
+            "NW 10 to NW 54.5 sizes · High impact resistance · Halogen-free · IP67 system rating",
           items: [
             {
               name: "SILVYN® RILL Corrugated Conduit",
               desc: "Flexible protective conduit tubing made of specially modified polyamide for dynamic and static cable protection.",
-              specs: "PA6 material · High impact resistance · Temperature range -40°C to +115°C",
+              specs:
+                "PA6 material · High impact resistance · Temperature range -40°C to +115°C",
               image: "/images/cable13.png",
               catId: "rill",
               seriesId: "silvyn-rill",
@@ -409,7 +469,8 @@ export const BrandPortfoliosSection: React.FC = () => {
             {
               name: "SILVYN® KLICK Fittings",
               desc: "Quick-mounting snap-in conduit fitting that connects SILVYN RILL conduits securely to enclosures with a single click.",
-              specs: "Quick assembly · IP67 system rating · Vibration resistant",
+              specs:
+                "Quick assembly · IP67 system rating · Vibration resistant",
               image: "/images/cable12.png",
               catId: "klick",
               seriesId: "silvyn-klick",
@@ -435,8 +496,10 @@ export const BrandPortfoliosSection: React.FC = () => {
       catalogQuery: "EATON - MOELLER",
       themeBg: "bg-sky-500",
       themeHex: "#38BDF8",
-      selectedCardBg: "bg-gradient-to-br from-[#08182b] via-[#0d2847] to-[#040e1b] text-white border-sky-400 shadow-2xl scale-[1.01]",
-      containerBg: "bg-gradient-to-br from-[#08182b] via-[#0d2847] to-[#040e1b] text-white border-sky-500/40 shadow-2xl",
+      selectedCardBg:
+        "bg-gradient-to-br from-[#08182b] via-[#0d2847] to-[#040e1b] text-white border-sky-400 shadow-2xl scale-[1.01]",
+      containerBg:
+        "bg-gradient-to-br from-[#08182b] via-[#0d2847] to-[#040e1b] text-white border-sky-500/40 shadow-2xl",
       borderAccent: "border-l-4 border-l-sky-400",
       buttonBg: "bg-sky-400 hover:bg-sky-300 text-slate-950 font-black",
       badgeStyle: "bg-black/40 text-sky-300 border-sky-400/40",
@@ -447,18 +510,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 01 // MOTOR PROTECTORS",
           title: "PKZM0® Motor-Protective Circuit-Breakers",
           desc: "Manual motor starters with thermal overload and magnetic short-circuit releases up to 150 kA breaking capacity. Safe phase failure sensitivity for 3-phase AC motors.",
-          specs: "0.16A to 32A ratings · 150 kA at 400V · IEC/EN 60947-4-1 · UL 508 / CSA approved",
+          specs:
+            "0.16A to 32A ratings · 150 kA at 400V · IEC/EN 60947-4-1 · UL 508 / CSA approved",
           items: [
             {
               name: "PKZM0-0.16 to PKZM0-32",
               desc: "Motor-protective circuit-breaker range with an adjustable overload release and short-circuit protection for three-phase motors.",
-              specs: "0.16 A to 32 A · Thermal and magnetic release · IEC/EN 60947-4-1",
+              specs:
+                "0.16 A to 32 A · Thermal and magnetic release · IEC/EN 60947-4-1",
               image: "/images/eaton-nzm.jpg",
             },
             {
               name: "PKZM01 Pushbutton Starter",
               desc: "Compact manual motor starter with pushbutton start and stop, for switching and protecting small motors.",
-              specs: "Pushbutton operation · Thermal and magnetic release · IEC/EN 60947-4-1",
+              specs:
+                "Pushbutton operation · Thermal and magnetic release · IEC/EN 60947-4-1",
               image: "/images/pkzm0-v2.jpg",
             },
           ],
@@ -469,7 +535,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 02 // POWER CONTACTORS",
           title: "DILM® Power Contactors & Overload Relays",
           desc: "World-class power contactors engineered for heavy AC-3 motor starting, capacitive switching, and industrial automation with SmartWire-DT connectivity.",
-          specs: "3-Pole 7A to 1000A · Electronic AC/DC coils · Low holding power consumption · 10 million operations",
+          specs:
+            "3-Pole 7A to 1000A · Electronic AC/DC coils · Low holding power consumption · 10 million operations",
           items: [
             {
               name: "DILM7 to DILM15",
@@ -491,7 +558,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 03 // COMPACT MCCB",
           title: "NZM® Molded Case Circuit Breakers (MCCB)",
           desc: "Compact circuit breakers up to 1600 A with state-of-the-art microprocessor releases, energy monitoring, and comprehensive selectivity for distribution panels.",
-          specs: "NZM1 to NZM4 · 20A to 1600A · Breaking capacity 25kA to 150kA · Worldwide market approvals",
+          specs:
+            "NZM1 to NZM4 · 20A to 1600A · Breaking capacity 25kA to 150kA · Worldwide market approvals",
           items: [
             {
               name: "NZMN1-A (160A)",
@@ -513,18 +581,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 04 // PILOT DEVICES",
           title: "RMQ-TITAN® Pilot Devices & Control Stations",
           desc: "Ergonomic 22.5 mm pushbuttons, selector switches, LED indicator lights, and emergency stop actuators built for extreme environmental toughness up to IP69K.",
-          specs: "IP67 / IP69K front ring · LED illumination >100,000 hrs · Flat modular design · SmartWire compatible",
+          specs:
+            "IP67 / IP69K front ring · LED illumination >100,000 hrs · Flat modular design · SmartWire compatible",
           items: [
             {
               name: "M22-D Pushbuttons",
               desc: "Flat-front 22.5 mm pushbutton actuators for machine control panels, in multiple colours.",
-              specs: "22.5 mm mounting · IP67 / IP69K front ring · Flat modular design",
+              specs:
+                "22.5 mm mounting · IP67 / IP69K front ring · Flat modular design",
               image: "/images/eaton-rmq.jpg",
             },
             {
               name: "M22-PV Emergency Stop",
               desc: "Red mushroom-head emergency stop actuator for machine safety circuits.",
-              specs: "22.5 mm mounting · Mushroom head · IP67 / IP69K front ring",
+              specs:
+                "22.5 mm mounting · Mushroom head · IP67 / IP69K front ring",
               image: "/images/eaton-faz.jpg",
             },
           ],
@@ -535,18 +606,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 05 // MCB & RCCB",
           title: "xPole Residential & Commercial MCBs",
           desc: "High-precision miniature circuit breakers and residual current circuit breakers for building automation, data centers, and commercial distribution.",
-          specs: "6kA to 15kA breaking capacity · Type A and AC residual current · Dual function arc fault detection",
+          specs:
+            "6kA to 15kA breaking capacity · Type A and AC residual current · Dual function arc fault detection",
           items: [
             {
               name: "PLHT Miniature Breakers",
               desc: "Miniature circuit breakers that guard final circuits against overload and short-circuit in distribution boards.",
-              specs: "6 kA to 15 kA breaking capacity · Overload and short-circuit protection",
+              specs:
+                "6 kA to 15 kA breaking capacity · Overload and short-circuit protection",
               image: "/images/eaton-drives.jpg",
             },
             {
               name: "FI Residual Current Devices",
               desc: "Residual current breakers that trip on earth-leakage to protect people and installations.",
-              specs: "Type A and AC · Residual current protection · For distribution boards",
+              specs:
+                "Type A and AC · Residual current protection · For distribution boards",
               image: "/images/xpole-v2.jpg",
             },
           ],
@@ -557,7 +631,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 06 // CONTROL RELAYS",
           title: "easyE4® Micro PLCs & Logic Controllers",
           desc: "Compact control relays designed for straightforward automation tasks, lighting control, and machinery monitoring with built-in web server functionality.",
-          specs: "Expandable I/O channels · TFT color display · Ethernet TCP/IP connectivity · 12/24V DC & 240V AC",
+          specs:
+            "Expandable I/O channels · TFT color display · Ethernet TCP/IP connectivity · 12/24V DC & 240V AC",
           items: [
             {
               name: "easyE4 Base Controllers",
@@ -579,18 +654,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 07 // SOFT STARTERS",
           title: "S801+ & DS7 Digital Soft Starters",
           desc: "Advanced electronic soft starters providing smooth, stress-free acceleration and deceleration for heavy industrial pumps, fans, and compressors.",
-          specs: "18A to 1000A ratings · Built-in bypass contactor · Torque control algorithms · LCD diagnostic keypad",
+          specs:
+            "18A to 1000A ratings · Built-in bypass contactor · Torque control algorithms · LCD diagnostic keypad",
           items: [
             {
               name: "DS7 Compact Soft Starters",
               desc: "Compact digital soft starters with built-in bypass for smooth motor start and stop.",
-              specs: "Built-in bypass contactor · Smooth start and stop · Compact housing",
+              specs:
+                "Built-in bypass contactor · Smooth start and stop · Compact housing",
               image: "/images/havells.jpg",
             },
             {
               name: "S801+ High Performance Units",
               desc: "Higher-performance soft starters for pumps, fans and compressors, with torque control and a diagnostic keypad.",
-              specs: "Torque control algorithms · LCD diagnostic keypad · Built-in bypass",
+              specs:
+                "Torque control algorithms · LCD diagnostic keypad · Built-in bypass",
               image: "/images/softstarter-v2.jpg",
             },
           ],
@@ -601,18 +679,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 08 // POWER QUALITY",
           title: "9PX & 9E Online Double Conversion UPS",
           desc: "Enterprise-grade uninterruptible power supplies delivering reliable backup power and clean sine-wave output for critical automation servers and SCADA.",
-          specs: "1 kVA to 300 kVA · 95% high efficiency rating · Hot-swappable batteries · ABM battery management",
+          specs:
+            "1 kVA to 300 kVA · 95% high efficiency rating · Hot-swappable batteries · ABM battery management",
           items: [
             {
               name: "Eaton 9PX Tower / Rack UPS",
               desc: "Online double-conversion UPS in tower or rack form for servers, network gear and automation systems.",
-              specs: "Online double conversion · Hot-swappable batteries · ABM battery management",
+              specs:
+                "Online double conversion · Hot-swappable batteries · ABM battery management",
               image: "/images/eaton-pkzm0.jpg",
             },
             {
               name: "Eaton 9E Online UPS",
               desc: "Online UPS delivering clean sine-wave power to SCADA and critical automation loads.",
-              specs: "Online double conversion · Clean sine-wave output · High efficiency",
+              specs:
+                "Online double conversion · Clean sine-wave output · High efficiency",
               image: "/images/ups-v2.jpg",
             },
           ],
@@ -623,7 +704,8 @@ export const BrandPortfoliosSection: React.FC = () => {
     partex: {
       id: "partex",
       name: "PARTEX",
-      fullName: "PARTEX Marking Systems — Industrial Wire & Cable Identification",
+      fullName:
+        "PARTEX Marking Systems — Industrial Wire & Cable Identification",
       country: "SWEDEN",
       flag: "🇸🇪",
       origin: "Gullspång, Sweden",
@@ -636,8 +718,10 @@ export const BrandPortfoliosSection: React.FC = () => {
       catalogQuery: "PARTEX SWEDEN",
       themeBg: "bg-emerald-500",
       themeHex: "#34D399",
-      selectedCardBg: "bg-gradient-to-br from-[#072115] via-[#0e3b25] to-[#03110a] text-white border-emerald-400 shadow-2xl scale-[1.01]",
-      containerBg: "bg-gradient-to-br from-[#072115] via-[#0e3b25] to-[#03110a] text-white border-emerald-500/40 shadow-2xl",
+      selectedCardBg:
+        "bg-gradient-to-br from-[#072115] via-[#0e3b25] to-[#03110a] text-white border-emerald-400 shadow-2xl scale-[1.01]",
+      containerBg:
+        "bg-gradient-to-br from-[#072115] via-[#0e3b25] to-[#03110a] text-white border-emerald-500/40 shadow-2xl",
       borderAccent: "border-l-4 border-l-emerald-400",
       buttonBg: "bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black",
       badgeStyle: "bg-black/40 text-emerald-300 border-emerald-400/40",
@@ -648,18 +732,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES PA // CLOSED CHEVRON",
           title: "PA Closed Wire Markers (Chevron Cut)",
           desc: "Single-digit closed chevron cut sleeves for wires from 0.2 to 70 sq mm. The interlocking chevron profile ensures individual characters stay permanently aligned on wire bundles.",
-          specs: "PA-02, PA-1, PA-2, PA-3 · Cadmium & Silicon-free PVC · UL94-V0 Flame Retardant · -30°C to +60°C",
+          specs:
+            "PA-02, PA-1, PA-2, PA-3 · Cadmium & Silicon-free PVC · UL94-V0 Flame Retardant · -30°C to +60°C",
           items: [
             {
               name: "PA-02 (0.2 - 1.5 mm²)",
               desc: "Closed chevron-cut markers for thin control wires, holding each character in line on dense wire bundles.",
-              specs: "Wire 0.2 - 1.5 mm² · Cadmium & silicon-free PVC · UL94-V0",
+              specs:
+                "Wire 0.2 - 1.5 mm² · Cadmium & silicon-free PVC · UL94-V0",
               image: "/images/partex-po.jpg",
             },
             {
               name: "PA-1 (0.75 - 4.0 mm²)",
               desc: "Closed chevron-cut markers for standard panel wiring, one character per sleeve.",
-              specs: "Wire 0.75 - 4.0 mm² · Cadmium & silicon-free PVC · UL94-V0",
+              specs:
+                "Wire 0.75 - 4.0 mm² · Cadmium & silicon-free PVC · UL94-V0",
               image: "/images/partex-ties.jpg",
             },
           ],
@@ -670,12 +757,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES T-1000 // THERMAL PRINTER",
           title: "ProMark T-1000 Thermal Transfer Marker Printer",
           desc: "High-speed portable on-site industrial marker printer with 300 dpi resolution. Prints directly on continuous PO profile tubing, heat-shrinkable sleeves, and self-adhesive panel labels.",
-          specs: "40 mm/sec print speed · USB PC connection + internal memory · 300 dpi high clarity · Portable battery pack",
+          specs:
+            "40 mm/sec print speed · USB PC connection + internal memory · 300 dpi high clarity · Portable battery pack",
           items: [
             {
               name: "ProMark T-1000 Kit",
               desc: "Portable thermal transfer printer kit for printing wire markers and labels on site.",
-              specs: "300 dpi · USB connection + internal memory · Portable battery pack",
+              specs:
+                "300 dpi · USB connection + internal memory · Portable battery pack",
               image: "/images/partex-pc.jpg",
             },
             {
@@ -692,18 +781,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES PC // RETROFIT SNAP-ON",
           title: "PC Clip-On Open Wire Markers",
           desc: "Open snap-on markers designed for direct installation on pre-connected wiring, terminal blocks, and retrofit maintenance without removing wire terminations.",
-          specs: "PC-10, PC-20, PC-30, PC-40 · High retention spring clamp · Vibration-proof grip · Fast wand applicator",
+          specs:
+            "PC-10, PC-20, PC-30, PC-40 · High retention spring clamp · Vibration-proof grip · Fast wand applicator",
           items: [
             {
               name: "PC-10 (2.4 - 3.0 mm)",
               desc: "Snap-on open marker for smaller wires and cables, fitted without disconnecting terminations.",
-              specs: "Fits 2.4 - 3.0 mm · Spring clamp retention · Vibration-proof grip",
+              specs:
+                "Fits 2.4 - 3.0 mm · Spring clamp retention · Vibration-proof grip",
               image: "/images/partex-pa.jpg",
             },
             {
               name: "PC-20 (3.0 - 4.0 mm)",
               desc: "Snap-on open marker for mid-size wires and cables, for retrofit and maintenance work.",
-              specs: "Fits 3.0 - 4.0 mm · Spring clamp retention · Vibration-proof grip",
+              specs:
+                "Fits 3.0 - 4.0 mm · Spring clamp retention · Vibration-proof grip",
               image: "/images/partex-po.jpg",
             },
           ],
@@ -714,18 +806,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES PKS // ACID-PROOF SS316",
           title: "PKS Stainless Steel 316 Acid-Proof Markers",
           desc: "High-grade AISI 316 stainless steel identification tags engineered for extreme marine, chemical plants, offshore oil rigs, and high-temperature fire hazard zones.",
-          specs: "AISI 316 Stainless Steel · -80°C to +500°C · Extreme fire, salt spray, and acid resistance",
+          specs:
+            "AISI 316 Stainless Steel · -80°C to +500°C · Extreme fire, salt spray, and acid resistance",
           items: [
             {
               name: "PKS Embossed Strips",
               desc: "Stainless steel marker strips with embossed characters that survive fire, salt spray and acid.",
-              specs: "AISI 316 stainless steel · -80°C to +500°C · Embossed characters",
+              specs:
+                "AISI 316 stainless steel · -80°C to +500°C · Embossed characters",
               image: "/images/partex-ties.jpg",
             },
             {
               name: "PKH Carrier Holders",
               desc: "Holders that carry PKS marker strips and fix them onto cables.",
-              specs: "AISI 316 stainless steel · Secure fixing · Corrosion resistant",
+              specs:
+                "AISI 316 stainless steel · Secure fixing · Corrosion resistant",
               image: "/images/partex-promark.jpg",
             },
           ],
@@ -736,18 +831,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES PO // HEAT SHRINK TUBING",
           title: "PO-060 Heat Shrinkable Wire Markers",
           desc: "Flame-retardant polyolefin heat shrink tubing with a 2:1 shrink ratio, specifically designed for professional high-end aerospace, rail, and military switchboards.",
-          specs: "2:1 shrink ratio · MIL-STD cross-linked polyolefin · -55°C to +135°C operating range",
+          specs:
+            "2:1 shrink ratio · MIL-STD cross-linked polyolefin · -55°C to +135°C operating range",
           items: [
             {
               name: "PO-068 Tubing (Black/White)",
               desc: "Flame-retardant heat-shrink tubing for individual wire and cable identification.",
-              specs: "2:1 shrink ratio · Cross-linked polyolefin · -55°C to +135°C",
+              specs:
+                "2:1 shrink ratio · Cross-linked polyolefin · -55°C to +135°C",
               image: "/images/promo-partex.jpg",
             },
             {
               name: "PO-100 Tubing Reels",
               desc: "Continuous heat-shrink tubing on reels for high-volume printing and marking.",
-              specs: "2:1 shrink ratio · Continuous reel · Cross-linked polyolefin",
+              specs:
+                "2:1 shrink ratio · Continuous reel · Cross-linked polyolefin",
               image: "/images/partex-pks.jpg",
             },
           ],
@@ -758,7 +856,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES PP // SNAP-ON PROFILE",
           title: "PP Profile Halogen-Free Holders & Strips",
           desc: "Extruded transparent holder profiles combined with card inserts for labeling larger power cables, conduit pipes, and instrument loops.",
-          specs: "Halogen-free material · UV stable profile · Secure slide-in insert window",
+          specs:
+            "Halogen-free material · UV stable profile · Secure slide-in insert window",
           items: [
             {
               name: "PP-01 Profile Holders",
@@ -780,18 +879,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES MG // MODULAR PLATES",
           title: "MG-Kdp Modular Push-In Plate Markers",
           desc: "Multi-card plastic tag plates designed for marking control panel pushbuttons, contactors, terminal blocks, and modular DIN enclosures.",
-          specs: "Flame retardant polycarbonate · Snap-fit installation · Laser printable",
+          specs:
+            "Flame retardant polycarbonate · Snap-fit installation · Laser printable",
           items: [
             {
               name: "MG-CPM Panel Plates",
               desc: "Push-in plates for identifying pushbuttons, contactors and other control panel devices.",
-              specs: "Flame retardant polycarbonate · Snap-fit installation · Laser printable",
+              specs:
+                "Flame retardant polycarbonate · Snap-fit installation · Laser printable",
               image: "/images/partex-po.jpg",
             },
             {
               name: "MG-TD Terminal Markers",
               desc: "Modular markers for terminal blocks and DIN enclosure components.",
-              specs: "Flame retardant polycarbonate · Snap-fit installation · Laser printable",
+              specs:
+                "Flame retardant polycarbonate · Snap-fit installation · Laser printable",
               image: "/images/partex-pks.jpg",
             },
           ],
@@ -802,7 +904,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES TK // CABLE TIE TAGS",
           title: "TK Heavy-Duty Cable Tie Marker Tags",
           desc: "Large format identification plates secured with standard cable ties for heavy cable bundles, conduits, hydraulic hoses, and pole lines.",
-          specs: "Rigid PVC / Nylon material · High tensile holding strength · Dual-end tie slots",
+          specs:
+            "Rigid PVC / Nylon material · High tensile holding strength · Dual-end tie slots",
           items: [
             {
               name: "TK-1 40x10mm Tags",
@@ -824,7 +927,8 @@ export const BrandPortfoliosSection: React.FC = () => {
     mennekes: {
       id: "mennekes",
       name: "MENNEKES",
-      fullName: "MENNEKES Elektrotechnik — Industrial Plugs & AMAXX® Combinations",
+      fullName:
+        "MENNEKES Elektrotechnik — Industrial Plugs & AMAXX® Combinations",
       country: "GERMANY",
       flag: "🇩🇪",
       origin: "Kirchhundem, Germany",
@@ -837,8 +941,10 @@ export const BrandPortfoliosSection: React.FC = () => {
       catalogQuery: "MENNEKES",
       themeBg: "bg-purple-500",
       themeHex: "#C084FC",
-      selectedCardBg: "bg-gradient-to-br from-[#1d0d24] via-[#2d1438] to-[#100615] text-white border-purple-400 shadow-2xl scale-[1.01]",
-      containerBg: "bg-gradient-to-br from-[#1d0d24] via-[#2d1438] to-[#100615] text-white border-purple-500/40 shadow-2xl",
+      selectedCardBg:
+        "bg-gradient-to-br from-[#1d0d24] via-[#2d1438] to-[#100615] text-white border-purple-400 shadow-2xl scale-[1.01]",
+      containerBg:
+        "bg-gradient-to-br from-[#1d0d24] via-[#2d1438] to-[#100615] text-white border-purple-500/40 shadow-2xl",
       borderAccent: "border-l-4 border-l-purple-400",
       buttonBg: "bg-purple-400 hover:bg-purple-300 text-slate-950 font-black",
       badgeStyle: "bg-black/40 text-purple-300 border-purple-400/40",
@@ -849,7 +955,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 01 // HEAVY DUTY CEE",
           title: "PowerTOP® Xtra CEE Plugs & Connectors",
           desc: "Ergonomic industrial plugs with rubberized slip-proof grips and SafeCONTACT screwless insulation-displacement technology for fast, vibration-proof field wiring.",
-          specs: "16A, 32A, 63A, 125A · IP44 / IP67 watertight · Highly heat-resistant contact carriers · Nickel-plated pins",
+          specs:
+            "16A, 32A, 63A, 125A · IP44 / IP67 watertight · Highly heat-resistant contact carriers · Nickel-plated pins",
           items: [
             {
               name: "PowerTOP Xtra 16A 5P",
@@ -871,18 +978,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 02 // RECEPTACLE COMBOS",
           title: "AMAXX® Receptacle Combination Enclosures",
           desc: "Modular, pre-wired power distribution units fabricated from high-impact AMAPLAST polymer. Configurable with MCBs, RCCBs, and CEE receptacles for manufacturing lines.",
-          specs: "AMAPLAST impact polymer · IP44 / IP67 · Custom DIN rail windows · Pre-wired & factory tested",
+          specs:
+            "AMAPLAST impact polymer · IP44 / IP67 · Custom DIN rail windows · Pre-wired & factory tested",
           items: [
             {
               name: "AMAXX® 2-Gang Wall Units",
               desc: "Pre-wired two-gang wall enclosure with CEE receptacles and protective devices for smaller work areas.",
-              specs: "2-gang · AMAPLAST impact polymer · IP44 / IP67 · Pre-wired & factory tested",
+              specs:
+                "2-gang · AMAPLAST impact polymer · IP44 / IP67 · Pre-wired & factory tested",
               image: "/images/menn-duo.jpg",
             },
             {
               name: "AMAXX® 4-Gang Enclosures",
               desc: "Pre-wired four-gang enclosure for production lines and workshops that need more outlets in one unit.",
-              specs: "4-gang · AMAPLAST impact polymer · IP44 / IP67 · Pre-wired & factory tested",
+              specs:
+                "4-gang · AMAPLAST impact polymer · IP44 / IP67 · Pre-wired & factory tested",
               image: "/images/amaxx-v2.jpg",
             },
           ],
@@ -893,12 +1003,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 03 // VULCANIZED RUBBER",
           title: "EverGUM® Solid Rubber Field Distributors",
           desc: "Virtually indestructible portable and wall-mount distribution boxes manufactured from solid vulcanized rubber, resistant to harsh acids, oils, and severe drop impacts.",
-          specs: "Solid vulcanized synthetic rubber · Crush & drop proof · IP44 / IP67 · Safety yellow & black casing",
+          specs:
+            "Solid vulcanized synthetic rubber · Crush & drop proof · IP44 / IP67 · Safety yellow & black casing",
           items: [
             {
               name: "EverGUM® Portable Boxes",
               desc: "Solid rubber portable distribution boxes that shrug off drops, crushing, oils and acids on site.",
-              specs: "Solid vulcanized rubber · Crush & drop proof · IP44 / IP67",
+              specs:
+                "Solid vulcanized rubber · Crush & drop proof · IP44 / IP67",
               image: "/images/menn-evergum.jpg",
             },
             {
@@ -915,12 +1027,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 04 // PANEL RECEPTACLES",
           title: "CEE Panel Sockets & DUO Interlocked Switches",
           desc: "Surface and panel-mount industrial CEE receptacles with mechanical interlocks that prevent withdrawal under electrical load for total plant personnel safety.",
-          specs: "Mechanical interlock DUO switch · IP44 / IP67 · Nickel-plated brass terminals · Padlockable handle",
+          specs:
+            "Mechanical interlock DUO switch · IP44 / IP67 · Nickel-plated brass terminals · Padlockable handle",
           items: [
             {
               name: "Panel Sockets Straight",
               desc: "Straight panel-mount CEE receptacles for building into machines and distribution enclosures.",
-              specs: "Straight panel mount · IP44 / IP67 · Nickel-plated brass terminals",
+              specs:
+                "Straight panel mount · IP44 / IP67 · Nickel-plated brass terminals",
               image: "/images/menn-powertop.jpg",
             },
             {
@@ -937,7 +1051,8 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 05 // REFRIGERATED CONTAINER",
           title: "CEE-IU Refrigerated Container Sockets",
           desc: "Interlocked switched socket outlets specially designed for refrigerated containers (reefer plugs) in ports, logistics yards, and container ships.",
-          specs: "32A 3P+N+E 3h (yellow voltage code) · IP67 watertight · Built-in phase inverter",
+          specs:
+            "32A 3P+N+E 3h (yellow voltage code) · IP67 watertight · Built-in phase inverter",
           items: [
             {
               name: "Reefer Sockets 32A",
@@ -948,7 +1063,8 @@ export const BrandPortfoliosSection: React.FC = () => {
             {
               name: "CEE Plug 3h Yellow",
               desc: "Matching reefer plug with yellow 3h voltage coding and a built-in phase inverter.",
-              specs: "3h yellow voltage code · IP67 watertight · Built-in phase inverter",
+              specs:
+                "3h yellow voltage code · IP67 watertight · Built-in phase inverter",
               image: "/images/menn-evergum.jpg",
             },
           ],
@@ -959,18 +1075,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 06 // PILLAR DISTRIBUTION",
           title: "AMATUR® Outdoor Energy & Lighting Pillars",
           desc: "Stainless steel energy and lighting distribution pillars for marinas, camping grounds, public squares, and industrial loading docks.",
-          specs: "V2A Stainless Steel housing · Lockable service doors · Integrated CEE and Schuko sockets",
+          specs:
+            "V2A Stainless Steel housing · Lockable service doors · Integrated CEE and Schuko sockets",
           items: [
             {
               name: "AMATUR Marina Pillar",
               desc: "Stainless steel distribution pillar giving boats and docks a safe, weatherproof power point.",
-              specs: "V2A stainless steel · Lockable service door · CEE and Schuko sockets",
+              specs:
+                "V2A stainless steel · Lockable service door · CEE and Schuko sockets",
               image: "/images/menn-amaxx.jpg",
             },
             {
               name: "Camping Distribution Column",
               desc: "Distribution column for camping grounds and public sites, with lockable access and mixed sockets.",
-              specs: "V2A stainless steel · Lockable service door · CEE and Schuko sockets",
+              specs:
+                "V2A stainless steel · Lockable service door · CEE and Schuko sockets",
               image: "/images/menn-phase.jpg",
             },
           ],
@@ -981,12 +1100,14 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 07 // PORTABLE ADAPTERS",
           title: "TOP-TROPIC Industrial Cable Reels & Splitters",
           desc: "Robust rubber and steel cable drums and mobile splitters designed for construction sites, outdoor events, and emergency power supply squads.",
-          specs: "Thermal cut-out protection · Heavy-duty rubberized drums · IP44 spray-proof outlets",
+          specs:
+            "Thermal cut-out protection · Heavy-duty rubberized drums · IP44 spray-proof outlets",
           items: [
             {
               name: "TOP-TROPIC Cable Drums",
               desc: "Rubberized cable drums for construction sites, events and temporary power supply.",
-              specs: "Thermal cut-out protection · Heavy-duty rubberized drum · IP44 outlets",
+              specs:
+                "Thermal cut-out protection · Heavy-duty rubberized drum · IP44 outlets",
               image: "/images/menn-duo.jpg",
             },
             {
@@ -1003,18 +1124,21 @@ export const BrandPortfoliosSection: React.FC = () => {
           seriesCode: "SERIES 08 // EXTRA LOW VOLTAGE",
           title: "Extra-Low Voltage 20V to 50V CEE Plugs",
           desc: "Specialized industrial plugs and sockets designed for safety extra-low voltage applications in confined metal vessels, boilers, and wet underground maintenance.",
-          specs: "24V / 42V / 50V AC/DC · Mechanical keying prevents wrong voltage insertion · Frequency specific pins",
+          specs:
+            "24V / 42V / 50V AC/DC · Mechanical keying prevents wrong voltage insertion · Frequency specific pins",
           items: [
             {
               name: "ELV Panel Sockets 24V",
               desc: "Panel-mount extra-low voltage sockets for safe supply inside boilers, tanks and wet areas.",
-              specs: "24 V · Panel mount · Mechanical keying prevents wrong voltage",
+              specs:
+                "24 V · Panel mount · Mechanical keying prevents wrong voltage",
               image: "/images/menn-panel.jpg",
             },
             {
               name: "ELV Portable Plugs",
               desc: "Portable plugs for extra-low voltage tools and lamps in confined metal vessels.",
-              specs: "24 V / 42 V / 50 V · Frequency specific pins · Keyed against wrong voltage",
+              specs:
+                "24 V / 42 V / 50 V · Frequency specific pins · Keyed against wrong voltage",
               image: "/images/socket1.png",
             },
           ],
@@ -1025,7 +1149,8 @@ export const BrandPortfoliosSection: React.FC = () => {
   };
 
   const currentBrand = brandProfiles[selectedBrandId] || brandProfiles.lapp;
-  const activeSeries = currentBrand.series[activeSeriesIndex] || currentBrand.series[0];
+  const activeSeries =
+    currentBrand.series[activeSeriesIndex] || currentBrand.series[0];
 
   const allItems: ProductItem[] = activeSeries
     ? selectedBrandId === "lapp"
@@ -1035,7 +1160,10 @@ export const BrandPortfoliosSection: React.FC = () => {
 
   const totalPages = Math.max(1, Math.ceil(allItems.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages - 1);
-  const detailRows = allItems.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
+  const detailRows = allItems.slice(
+    safePage * PAGE_SIZE,
+    safePage * PAGE_SIZE + PAGE_SIZE,
+  );
 
   const handleBrandChange = (brandId: string) => {
     setSelectedBrandId(brandId);
@@ -1044,19 +1172,24 @@ export const BrandPortfoliosSection: React.FC = () => {
   };
 
   const handleItemClick = (catId?: string, seriesId?: string) => {
-  const state = { fromPortfolio: true };
-  if (selectedBrandId === "lapp" && catId) {
-    const sParam = seriesId ? `&series=${seriesId}` : "";
-    navigate(`/catalog?brand=lapp&category=${catId}${sParam}`, { state });
-  } else {
-    navigate(`/catalog?brand=${encodeURIComponent(currentBrand.catalogQuery)}`, { state });
-  }
-};
+    const state = { fromPortfolio: true };
+    if (selectedBrandId === "lapp" && catId) {
+      const sParam = seriesId ? `&series=${seriesId}` : "";
+      navigate(`/catalog?brand=lapp&category=${catId}${sParam}`, { state });
+    } else {
+      navigate(
+        `/catalog?brand=${encodeURIComponent(currentBrand.catalogQuery)}`,
+        { state },
+      );
+    }
+  };
 
   return (
-    <section className="py-14 lg:py-20 hybrid-light-bg border-b border-[#E2E8F0] select-none" id="brandPortfolios">
+    <section
+      className="py-14 lg:py-20 hybrid-light-bg border-b border-[#E2E8F0] select-none"
+      id="brandPortfolios"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-
         {/* Section Header */}
         <div className="flex flex-col space-y-2">
           <h2 className="text-3xl sm:text-4xl font-black text-[#0B0F17] tracking-tight">
@@ -1076,21 +1209,35 @@ export const BrandPortfoliosSection: React.FC = () => {
                 key={brand.id}
                 onClick={() => handleBrandChange(brand.id)}
                 className={`p-4 rounded-2xl text-left transition-all duration-300 flex items-center justify-between cursor-pointer hover-card-lift border ${
-                  isSelected ? brand.selectedCardBg : "bg-white text-[#0B0F17] border-[#CBD5E1] hover:border-[#475569]"
+                  isSelected
+                    ? brand.selectedCardBg
+                    : "bg-white text-[#0B0F17] border-[#CBD5E1] hover:border-[#475569]"
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`h-9 px-2.5 rounded-xl border flex items-center justify-center shrink-0 ${isSelected ? "bg-black/30 border-white/20" : "bg-slate-50 border-[#E2E8F0]"}`}>
-                    <img src={brand.logo} alt={brand.name} className={`h-4 object-contain max-w-[65px] ${isSelected ? "brightness-200" : ""}`} />
+                  <div
+                    className={`h-9 px-2.5 rounded-xl border flex items-center justify-center shrink-0 ${isSelected ? "bg-black/30 border-white/20" : "bg-slate-50 border-[#E2E8F0]"}`}
+                  >
+                    <img
+                      src={brand.logo}
+                      alt={brand.name}
+                      className={`h-4 object-contain max-w-[65px] ${isSelected ? "brightness-200" : ""}`}
+                    />
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-xs font-black tracking-tight truncate">{brand.name}</h4>
-                    <span className={`text-[10px] font-mono block ${isSelected ? "text-slate-300" : "text-[#64748B]"}`}>
+                    <h4 className="text-xs font-black tracking-tight truncate">
+                      {brand.name}
+                    </h4>
+                    <span
+                      className={`text-[10px] font-mono block ${isSelected ? "text-slate-300" : "text-[#64748B]"}`}
+                    >
                       {brand.country}
                     </span>
                   </div>
                 </div>
-                <div className={`w-2.5 h-2.5 rounded-full ${brand.themeBg} shrink-0 shadow-sm`} />
+                <div
+                  className={`w-2.5 h-2.5 rounded-full ${brand.themeBg} shrink-0 shadow-sm`}
+                />
               </button>
             );
           })}
@@ -1103,17 +1250,19 @@ export const BrandPortfoliosSection: React.FC = () => {
             className={`rounded-[2.5rem] p-6 sm:p-10 border relative overflow-hidden transition-all duration-700 ${currentBrand.containerBg}`}
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch relative z-10">
-
               {/* LEFT COLUMN: EXECUTIVE DOSSIER & SERIES SELECTOR */}
               <div className="lg:col-span-5 space-y-6">
-
                 <div className="space-y-3 pb-6 border-b border-white/10">
                   <div className="flex items-center gap-3 flex-wrap">
-                    <span className={`px-3.5 py-1 rounded-full font-mono text-xs font-bold uppercase tracking-wider border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
+                    <span
+                      className={`px-3.5 py-1 rounded-full font-mono text-xs font-bold uppercase tracking-wider border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}
+                    >
                       <Building2 size={13} />
                       {currentBrand.partnerBadge}
                     </span>
-                    <span className="text-xs font-mono text-slate-300">{currentBrand.origin}</span>
+                    <span className="text-xs font-mono text-slate-300">
+                      {currentBrand.origin}
+                    </span>
                   </div>
 
                   <h3 className="text-2xl font-black text-white tracking-tight leading-snug">
@@ -1124,7 +1273,9 @@ export const BrandPortfoliosSection: React.FC = () => {
                     {currentBrand.tagline}
                   </p>
 
-                  <div className={`flex items-center gap-2 text-xs font-mono ${currentBrand.accentText} font-semibold pt-1`}>
+                  <div
+                    className={`flex items-center gap-2 text-xs font-mono ${currentBrand.accentText} font-semibold pt-1`}
+                  >
                     <ShieldCheck size={14} />
                     <span>{currentBrand.certs}</span>
                   </div>
@@ -1152,10 +1303,14 @@ export const BrandPortfoliosSection: React.FC = () => {
                               : "bg-black/30 text-slate-200 border-white/10 hover:bg-black/50"
                           }`}
                         >
-                          <span className={`text-[9px] font-mono uppercase block tracking-wider mb-0.5 ${isSeriesActive ? "text-slate-900 font-bold" : "text-slate-400"}`}>
+                          <span
+                            className={`text-[9px] font-mono uppercase block tracking-wider mb-0.5 ${isSeriesActive ? "text-slate-900 font-bold" : "text-slate-400"}`}
+                          >
                             SERIES {String(idx + 1).padStart(2, "0")}
                           </span>
-                          <span className="font-bold text-xs tracking-tight line-clamp-1">{s.title}</span>
+                          <span className="font-bold text-xs tracking-tight line-clamp-1">
+                            {s.title}
+                          </span>
                         </button>
                       );
                     })}
@@ -1166,22 +1321,25 @@ export const BrandPortfoliosSection: React.FC = () => {
               {/* RIGHT COLUMN: 2 PRODUCTS PER PAGE */}
               <div className="lg:col-span-7 flex self-stretch">
                 <div className="w-full h-full flex flex-col bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-5 sm:p-6 border border-white/40 shadow-xl">
-
                   {/* Header */}
                   <div className="flex items-start justify-between gap-3 border-b border-slate-200 pb-3">
                     <div className="min-w-0">
-                      <span className={`text-[10px] font-mono uppercase tracking-wider ${currentBrand.accentText} font-bold block`}>
+                      <span
+                        className={`text-[10px] font-mono uppercase tracking-wider ${currentBrand.accentText} font-bold block`}
+                      >
                         {activeSeries.seriesCode}
                       </span>
-                      <h4 
-                        onClick={() => handleItemClick(activeSeries.catId, activeSeries.seriesId)}
+                      <h4
+                        onClick={() => handleItemClick(activeSeries.catId)}
                         className="text-lg sm:text-xl font-black text-slate-950 tracking-tight mt-0.5 hover:text-amber-600 transition-colors cursor-pointer"
                         title="View sub-category in catalog"
                       >
                         {activeSeries.title}
                       </h4>
                     </div>
-                    <span className={`shrink-0 px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}>
+                    <span
+                      className={`shrink-0 px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold border flex items-center gap-1.5 ${currentBrand.badgeStyle}`}
+                    >
                       <ShieldCheck size={12} /> Authorized Stock
                     </span>
                   </div>
@@ -1191,7 +1349,12 @@ export const BrandPortfoliosSection: React.FC = () => {
                     {detailRows.map((item, rowIdx) => (
                       <div
                         key={`${activeSeries.id}-${safePage}-${rowIdx}`}
-                        onClick={() => handleItemClick(item.catId || activeSeries.catId, item.seriesId || activeSeries.seriesId)}
+                        onClick={() =>
+                          handleItemClick(
+                            item.catId || activeSeries.catId,
+                            item.seriesId || activeSeries.seriesId,
+                          )
+                        }
                         className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center group cursor-pointer p-1.5 rounded-2xl hover:bg-stone-50 transition-colors"
                         title="Click to view inside catalog"
                       >
@@ -1227,10 +1390,14 @@ export const BrandPortfoliosSection: React.FC = () => {
                           </p>
 
                           <div className="bg-white rounded-xl p-2.5 border border-slate-100 shadow-sm space-y-1 font-mono text-[11px]">
-                            <div className={`text-[9px] font-bold ${currentBrand.accentText} uppercase tracking-wider flex items-center gap-1`}>
+                            <div
+                              className={`text-[9px] font-bold ${currentBrand.accentText} uppercase tracking-wider flex items-center gap-1`}
+                            >
                               <ShieldCheck size={11} /> Technical Parameters
                             </div>
-                            <p className="text-slate-700 leading-snug line-clamp-2">{item.specs}</p>
+                            <p className="text-slate-700 leading-snug line-clamp-2">
+                              {item.specs}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -1241,7 +1408,9 @@ export const BrandPortfoliosSection: React.FC = () => {
                   {totalPages > 1 && (
                     <div className="flex items-center justify-between gap-3 pt-3 mt-2 border-t border-slate-200">
                       <span className="text-[11px] font-mono text-slate-500">
-                        Showing {safePage * PAGE_SIZE + 1}–{Math.min((safePage + 1) * PAGE_SIZE, allItems.length)} of {allItems.length}
+                        Showing {safePage * PAGE_SIZE + 1}–
+                        {Math.min((safePage + 1) * PAGE_SIZE, allItems.length)}{" "}
+                        of {allItems.length}
                       </span>
                       <div className="flex items-center gap-1.5">
                         <button
@@ -1269,7 +1438,9 @@ export const BrandPortfoliosSection: React.FC = () => {
                         ))}
                         <button
                           type="button"
-                          onClick={() => setPage(Math.min(totalPages - 1, safePage + 1))}
+                          onClick={() =>
+                            setPage(Math.min(totalPages - 1, safePage + 1))
+                          }
                           disabled={safePage === totalPages - 1}
                           className="p-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                           aria-label="Next page"
@@ -1281,11 +1452,9 @@ export const BrandPortfoliosSection: React.FC = () => {
                   )}
                 </div>
               </div>
-
             </div>
           </div>
         )}
-
       </div>
 
       {/* RFQ Quote Modal */}
